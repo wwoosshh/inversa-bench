@@ -4,12 +4,16 @@ from __future__ import annotations
 import argparse
 import json
 
+from dotenv import load_dotenv
+
 from inversa.adapters.anthropic_adapter import AnthropicAdapter
 from inversa.report import format_summary, summarize
 from inversa.tasks.posing import run_batch
 
 
 def main(argv=None) -> None:
+    # Load ANTHROPIC_API_KEY from a .env in the cwd / project root if present.
+    load_dotenv()
     parser = argparse.ArgumentParser(description="Inversa slice-1 math runner")
     parser.add_argument("--bank", required=True, help="path to target bank JSON")
     parser.add_argument("--model", default="claude-opus-4-8")
