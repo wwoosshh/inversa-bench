@@ -18,7 +18,12 @@ from sympy.parsing.sympy_parser import (
 
 _TRANSFORMS = standard_transformations + (implicit_multiplication_application,)
 _X = sp.Symbol("x")
-_TOL = 1e-6
+_TOL = 1e-6  # max |solution - target| to count as a match (sympy returns exact/near-exact floats)
+
+# parse_expr has eval-like semantics; restrict the namespace to sympy names with no
+# builtins so untrusted model output cannot execute arbitrary Python (e.g. __import__).
+_SAFE_GLOBAL = {k: getattr(sp, k) for k in dir(sp) if not k.startswith("_")}
+_SAFE_GLOBAL["__builtins__"] = {}
 
 
 @dataclass
@@ -44,21 +49,21 @@ def _real_solutions(solutions) -> List[float]:
 
 def verify_equation(equation_str: str, target: float) -> VerificationResult:
     s = (equation_str or "").strip()
-    if s.count("=") != 1:
+    if s.count("=") != 1 or any(op in s for op in ("!=", "<=", ">=")):
         return VerificationResult(False, False, False, [],
                                   "equation must contain exactly one '='")
     lhs_str, rhs_str = s.split("=")
     try:
         lhs = parse_expr(lhs_str, transformations=_TRANSFORMS,
-                         local_dict={"x": _X}, evaluate=True)
+                         global_dict=_SAFE_GLOBAL, local_dict={"x": _X}, evaluate=True)
         rhs = parse_expr(rhs_str, transformations=_TRANSFORMS,
-                         local_dict={"x": _X}, evaluate=True)
+                         global_dict=_SAFE_GLOBAL, local_dict={"x": _X}, evaluate=True)
     except Exception as e:  # parse failure -> not well formed
         return VerificationResult(False, False, False, [], f"parse error: {e}")
 
     if _X not in (lhs - rhs).free_symbols:
         return VerificationResult(False, False, False, [],
-                                  "equation does not involve variable x")
+                                  "equation does not constrain x (x absent or cancels out)")
 
     eq = sp.Eq(lhs, rhs)
     try:
