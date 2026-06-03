@@ -56,10 +56,11 @@ do the generative scores <b>diverge</b> from solving?</p>
 </table>
 <div class="box">
 <b>Dissociation (Spearman across models):</b><br>
-solve vs calibration-MACE: <code>{c_mace}</code> (near 0 / positive &rArr; generative diverges from solving)<br>
+solve vs calibration-MACE: <code>{c_mace}</code> (near 0 / positive &rArr; diverges; negative &rArr; tracks solving)<br>
 solve vs adversarial: <code>{c_adv}</code> (near 0 / negative &rArr; diverges; +1 &rArr; tracks solving)
 </div>
-<p class="caveat"><b>Honest caveats:</b> few models &rArr; correlations are <i>suggestive, not conclusive</i>.
-Difficulty = polynomial degree (a v1 proxy). All scores are machine-verified (sympy), but whether
+<p class="caveat"><b>Honest caveats:</b> few models &rArr; correlations are <i>suggestive, not conclusive</i> (and undefined when a column has no variance).
+Difficulty = polynomial degree (a v1 proxy). When the weak solver is also one of the tested poser models (typically the weakest), that model's adversarial score is measured against <i>itself</i>, not an external baseline &mdash; interpret its adversarial number with care.
+All scores are machine-verified (sympy), but whether
 they measure "understanding" beyond solving is exactly the hypothesis under test. Domain: math equations only.</p>
 </body></html>"""

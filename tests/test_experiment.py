@@ -26,3 +26,5 @@ def test_correlations_keys():
     cors = correlations(scores)
     assert "solve_vs_calibration_mace" in cors
     assert "solve_vs_adversarial" in cors
+    assert cors["solve_vs_calibration_mace"] == -1.0
+    assert cors["solve_vs_adversarial"] == -1.0

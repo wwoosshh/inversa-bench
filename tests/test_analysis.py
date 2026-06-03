@@ -15,3 +15,9 @@ def test_no_variance_returns_none():
 
 def test_too_few_points_returns_none():
     assert spearman([1], [2]) is None
+
+
+def test_tie_averaging_is_handled():
+    # ties must not crash and must still yield a valid correlation
+    r = spearman([1, 2, 2, 4], [10, 20, 30, 40])
+    assert r is not None and 0.0 < r <= 1.0
