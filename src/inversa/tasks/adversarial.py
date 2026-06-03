@@ -29,6 +29,8 @@ SOLVER_PROMPT = (
 
 _TOL = 1e-6
 _NUM_RE = re.compile(r"-?\d+/\d+|-?\d+\.?\d*")
+_XEQ_RE = re.compile(r"x\s*=\s*(-?\d+/\d+|-?\d+\.?\d*)", re.IGNORECASE)
+_NOSOL_RE = re.compile(r"\bno\s+(real\s+)?solution", re.IGNORECASE)
 
 
 def build_poser_prompt(target) -> str:
@@ -41,12 +43,20 @@ def build_solver_prompt(equation: str) -> str:
 
 def parse_numeric_answer(text: str) -> Optional[float]:
     """Best-effort extraction of a single numeric answer from a model's solve reply.
-    Handles '3', 'x = 7', 'x=-5', '1/2', and a number embedded in prose. Returns
-    None when no number is present."""
+    Priority: explicit 'x = <num>' anywhere in the text; else the whole cleaned reply;
+    else the FIRST number token. Returns None for 'no solution' replies or when no
+    number is present."""
     s = (text or "").strip()
-    s = re.sub(r"^\s*x\s*=\s*", "", s, flags=re.IGNORECASE)
-    candidates = [s] + list(reversed(_NUM_RE.findall(s)))
-    for cand in candidates:
+    if _NOSOL_RE.search(s):
+        return None
+    m = _XEQ_RE.search(s)
+    if m:
+        try:
+            return float(sp.sympify(m.group(1)))
+        except Exception:
+            pass
+    s2 = re.sub(r"^\s*x\s*=\s*", "", s, flags=re.IGNORECASE)
+    for cand in [s2] + _NUM_RE.findall(s2):
         try:
             return float(sp.sympify(cand))
         except Exception:

@@ -70,3 +70,16 @@ def test_batch_size():
     weak = FakeAdapter(["0"])
     items = run_adversarial_batch(poser, weak, [1, 2, 3])
     assert len(items) == 3
+
+
+def test_parse_x_equals_wins_over_trailing_number():
+    assert parse_numeric_answer("We get x = 5 after step 2") == 5.0
+
+
+def test_parse_x_equals_ignores_check_annotation():
+    assert parse_numeric_answer("x = 7 (check: 2*7 = 14)") == 7.0
+
+
+def test_parse_no_solution_phrase_variants():
+    assert parse_numeric_answer("There is no real solution") is None
+    assert parse_numeric_answer("no solution") is None
