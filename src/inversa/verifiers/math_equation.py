@@ -52,7 +52,7 @@ def parse_sides(equation_str: str):
     namespace. Raises ValueError if the string is not a single well-formed
     equation (wrong count of '=', inequality operators, or parse failure)."""
     s = (equation_str or "").strip()
-    if s.count("=") != 1 or any(op in s for op in ("!=", "<=", ">=")):
+    if s.count("=") != 1 or any(op in s for op in ("!=", "<=", ">=", "<", ">")):
         raise ValueError("equation must contain exactly one '='")
     lhs_str, rhs_str = s.split("=")
     try:

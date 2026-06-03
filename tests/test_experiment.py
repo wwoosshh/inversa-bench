@@ -28,3 +28,20 @@ def test_correlations_keys():
     assert "solve_vs_adversarial" in cors
     assert cors["solve_vs_calibration_mace"] == -1.0
     assert cors["solve_vs_adversarial"] == -1.0
+
+
+def test_evaluate_model_detailed_keeps_items():
+    from inversa.experiment import evaluate_model_detailed, ModelRun
+    poser = FakeAdapter(["3", "2*x = 6", "2*x = 6"])
+    weak = FakeAdapter(["999"])
+    run = evaluate_model_detailed(
+        "fake", poser, weak,
+        solve_problems=[{"equation": "2*x + 1 = 7", "answer": 3}],
+        calib_targets=[3], calib_levels=[1], adv_targets=[3],
+    )
+    assert isinstance(run, ModelRun)
+    assert run.model == "fake"
+    assert len(run.solve_items) == 1
+    assert len(run.calibration_items) == 1
+    assert len(run.adversarial_items) == 1
+    assert run.scores.solve_accuracy == 1.0

@@ -22,15 +22,31 @@ class ModelScores:
 
 def evaluate_model(model: str, poser: Adapter, weak: Adapter,
                    solve_problems, calib_targets, calib_levels, adv_targets) -> ModelScores:
+    return evaluate_model_detailed(model, poser, weak, solve_problems,
+                                   calib_targets, calib_levels, adv_targets).scores
+
+
+@dataclass
+class ModelRun:
+    model: str
+    scores: ModelScores
+    solve_items: list
+    calibration_items: list
+    adversarial_items: list
+
+
+def evaluate_model_detailed(model: str, poser: Adapter, weak: Adapter,
+                            solve_problems, calib_targets, calib_levels, adv_targets) -> ModelRun:
     solve_items = solve_batch(poser, solve_problems)
-    cal = calibration_summary(run_calibration_batch(poser, calib_targets, calib_levels))
-    adv = adversarial_summary(run_adversarial_batch(poser, weak, adv_targets))
-    return ModelScores(
+    calib_items = run_calibration_batch(poser, calib_targets, calib_levels)
+    adv_items = run_adversarial_batch(poser, weak, adv_targets)
+    scores = ModelScores(
         model=model,
         solve_accuracy=accuracy(solve_items),
-        calibration_mace=cal.mean_abs_calibration_error,
-        adversarial_success_rate=adv.adversarial_success_rate,
+        calibration_mace=calibration_summary(calib_items).mean_abs_calibration_error,
+        adversarial_success_rate=adversarial_summary(adv_items).adversarial_success_rate,
     )
+    return ModelRun(model, scores, solve_items, calib_items, adv_items)
 
 
 def correlations(scores: List[ModelScores]) -> dict:

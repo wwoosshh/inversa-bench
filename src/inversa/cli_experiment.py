@@ -7,8 +7,8 @@ import json
 from dotenv import load_dotenv
 
 from inversa.adapters.anthropic_adapter import AnthropicAdapter
-from inversa.experiment import correlations, evaluate_model
-from inversa.report_html import render_html
+from inversa.experiment import correlations, evaluate_model_detailed
+from inversa.report_html import render_html_detailed
 
 
 def main(argv=None) -> None:
@@ -32,17 +32,19 @@ def main(argv=None) -> None:
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     weak = AnthropicAdapter(model=args.weak_model)
 
-    scores = []
+    runs = []
     for m in models:
         poser = AnthropicAdapter(model=m)
-        s = evaluate_model(m, poser, weak, solve_problems, targets, levels, targets)
-        scores.append(s)
+        run = evaluate_model_detailed(m, poser, weak, solve_problems, targets, levels, targets)
+        runs.append(run)
+        s = run.scores
         print(f"[done] {m}: solve={s.solve_accuracy:.0%} "
               f"mace={s.calibration_mace} adv={s.adversarial_success_rate:.0%}")
 
+    scores = [r.scores for r in runs]
     cors = correlations(scores)
     with open(args.out, "w", encoding="utf-8") as f:
-        f.write(render_html(scores, cors))
+        f.write(render_html_detailed(runs, cors))
     with open(args.json_out, "w", encoding="utf-8") as f:
         json.dump({"scores": [s.__dict__ for s in scores], "correlations": cors}, f, indent=2)
     print(f"correlations: {cors}")
