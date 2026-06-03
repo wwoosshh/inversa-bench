@@ -1,0 +1,12 @@
+{
+  "problems": [
+    {"equation": "2*x + 1 = 7", "answer": 3},
+    {"equation": "3*x - 5 = 16", "answer": 7},
+    {"equation": "5*x = 60", "answer": 12},
+    {"equation": "x/2 + 4 = 9", "answer": 10},
+    {"equation": "2*(x + 3) = 14", "answer": 4},
+    {"equation": "7*x - 2 = 4*x + 13", "answer": 5},
+    {"equation": "x**3 = 27", "answer": 3},
+    {"equation": "(x - 8)**3 = 0", "answer": 8}
+  ]
+}
