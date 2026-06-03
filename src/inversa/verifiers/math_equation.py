@@ -47,19 +47,29 @@ def _real_solutions(solutions) -> List[float]:
     return reals
 
 
-def verify_equation(equation_str: str, target: float) -> VerificationResult:
+def parse_sides(equation_str: str):
+    """Parse 'lhs = rhs' into (lhs, rhs) sympy expressions using the sandboxed
+    namespace. Raises ValueError if the string is not a single well-formed
+    equation (wrong count of '=', inequality operators, or parse failure)."""
     s = (equation_str or "").strip()
     if s.count("=") != 1 or any(op in s for op in ("!=", "<=", ">=")):
-        return VerificationResult(False, False, False, [],
-                                  "equation must contain exactly one '='")
+        raise ValueError("equation must contain exactly one '='")
     lhs_str, rhs_str = s.split("=")
     try:
         lhs = parse_expr(lhs_str, transformations=_TRANSFORMS,
-                         global_dict=_SAFE_GLOBAL, local_dict={"x": _X}, evaluate=True)
+                         local_dict={"x": _X}, global_dict=_SAFE_GLOBAL, evaluate=True)
         rhs = parse_expr(rhs_str, transformations=_TRANSFORMS,
-                         global_dict=_SAFE_GLOBAL, local_dict={"x": _X}, evaluate=True)
-    except Exception as e:  # parse failure -> not well formed
-        return VerificationResult(False, False, False, [], f"parse error: {e}")
+                         local_dict={"x": _X}, global_dict=_SAFE_GLOBAL, evaluate=True)
+    except Exception as e:
+        raise ValueError(f"parse error: {e}")
+    return lhs, rhs
+
+
+def verify_equation(equation_str: str, target: float) -> VerificationResult:
+    try:
+        lhs, rhs = parse_sides(equation_str)
+    except ValueError as e:
+        return VerificationResult(False, False, False, [], str(e))
 
     if _X not in (lhs - rhs).free_symbols:
         return VerificationResult(False, False, False, [],
