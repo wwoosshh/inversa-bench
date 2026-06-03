@@ -36,3 +36,10 @@ def test_identity_is_band_0():
 def test_unparseable_is_band_0():
     r = difficulty("x + = 3")
     assert r.band == 0 and r.error is not None
+
+
+def test_constant_no_x_term_is_band_0():
+    r = difficulty("x**2 - x**2 = 3")
+    assert r.band == 0
+    assert r.degree == 0
+    assert "no x term" in r.error

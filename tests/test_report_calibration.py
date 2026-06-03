@@ -26,3 +26,14 @@ def test_format_is_readable():
     items = run_calibration_batch(adapter, [3], [1, 3])
     text = format_calibration_summary(calibration_summary(items))
     assert "calibration" in text.lower()
+
+
+def test_summary_excludes_invalid_from_mace():
+    # "2*x = 6" is valid for target 3 (band 1), invalid for target 5; only the valid one counts
+    adapter = FakeAdapter(["2*x = 6", "2*x = 6"])
+    items = run_calibration_batch(adapter, [3, 5], [1])  # 2 items, 1 valid
+    s = calibration_summary(items)
+    assert s.n == 2
+    assert s.n_valid == 1
+    assert s.n_measurable == 1
+    assert s.mean_abs_calibration_error == 0.0

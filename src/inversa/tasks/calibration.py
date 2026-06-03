@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from inversa.adapters.base import Adapter
-from inversa.tasks.posing import _extract_equation
+from inversa.tasks.posing import extract_equation
 from inversa.verifiers.difficulty import difficulty, DifficultyResult
 from inversa.verifiers.math_equation import verify_equation, VerificationResult
 
@@ -37,7 +37,7 @@ class CalibrationItem:
 
 def run_calibration_item(adapter: Adapter, target, level: int) -> CalibrationItem:
     raw = adapter.generate(build_calibration_prompt(target, level))
-    equation = _extract_equation(raw)
+    equation = extract_equation(raw)
     ver = verify_equation(equation, target)
     dif = difficulty(equation)
     cal_err = abs(int(level) - dif.band) if dif.band else None

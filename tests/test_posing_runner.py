@@ -1,5 +1,5 @@
 from inversa.adapters.fake import FakeAdapter
-from inversa.tasks.posing import build_prompt, _extract_equation, run_item, run_batch
+from inversa.tasks.posing import build_prompt, extract_equation, run_item, run_batch
 
 
 def test_build_prompt_mentions_target_and_x():
@@ -10,11 +10,11 @@ def test_build_prompt_mentions_target_and_x():
 
 def test_extract_equation_takes_first_line_with_equals():
     raw = "Here you go:\n2*x + 1 = 7\nthanks"
-    assert _extract_equation(raw) == "2*x + 1 = 7"
+    assert extract_equation(raw) == "2*x + 1 = 7"
 
 
 def test_extract_equation_strips_backticks():
-    assert _extract_equation("`x = 5`") == "x = 5"
+    assert extract_equation("`x = 5`") == "x = 5"
 
 
 def test_run_item_valid_equation():

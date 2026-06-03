@@ -19,7 +19,7 @@ def build_prompt(target) -> str:
     return PROMPT_TEMPLATE.format(target=target)
 
 
-def _extract_equation(raw: str) -> str:
+def extract_equation(raw: str) -> str:
     for line in raw.splitlines():
         if "=" in line:
             return line.strip().strip("`").strip()
@@ -36,7 +36,7 @@ class ItemResult:
 
 def run_item(adapter: Adapter, target) -> ItemResult:
     raw = adapter.generate(build_prompt(target))
-    equation = _extract_equation(raw)
+    equation = extract_equation(raw)
     verification = verify_equation(equation, target)
     return ItemResult(float(target), raw, equation, verification)
 
