@@ -10,6 +10,8 @@
 
 **Scope guardrails (design §8):** validity only (not depth — that's slice 2); math-equation sub-domain only; one provider. Do NOT add IRT, difficulty targets, or open-domain scoring here.
 
+**Transparency (design §3.5 — binding):** every item must emit its full evidence chain (prompt → raw model output → extracted equation → solver solutions → verdict) so a human can re-trace any score by hand. No opaque scoring. `ItemResult` captures the chain and the CLI prints it; do not hide steps.
+
 ---
 
 ## File Structure
@@ -767,9 +769,9 @@ git commit -m "feat: slice-1 math target bank + end-to-end smoke run"
 
 ## What slice 1 deliberately does NOT do (hand-off to later slices)
 
-- **No depth measurement** — validity only. A model can pose trivial equations; that is expected. Slice 2 adds machine-checkable depth constraints (difficulty targets, required techniques, adversarial posing) per design §5.4.
-- **No IRT / θ estimation** — slice 3 (design §5.5).
-- **No θ_solve comparison** — slice 4 (the falsifiable dissociation experiment, design §3).
+- **No depth measurement** — validity only. A model can pose trivial equations; that is expected. Slice 2 adds machine-checkable depth constraints + adversarial posing (generator↔verifier-solver separation) per design §5.4.
+- **No dissociation experiment** — slice 3 = IRT-free θ_gen-proxy vs θ_solve correlation across models (the falsifiable headline, design §3), de-risked *before* IRT.
+- **No IRT / θ estimation** — slice 4, only after dissociation is confirmed (design §5.5; do not make the headline hostage to IRT).
 - **No code/logic domains** — slice 5.
 
 These are out of scope here by design; do not add them to this plan.
