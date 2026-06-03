@@ -31,3 +31,34 @@ def format_summary(s: Summary) -> str:
         f"items={s.n} valid={s.n_valid} ({s.validity_rate:.1%}) "
         f"unique={s.n_unique} ({s.uniqueness_rate:.1%})"
     )
+
+
+@dataclass
+class CalibrationSummary:
+    n: int
+    n_valid: int
+    validity_rate: float
+    n_measurable: int                            # valid AND difficulty band measurable
+    mean_abs_calibration_error: float | None     # over measurable items, else None
+
+
+def calibration_summary(items) -> CalibrationSummary:
+    n = len(items)
+    n_valid = sum(1 for it in items if it.valid)
+    measurable = [it for it in items
+                  if it.valid and it.calibration_error is not None]
+    mace = (sum(it.calibration_error for it in measurable) / len(measurable)
+            if measurable else None)
+    return CalibrationSummary(
+        n=n,
+        n_valid=n_valid,
+        validity_rate=(n_valid / n if n else 0.0),
+        n_measurable=len(measurable),
+        mean_abs_calibration_error=mace,
+    )
+
+
+def format_calibration_summary(s: CalibrationSummary) -> str:
+    mace = "n/a" if s.mean_abs_calibration_error is None else f"{s.mean_abs_calibration_error:.2f}"
+    return (f"items={s.n} valid={s.n_valid} ({s.validity_rate:.1%}) "
+            f"measurable={s.n_measurable} mean_abs_calibration_error={mace}")
