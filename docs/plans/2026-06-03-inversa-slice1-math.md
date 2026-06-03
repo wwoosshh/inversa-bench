@@ -1,10 +1,10 @@
-# PoseBench Slice 1 (Math Equation Posing) Implementation Plan
+# Inversa Slice 1 (Math Equation Posing) Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build an end-to-end pipeline that asks a model to *construct* a single-variable algebraic equation whose solution is a given target, machine-verifies validity with sympy, and reports a validity rate over a batch.
 
-**Architecture:** A pure, fully-tested sympy verifier is the core. A thin `Adapter` protocol abstracts model calls (a `FakeAdapter` drives all unit tests with no network; an `AnthropicAdapter` is the real one, smoke-tested manually). A posing runner builds prompts, calls the adapter, extracts the equation, and verifies it. A report module summarizes results. A CLI runs a batch from a JSON target bank. This is the minimal vertical slice of the design doc (`docs/specs/2026-06-03-posebench-design.md` §11 step 1): posing → forward-verification → validity score. No IRT, no depth constraints, no multi-domain yet (those are later slices).
+**Architecture:** A pure, fully-tested sympy verifier is the core. A thin `Adapter` protocol abstracts model calls (a `FakeAdapter` drives all unit tests with no network; an `AnthropicAdapter` is the real one, smoke-tested manually). A posing runner builds prompts, calls the adapter, extracts the equation, and verifies it. A report module summarizes results. A CLI runs a batch from a JSON target bank. This is the minimal vertical slice of the design doc (`docs/specs/2026-06-03-inversa-design.md` §11 step 1): posing → forward-verification → validity score. No IRT, no depth constraints, no multi-domain yet (those are later slices).
 
 **Tech Stack:** Python 3.11+, sympy (verification), anthropic SDK (real adapter), pytest (tests), setuptools src-layout.
 
@@ -17,17 +17,17 @@
 ## File Structure
 
 - Create: `pyproject.toml` — package metadata + deps, src-layout.
-- Create: `src/posebench/__init__.py` — package marker.
-- Create: `src/posebench/verifiers/__init__.py` — package marker.
-- Create: `src/posebench/verifiers/math_equation.py` — `verify_equation(equation_str, target) -> VerificationResult`. **Core, fully unit-tested.**
-- Create: `src/posebench/adapters/__init__.py` — package marker.
-- Create: `src/posebench/adapters/base.py` — `Adapter` Protocol (`generate(prompt) -> str`).
-- Create: `src/posebench/adapters/fake.py` — `FakeAdapter` for tests.
-- Create: `src/posebench/adapters/anthropic_adapter.py` — real Claude adapter (smoke-tested).
-- Create: `src/posebench/tasks/__init__.py` — package marker.
-- Create: `src/posebench/tasks/posing.py` — `build_prompt`, `_extract_equation`, `ItemResult`, `run_item`, `run_batch`.
-- Create: `src/posebench/report.py` — `Summary`, `summarize`, `format_summary`.
-- Create: `src/posebench/cli.py` — argparse entry point.
+- Create: `src/inversa/__init__.py` — package marker.
+- Create: `src/inversa/verifiers/__init__.py` — package marker.
+- Create: `src/inversa/verifiers/math_equation.py` — `verify_equation(equation_str, target) -> VerificationResult`. **Core, fully unit-tested.**
+- Create: `src/inversa/adapters/__init__.py` — package marker.
+- Create: `src/inversa/adapters/base.py` — `Adapter` Protocol (`generate(prompt) -> str`).
+- Create: `src/inversa/adapters/fake.py` — `FakeAdapter` for tests.
+- Create: `src/inversa/adapters/anthropic_adapter.py` — real Claude adapter (smoke-tested).
+- Create: `src/inversa/tasks/__init__.py` — package marker.
+- Create: `src/inversa/tasks/posing.py` — `build_prompt`, `_extract_equation`, `ItemResult`, `run_item`, `run_batch`.
+- Create: `src/inversa/report.py` — `Summary`, `summarize`, `format_summary`.
+- Create: `src/inversa/cli.py` — argparse entry point.
 - Create: `data/banks/math_targets_slice1.json` — small target bank.
 - Create: `tests/test_math_equation_verifier.py`
 - Create: `tests/test_fake_adapter.py`
@@ -42,7 +42,7 @@ Each file has one responsibility; files that change together (verifier + its tes
 
 **Files:**
 - Create: `pyproject.toml`
-- Create: `src/posebench/__init__.py`
+- Create: `src/inversa/__init__.py`
 - Create: `tests/__init__.py`
 
 - [ ] **Step 1: Create `pyproject.toml`**
@@ -53,7 +53,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "posebench"
+name = "inversa"
 version = "0.1.0"
 description = "Measure AI reasoning by problem-posing with machine-verifiable scoring"
 requires-python = ">=3.11"
@@ -74,9 +74,9 @@ testpaths = ["tests"]
 
 - [ ] **Step 2: Create package markers**
 
-`src/posebench/__init__.py`:
+`src/inversa/__init__.py`:
 ```python
-"""PoseBench: measure AI reasoning by problem-posing."""
+"""Inversa: measure AI reasoning by problem-posing."""
 __version__ = "0.1.0"
 ```
 
@@ -93,7 +93,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 ```
-Expected: installs posebench (editable), sympy, anthropic, pytest with no errors.
+Expected: installs inversa (editable), sympy, anthropic, pytest with no errors.
 
 - [ ] **Step 4: Verify pytest collects (0 tests yet)**
 
@@ -106,7 +106,7 @@ Expected: "no tests ran" (exit code 5) — confirms pytest + package import work
 - [ ] **Step 5: Commit**
 
 ```bash
-git add pyproject.toml src/posebench/__init__.py tests/__init__.py
+git add pyproject.toml src/inversa/__init__.py tests/__init__.py
 git commit -m "chore: project setup (pyproject, package skeleton, venv install)"
 ```
 
@@ -115,15 +115,15 @@ git commit -m "chore: project setup (pyproject, package skeleton, venv install)"
 ### Task 1: Math equation verifier (core)
 
 **Files:**
-- Create: `src/posebench/verifiers/__init__.py` (empty)
-- Create: `src/posebench/verifiers/math_equation.py`
+- Create: `src/inversa/verifiers/__init__.py` (empty)
+- Create: `src/inversa/verifiers/math_equation.py`
 - Test: `tests/test_math_equation_verifier.py`
 
 - [ ] **Step 1: Write the failing tests**
 
 `tests/test_math_equation_verifier.py`:
 ```python
-from posebench.verifiers.math_equation import verify_equation
+from inversa.verifiers.math_equation import verify_equation
 
 
 def test_linear_equation_valid_and_unique():
@@ -185,16 +185,16 @@ Run:
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests/test_math_equation_verifier.py -q
 ```
-Expected: FAIL — `ModuleNotFoundError: No module named 'posebench.verifiers'`.
+Expected: FAIL — `ModuleNotFoundError: No module named 'inversa.verifiers'`.
 
 - [ ] **Step 3: Implement the verifier**
 
-`src/posebench/verifiers/__init__.py`:
+`src/inversa/verifiers/__init__.py`:
 ```python
 ```
 (empty file)
 
-`src/posebench/verifiers/math_equation.py`:
+`src/inversa/verifiers/math_equation.py`:
 ```python
 """Forward-verification oracle for posed single-variable equations.
 
@@ -282,7 +282,7 @@ Expected: PASS (8 passed).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/posebench/verifiers/ tests/test_math_equation_verifier.py
+git add src/inversa/verifiers/ tests/test_math_equation_verifier.py
 git commit -m "feat(verifier): sympy forward-verification of posed equations (validity)"
 ```
 
@@ -291,16 +291,16 @@ git commit -m "feat(verifier): sympy forward-verification of posed equations (va
 ### Task 2: Adapter protocol + FakeAdapter
 
 **Files:**
-- Create: `src/posebench/adapters/__init__.py` (empty)
-- Create: `src/posebench/adapters/base.py`
-- Create: `src/posebench/adapters/fake.py`
+- Create: `src/inversa/adapters/__init__.py` (empty)
+- Create: `src/inversa/adapters/base.py`
+- Create: `src/inversa/adapters/fake.py`
 - Test: `tests/test_fake_adapter.py`
 
 - [ ] **Step 1: Write the failing test**
 
 `tests/test_fake_adapter.py`:
 ```python
-from posebench.adapters.fake import FakeAdapter
+from inversa.adapters.fake import FakeAdapter
 
 
 def test_fake_adapter_returns_scripted_outputs_in_order():
@@ -327,16 +327,16 @@ Run:
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests/test_fake_adapter.py -q
 ```
-Expected: FAIL — `ModuleNotFoundError: No module named 'posebench.adapters'`.
+Expected: FAIL — `ModuleNotFoundError: No module named 'inversa.adapters'`.
 
 - [ ] **Step 3: Implement adapter base + fake**
 
-`src/posebench/adapters/__init__.py`:
+`src/inversa/adapters/__init__.py`:
 ```python
 ```
 (empty file)
 
-`src/posebench/adapters/base.py`:
+`src/inversa/adapters/base.py`:
 ```python
 """Adapter protocol: anything that turns a prompt into a text completion."""
 from __future__ import annotations
@@ -350,7 +350,7 @@ class Adapter(Protocol):
         ...
 ```
 
-`src/posebench/adapters/fake.py`:
+`src/inversa/adapters/fake.py`:
 ```python
 """Deterministic fake adapter for tests (no network)."""
 from __future__ import annotations
@@ -384,7 +384,7 @@ Expected: PASS (3 passed).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/posebench/adapters/__init__.py src/posebench/adapters/base.py src/posebench/adapters/fake.py tests/test_fake_adapter.py
+git add src/inversa/adapters/__init__.py src/inversa/adapters/base.py src/inversa/adapters/fake.py tests/test_fake_adapter.py
 git commit -m "feat(adapters): Adapter protocol + FakeAdapter for tests"
 ```
 
@@ -393,16 +393,16 @@ git commit -m "feat(adapters): Adapter protocol + FakeAdapter for tests"
 ### Task 3: Posing runner
 
 **Files:**
-- Create: `src/posebench/tasks/__init__.py` (empty)
-- Create: `src/posebench/tasks/posing.py`
+- Create: `src/inversa/tasks/__init__.py` (empty)
+- Create: `src/inversa/tasks/posing.py`
 - Test: `tests/test_posing_runner.py`
 
 - [ ] **Step 1: Write the failing tests**
 
 `tests/test_posing_runner.py`:
 ```python
-from posebench.adapters.fake import FakeAdapter
-from posebench.tasks.posing import build_prompt, _extract_equation, run_item, run_batch
+from inversa.adapters.fake import FakeAdapter
+from inversa.tasks.posing import build_prompt, _extract_equation, run_item, run_batch
 
 
 def test_build_prompt_mentions_target_and_x():
@@ -447,24 +447,24 @@ Run:
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests/test_posing_runner.py -q
 ```
-Expected: FAIL — `ModuleNotFoundError: No module named 'posebench.tasks'`.
+Expected: FAIL — `ModuleNotFoundError: No module named 'inversa.tasks'`.
 
 - [ ] **Step 3: Implement the runner**
 
-`src/posebench/tasks/__init__.py`:
+`src/inversa/tasks/__init__.py`:
 ```python
 ```
 (empty file)
 
-`src/posebench/tasks/posing.py`:
+`src/inversa/tasks/posing.py`:
 ```python
 """Inverse/posing task: target answer -> model constructs an equation -> verify."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from posebench.adapters.base import Adapter
-from posebench.verifiers.math_equation import verify_equation, VerificationResult
+from inversa.adapters.base import Adapter
+from inversa.verifiers.math_equation import verify_equation, VerificationResult
 
 PROMPT_TEMPLATE = (
     "You are constructing a math problem.\n"
@@ -516,7 +516,7 @@ Expected: PASS (6 passed).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/posebench/tasks/ tests/test_posing_runner.py
+git add src/inversa/tasks/ tests/test_posing_runner.py
 git commit -m "feat(tasks): posing runner (prompt -> extract -> verify)"
 ```
 
@@ -525,16 +525,16 @@ git commit -m "feat(tasks): posing runner (prompt -> extract -> verify)"
 ### Task 4: Report
 
 **Files:**
-- Create: `src/posebench/report.py`
+- Create: `src/inversa/report.py`
 - Test: `tests/test_report.py`
 
 - [ ] **Step 1: Write the failing tests**
 
 `tests/test_report.py`:
 ```python
-from posebench.adapters.fake import FakeAdapter
-from posebench.tasks.posing import run_batch
-from posebench.report import summarize, format_summary
+from inversa.adapters.fake import FakeAdapter
+from inversa.tasks.posing import run_batch
+from inversa.report import summarize, format_summary
 
 
 def _results():
@@ -569,11 +569,11 @@ Run:
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests/test_report.py -q
 ```
-Expected: FAIL — `ModuleNotFoundError: No module named 'posebench.report'`.
+Expected: FAIL — `ModuleNotFoundError: No module named 'inversa.report'`.
 
 - [ ] **Step 3: Implement the report module**
 
-`src/posebench/report.py`:
+`src/inversa/report.py`:
 ```python
 """Summarize a batch of posing results into validity / uniqueness rates."""
 from __future__ import annotations
@@ -627,7 +627,7 @@ Run:
 Expected: PASS (20 passed).
 
 ```bash
-git add src/posebench/report.py tests/test_report.py
+git add src/inversa/report.py tests/test_report.py
 git commit -m "feat(report): validity/uniqueness rate summary"
 ```
 
@@ -636,14 +636,14 @@ git commit -m "feat(report): validity/uniqueness rate summary"
 ### Task 5: Anthropic adapter + CLI (real, smoke-tested)
 
 **Files:**
-- Create: `src/posebench/adapters/anthropic_adapter.py`
-- Create: `src/posebench/cli.py`
+- Create: `src/inversa/adapters/anthropic_adapter.py`
+- Create: `src/inversa/cli.py`
 
 > No unit tests here (these hit the network / parse argv). Verified by the end-to-end smoke run in Task 6. Keep them thin so the untested surface is minimal.
 
 - [ ] **Step 1: Implement the Anthropic adapter**
 
-`src/posebench/adapters/anthropic_adapter.py`:
+`src/inversa/adapters/anthropic_adapter.py`:
 ```python
 """Real model adapter backed by the Anthropic API."""
 from __future__ import annotations
@@ -671,7 +671,7 @@ class AnthropicAdapter:
 
 - [ ] **Step 2: Implement the CLI**
 
-`src/posebench/cli.py`:
+`src/inversa/cli.py`:
 ```python
 """Run a posing batch from a JSON target bank and print a report."""
 from __future__ import annotations
@@ -679,13 +679,13 @@ from __future__ import annotations
 import argparse
 import json
 
-from posebench.adapters.anthropic_adapter import AnthropicAdapter
-from posebench.report import format_summary, summarize
-from posebench.tasks.posing import run_batch
+from inversa.adapters.anthropic_adapter import AnthropicAdapter
+from inversa.report import format_summary, summarize
+from inversa.tasks.posing import run_batch
 
 
 def main(argv=None) -> None:
-    parser = argparse.ArgumentParser(description="PoseBench slice-1 math runner")
+    parser = argparse.ArgumentParser(description="Inversa slice-1 math runner")
     parser.add_argument("--bank", required=True, help="path to target bank JSON")
     parser.add_argument("--model", default="claude-opus-4-8")
     args = parser.parse_args(argv)
@@ -711,14 +711,14 @@ if __name__ == "__main__":
 
 Run:
 ```powershell
-.\.venv\Scripts\python.exe -c "import posebench.cli, posebench.adapters.anthropic_adapter; print('ok')"
+.\.venv\Scripts\python.exe -c "import inversa.cli, inversa.adapters.anthropic_adapter; print('ok')"
 ```
 Expected: prints `ok` (no import errors).
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add src/posebench/adapters/anthropic_adapter.py src/posebench/cli.py
+git add src/inversa/adapters/anthropic_adapter.py src/inversa/cli.py
 git commit -m "feat(cli): Anthropic adapter + batch runner CLI"
 ```
 
@@ -754,7 +754,7 @@ Requires `ANTHROPIC_API_KEY` in the environment.
 Run:
 ```powershell
 $env:ANTHROPIC_API_KEY = "<your key>"
-.\.venv\Scripts\python.exe -m posebench.cli --bank data\banks\math_targets_slice1.json
+.\.venv\Scripts\python.exe -m inversa.cli --bank data\banks\math_targets_slice1.json
 ```
 Expected: a summary line like `items=8 valid=8 (100.0%) unique=...` followed by one line per target showing the posed equation and its verdict. (Validity should be high — posing an equation for a known answer is easy; this confirms the *pipeline* works end-to-end. Low-validity or extraction failures here are findings to feed into slice 2.)
 

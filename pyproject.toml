@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inversa"
+version = "0.1.0"
+description = "Measure AI reasoning by problem-posing with machine-verifiable scoring"
+requires-python = ">=3.11"
+dependencies = [
+    "sympy>=1.12",
+    "anthropic>=0.40",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
