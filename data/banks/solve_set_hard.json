@@ -1,0 +1,12 @@
+{
+  "problems": [
+    {"equation": "2**x = 64", "answer": 6},
+    {"equation": "x**3 = 64", "answer": 4},
+    {"equation": "3**(x - 1) = 81", "answer": 5},
+    {"equation": "x + sqrt(x) = 6", "answer": 4},
+    {"equation": "sqrt(x + 4) = x - 2", "answer": 5},
+    {"equation": "sqrt(2*x + 6) + sqrt(x + 11) = 2*x - 2", "answer": 5},
+    {"equation": "sqrt(x + 15) + sqrt(x) = 15", "answer": 49},
+    {"equation": "(x - 7)*(x**2 + x + 1) = 0", "answer": 7}
+  ]
+}
