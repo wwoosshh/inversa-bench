@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from concurrent.futures import ThreadPoolExecutor
 
 from dotenv import load_dotenv
 
@@ -42,6 +43,8 @@ def main(argv=None) -> None:
     parser.add_argument("--levels", default="1,2,3")
     parser.add_argument("--max-tokens", type=int, default=1024,
                         help="output token cap; raise so reasoning models reach the '#### <ans>' line")
+    parser.add_argument("--max-workers", type=int, default=8,
+                        help="models evaluated concurrently (each is network-bound; wall-clock ~ slowest model)")
     parser.add_argument("--out", default="data/results/report.html")
     parser.add_argument("--json-out", default="data/results/results.json")
     args = parser.parse_args(argv)
@@ -51,20 +54,27 @@ def main(argv=None) -> None:
     targets = [int(x) for x in args.targets.split(",")]
     levels = [int(x) for x in args.levels.split(",")]
     models = [m.strip() for m in args.models.split(",") if m.strip()]
-    weak = _make_adapter(args.weak_model, args.provider, args.base_url, args.key_env, args.max_tokens)
 
-    runs = []
-    for m in models:
+    def run_one(m):
+        """Evaluate one poser end-to-end. Each model gets its OWN poser+weak adapters
+        (independent OpenAI clients) so the calls are safe to run concurrently."""
         try:
             poser = _make_adapter(m, args.provider, args.base_url, args.key_env, args.max_tokens)
+            weak = _make_adapter(args.weak_model, args.provider, args.base_url, args.key_env, args.max_tokens)
             run = evaluate_model_detailed(m, poser, weak, solve_problems, targets, levels, targets)
         except Exception as e:  # one unreachable/mis-slugged model must not abort the whole run
-            print(f"[skip] {m}: {type(e).__name__}: {e}")
-            continue
-        runs.append(run)
+            print(f"[skip] {m}: {type(e).__name__}: {e}", flush=True)
+            return None
         s = run.scores
         print(f"[done] {m}: solve={s.solve_accuracy:.0%} "
-              f"mace={s.calibration_mace} adv={s.adversarial_success_rate:.0%}")
+              f"mace={s.calibration_mace} adv={s.adversarial_success_rate:.0%}", flush=True)
+        return run
+
+    # Models are independent network-bound jobs -> run concurrently. Wall-clock collapses
+    # from the SUM of per-model times to roughly the SLOWEST single model. ex.map preserves
+    # input order, so the report keeps the requested model ordering.
+    with ThreadPoolExecutor(max_workers=min(len(models), args.max_workers)) as ex:
+        runs = [r for r in ex.map(run_one, models) if r is not None]
 
     scores = [r.scores for r in runs]
     cors = correlations(scores)
