@@ -14,12 +14,13 @@ from inversa.report_html import render_html_detailed
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
-def _make_adapter(model: str, provider: str, base_url: str, key_env: str):
+def _make_adapter(model: str, provider: str, base_url: str, key_env: str, max_tokens: int = 512):
     """Build an adapter for `model`. provider=anthropic -> native Anthropic;
     anything else -> OpenAI-compatible endpoint (OpenRouter, Ollama, ...)."""
     if provider == "anthropic":
         return AnthropicAdapter(model=model)
-    return OpenAICompatibleAdapter(model, base_url=base_url, api_key_env=key_env)
+    return OpenAICompatibleAdapter(model, base_url=base_url, api_key_env=key_env,
+                                   max_tokens=max_tokens)
 
 
 def main(argv=None) -> None:
@@ -39,6 +40,8 @@ def main(argv=None) -> None:
     parser.add_argument("--solve-bank", default="data/banks/solve_set_v1.json")
     parser.add_argument("--targets", default="3,7,12,42")
     parser.add_argument("--levels", default="1,2,3")
+    parser.add_argument("--max-tokens", type=int, default=1024,
+                        help="output token cap; raise so reasoning models reach the '#### <ans>' line")
     parser.add_argument("--out", default="data/results/report.html")
     parser.add_argument("--json-out", default="data/results/results.json")
     args = parser.parse_args(argv)
@@ -48,12 +51,16 @@ def main(argv=None) -> None:
     targets = [int(x) for x in args.targets.split(",")]
     levels = [int(x) for x in args.levels.split(",")]
     models = [m.strip() for m in args.models.split(",") if m.strip()]
-    weak = _make_adapter(args.weak_model, args.provider, args.base_url, args.key_env)
+    weak = _make_adapter(args.weak_model, args.provider, args.base_url, args.key_env, args.max_tokens)
 
     runs = []
     for m in models:
-        poser = _make_adapter(m, args.provider, args.base_url, args.key_env)
-        run = evaluate_model_detailed(m, poser, weak, solve_problems, targets, levels, targets)
+        try:
+            poser = _make_adapter(m, args.provider, args.base_url, args.key_env, args.max_tokens)
+            run = evaluate_model_detailed(m, poser, weak, solve_problems, targets, levels, targets)
+        except Exception as e:  # one unreachable/mis-slugged model must not abort the whole run
+            print(f"[skip] {m}: {type(e).__name__}: {e}")
+            continue
         runs.append(run)
         s = run.scores
         print(f"[done] {m}: solve={s.solve_accuracy:.0%} "
