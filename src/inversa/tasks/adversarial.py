@@ -19,7 +19,8 @@ POSER_PROMPT = (
     "Write a single-variable algebraic EQUATION in the variable x whose UNIQUE real "
     "solution is exactly {target}, but make it tricky enough that a LESS capable solver "
     "would get it wrong.\n"
-    "Output ONLY the equation as '<lhs> = <rhs>', with no explanation. Use sympy syntax."
+    "You may reason first, but you MUST end with the equation on its own final line prefixed "
+    "by '#### ', in sympy syntax. Example: '#### x**2 - 9 = 0'."
 )
 
 SOLVER_PROMPT = (

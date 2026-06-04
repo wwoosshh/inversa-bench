@@ -14,8 +14,8 @@ CALIB_PROMPT = (
     "You are constructing a math problem.\n"
     "Write a single-variable algebraic EQUATION in the variable x whose unique "
     "solution is exactly {target} AND whose polynomial degree in x is exactly {level}.\n"
-    "Output ONLY the equation as '<lhs> = <rhs>', with no explanation. "
-    "Use sympy syntax (e.g. x**2 - 4 = 0 has degree 2)."
+    "You may reason first, but you MUST end with the equation on its own final line prefixed "
+    "by '#### ', in sympy syntax (e.g. '#### x**2 - 4 = 0' has degree 2)."
 )
 
 
