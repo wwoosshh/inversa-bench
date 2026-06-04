@@ -80,11 +80,12 @@ class AdversarialItem:
     raw_poser_output: str
     equation: str
     verification: VerificationResult
-    valid: bool                  # target is a real solution (sympy)
+    valid: bool                  # target is A real solution (membership) — kept for evidence
+    unique: bool                 # target is the UNIQUE real solution — the constraint the poser was given
     weak_raw_output: str
     weak_answer: Optional[float]
     weak_correct: bool
-    adversarial_success: bool    # valid AND weak model got it wrong
+    adversarial_success: bool    # UNIQUE-valid AND weak model got it wrong (validity x difficulty)
 
 
 def run_adversarial_item(poser: Adapter, weak_solver: Adapter, target) -> AdversarialItem:
@@ -100,10 +101,13 @@ def run_adversarial_item(poser: Adapter, weak_solver: Adapter, target) -> Advers
         equation=equation,
         verification=ver,
         valid=ver.valid,
+        unique=ver.unique,
         weak_raw_output=weak_raw,
         weak_answer=weak_ans,
         weak_correct=weak_correct,
-        adversarial_success=(ver.valid and not weak_correct),
+        # The poser was asked for a UNIQUE solution = target. Credit the pose only if that
+        # constraint is actually met (not mere membership) AND the weak solver still failed.
+        adversarial_success=(ver.unique and not weak_correct),
     )
 
 

@@ -68,16 +68,21 @@ def format_calibration_summary(s: CalibrationSummary) -> str:
 class AdversarialSummary:
     n: int
     n_valid: int
-    validity_rate: float
-    n_adversarial_success: int           # valid AND weak model wrong
-    adversarial_success_rate: float      # over all n
-    weak_solver_accuracy_on_valid: float | None   # weak correct / valid posed equations
+    validity_rate: float                 # membership: target is A solution (kept for evidence)
+    n_adversarial_success: int           # UNIQUE-valid AND weak model wrong
+    adversarial_success_rate: float      # over all n (= pose_validity x fool_rate)
+    weak_solver_accuracy_on_valid: float | None   # weak correct / membership-valid posed equations
+    # Decomposed axes (the two things the composite conflates):
+    n_unique: int                        # target is the UNIQUE real solution (the posed constraint)
+    pose_validity_rate: float            # n_unique / n  -> "can it construct a well-posed problem?"
+    fool_rate_on_unique: float | None    # weak wrong / n_unique -> "given a valid problem, was it hard?"
 
 
 def adversarial_summary(items) -> AdversarialSummary:
     n = len(items)
     n_valid = sum(1 for it in items if it.valid)
-    n_adv = sum(1 for it in items if it.adversarial_success)
+    n_unique = sum(1 for it in items if it.unique)
+    n_adv = sum(1 for it in items if it.adversarial_success)  # unique AND weak wrong
     valid_items = [it for it in items if it.valid]
     weak_acc = (sum(1 for it in valid_items if it.weak_correct) / len(valid_items)
                 if valid_items else None)
@@ -88,11 +93,16 @@ def adversarial_summary(items) -> AdversarialSummary:
         n_adversarial_success=n_adv,
         adversarial_success_rate=(n_adv / n if n else 0.0),
         weak_solver_accuracy_on_valid=weak_acc,
+        n_unique=n_unique,
+        pose_validity_rate=(n_unique / n if n else 0.0),
+        fool_rate_on_unique=(n_adv / n_unique if n_unique else None),
     )
 
 
 def format_adversarial_summary(s: AdversarialSummary) -> str:
     wacc = "n/a" if s.weak_solver_accuracy_on_valid is None else f"{s.weak_solver_accuracy_on_valid:.1%}"
+    fool = "n/a" if s.fool_rate_on_unique is None else f"{s.fool_rate_on_unique:.1%}"
     return (f"items={s.n} valid={s.n_valid} ({s.validity_rate:.1%}) "
+            f"unique={s.n_unique} (pose_validity={s.pose_validity_rate:.1%}) "
             f"adversarial_success={s.n_adversarial_success} ({s.adversarial_success_rate:.1%}) "
-            f"weak_solver_accuracy_on_valid={wacc}")
+            f"fool_rate_on_unique={fool} weak_solver_accuracy_on_valid={wacc}")
