@@ -24,13 +24,15 @@ POSER_PROMPT = (
 
 SOLVER_PROMPT = (
     "Solve this equation for x:\n{equation}\n"
-    "Output ONLY the numeric value of x (a single number), nothing else."
+    "Reason briefly if you must, then end your reply with a line in EXACTLY this form:\n"
+    "#### <the numeric value of x>"
 )
 
 _TOL = 1e-6
 _NUM_RE = re.compile(r"-?\d+/\d+|-?\d+\.?\d*")
 _XEQ_RE = re.compile(r"x\s*=\s*(-?\d+/\d+|-?\d+\.?\d*)", re.IGNORECASE)
 _NOSOL_RE = re.compile(r"\bno\s+(real\s+)?solution", re.IGNORECASE)
+_FINAL_RE = re.compile(r"####\s*(-?\d+/\d+|-?\d+\.?\d*)")
 
 
 def build_poser_prompt(target) -> str:
@@ -47,6 +49,14 @@ def parse_numeric_answer(text: str) -> Optional[float]:
     else the FIRST number token. Returns None for 'no solution' replies or when no
     number is present."""
     s = (text or "").strip()
+    # An explicit '#### <num>' final-answer line (last one wins) beats any number that
+    # appears inside a reasoning/scratch-work prefix.
+    finals = _FINAL_RE.findall(s)
+    if finals:
+        try:
+            return float(sp.sympify(finals[-1]))
+        except Exception:
+            pass
     if _NOSOL_RE.search(s):
         return None
     m = _XEQ_RE.search(s)

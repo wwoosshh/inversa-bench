@@ -32,7 +32,7 @@ class CalibrationItem:
     verification: VerificationResult
     difficulty: DifficultyResult
     valid: bool                       # solves to target
-    calibration_error: Optional[int]  # |requested_level - actual band|, None if band==0
+    calibration_error: Optional[int]  # |requested_level - actual polynomial degree|, None if not measurable
 
 
 def run_calibration_item(adapter: Adapter, target, level: int) -> CalibrationItem:
@@ -40,7 +40,9 @@ def run_calibration_item(adapter: Adapter, target, level: int) -> CalibrationIte
     equation = extract_equation(raw)
     ver = verify_equation(equation, target)
     dif = difficulty(equation)
-    cal_err = abs(int(level) - dif.band) if dif.band else None
+    # Compare to the RAW polynomial degree, not the 1..5 display band — otherwise a
+    # requested level >5 is always "off" because the band saturates at 5 (a measurement artifact).
+    cal_err = abs(int(level) - dif.degree) if dif.degree is not None else None
     return CalibrationItem(
         target=float(target),
         requested_level=int(level),
