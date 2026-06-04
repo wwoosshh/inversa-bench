@@ -62,6 +62,11 @@ def parse_sides(equation_str: str):
                          local_dict={"x": _X}, global_dict=_SAFE_GLOBAL, evaluate=True)
     except Exception as e:
         raise ValueError(f"parse error: {e}")
+    # A side must be a plain arithmetic expression. Models sometimes emit sympy relational
+    # syntax (e.g. "Eq(x**2, 4) = 0"), which parses to a Relational/Boolean — not an Expr —
+    # and would crash later arithmetic (Equality - Zero). Reject it as malformed.
+    if not isinstance(lhs, sp.Expr) or not isinstance(rhs, sp.Expr):
+        raise ValueError("each side must be a plain arithmetic expression (got a relational/boolean)")
     return lhs, rhs
 
 
