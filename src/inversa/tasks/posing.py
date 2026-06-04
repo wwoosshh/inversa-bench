@@ -1,10 +1,13 @@
 """Inverse/posing task: target answer -> model constructs an equation -> verify."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from inversa.adapters.base import Adapter
 from inversa.verifiers.math_equation import verify_equation, VerificationResult
+
+_MARKER_RE = re.compile(r"####\s*(.+)")
 
 PROMPT_TEMPLATE = (
     "You are constructing a math problem.\n"
@@ -20,10 +23,19 @@ def build_prompt(target) -> str:
 
 
 def extract_equation(raw: str) -> str:
-    for line in raw.splitlines():
-        if "=" in line:
-            return line.strip().strip("`").strip()
-    return raw.strip().strip("`").strip()
+    """Pull the final equation from a model reply. Prefers an explicit '#### <eq>' marker
+    (last one wins) so a verbose/reasoning model's final answer is captured; otherwise takes
+    the LAST line containing '=' (the conclusion of any working), stripping code fences."""
+    s = (raw or "").strip()
+    marked = _MARKER_RE.findall(s)
+    for cand in reversed(marked):
+        c = cand.strip().strip("`").strip()
+        if "=" in c:
+            return c
+    eq_lines = [ln.strip().strip("`").strip() for ln in s.splitlines() if "=" in ln]
+    if eq_lines:
+        return eq_lines[-1]
+    return s.strip("`").strip()
 
 
 @dataclass

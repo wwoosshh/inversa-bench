@@ -27,14 +27,16 @@ STRUCT_POSE_PROMPT = (
     "Construct a single-variable equation in x whose UNIQUE real solution is exactly {target_desc}.\n"
     "There must be no other real solution. Radicals, fractions, exponentials and logs are allowed "
     "and encouraged.\n"
-    "Output ONLY the equation as '<lhs> = <rhs>' in sympy syntax, with no explanation."
+    "You may reason first, but you MUST end with the equation on its own final line, prefixed by "
+    "'#### ', in sympy syntax. Example: '#### x**2 - 2 = 0'."
 )
 
 TRANSFORM_PROMPT = (
     "Let r be the UNIQUE real solution of this equation:\n{source}\n"
     "Do NOT solve for r numerically. By transforming the structure, construct a NEW single-variable "
     "equation in x whose unique real solution is exactly {g_desc} (where r is that solution above).\n"
-    "Output ONLY the new equation as '<lhs> = <rhs>' in sympy syntax, with no explanation."
+    "You may reason first, but you MUST end with the new equation on its own final line, prefixed by "
+    "'#### ', in sympy syntax. Example: '#### (x-1)**3 + (x-1) - 1 = 0'."
 )
 
 
