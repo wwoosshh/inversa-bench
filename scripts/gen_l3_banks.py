@@ -37,6 +37,10 @@ CUBICS = [(1, -1), (1, -3), (2, -5), (-1, -1), (3, -2), (1, 1)]
 TRANSFORMS = [
     ("r + 1", lambda src: src.subs(X, X - 1), lambda r: r + 1),
     ("2*r",   lambda src: src.subs(X, X / 2), lambda r: 2 * r),
+    # 1/r: reverse the coefficients (x^n * P(1/x)) -> roots are reciprocals; the one real root
+    # maps to 1/r (the complex pair stays complex), so uniqueness is preserved. Harder than an
+    # affine shift -> stretches the ceiling for strong models.
+    ("1/r",   lambda src: sp.expand(src.subs(X, 1 / X) * X**sp.degree(src, X)), lambda r: 1 / r),
     # r**2 omitted: no clean root-substitution guarantees a UNIQUE real root, so it would be
     # an unfairly/possibly-unsolvable task. Every kept transform is canonical-solvable=True.
 ]
