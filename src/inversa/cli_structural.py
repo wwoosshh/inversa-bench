@@ -10,8 +10,9 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 from collections import OrderedDict
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from dotenv import load_dotenv
 
@@ -114,6 +115,8 @@ def main(argv=None) -> None:
     ap.add_argument("--key-env", default="OPENROUTER_API_KEY")
     ap.add_argument("--max-tokens", type=int, default=1024)
     ap.add_argument("--max-workers", type=int, default=8)
+    ap.add_argument("--deadline", type=float, default=900.0,
+                    help="overall seconds before abandoning stuck/slow models (keeps partial results)")
     ap.add_argument("--pose-bank", default="data/banks/struct_pose_targets.json")
     ap.add_argument("--transform-bank", default="data/banks/transform_bank.json")
     ap.add_argument("--out", default="data/results/level3_report.html")
@@ -136,16 +139,35 @@ def main(argv=None) -> None:
               f"transform_valid={res['transform_validity']:.0%}", flush=True)
         return res
 
-    with ThreadPoolExecutor(max_workers=min(len(models), args.max_workers)) as ex:
-        results = [r for r in ex.map(run_one, models) if r is not None]
+    def writeout(results):
+        with open(args.out, "w", encoding="utf-8") as f:
+            f.write(_render(results, novelty_order))
+        slim = [{k: v for k, v in r.items() if k not in ("pose_items", "transform_items")}
+                for r in results]
+        with open(args.json_out, "w", encoding="utf-8") as f:
+            json.dump(slim, f, indent=2)
 
-    with open(args.out, "w", encoding="utf-8") as f:
-        f.write(_render(results, novelty_order))
-    slim = [{k: v for k, v in r.items() if k not in ("pose_items", "transform_items")}
-            for r in results]
-    with open(args.json_out, "w", encoding="utf-8") as f:
-        json.dump(slim, f, indent=2)
-    print(f"wrote {args.out} and {args.json_out}")
+    # Incremental write per completed model + an overall deadline: a network drop or a
+    # GIL-holding verify hang (which thread timeouts can't interrupt) can no longer lose the
+    # models that already finished. Past the deadline we keep partial results and force-exit
+    # rather than block forever on a stuck worker thread.
+    results = []
+    ex = ThreadPoolExecutor(max_workers=min(len(models), args.max_workers))
+    futs = {ex.submit(run_one, m): m for m in models}
+    try:
+        for fut in as_completed(futs, timeout=args.deadline):
+            r = fut.result()
+            if r is not None:
+                results.append(r)
+                writeout(results)
+    except TimeoutError:
+        stuck = [m for f, m in futs.items() if not f.done()]
+        print(f"[deadline] {len(stuck)} model(s) abandoned (stuck/slow): {stuck}", flush=True)
+
+    writeout(results)
+    print(f"wrote {args.out} and {args.json_out} ({len(results)} models)")
+    ex.shutdown(wait=False)
+    os._exit(0)  # don't block process exit on any stuck worker thread
 
 
 if __name__ == "__main__":
