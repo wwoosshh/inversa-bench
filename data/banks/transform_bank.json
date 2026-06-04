@@ -1,0 +1,89 @@
+{
+  "name": "transform_bank",
+  "items": [
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": 0.6823278038280194,
+      "target_value": 1.6823278038280194,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "2*r",
+      "r_value": 0.6823278038280194,
+      "target_value": 1.3646556076560388,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.2134116627622296,
+      "target_value": 2.21341166276223,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.2134116627622296,
+      "target_value": 2.426823325524459,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.3282688556686084,
+      "target_value": 2.3282688556686084,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.3282688556686084,
+      "target_value": 2.656537711337217,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.324717957244746,
+      "target_value": 2.3247179572447463,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.324717957244746,
+      "target_value": 2.649435914489492,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r + 1",
+      "r_value": 0.5960716379833215,
+      "target_value": 1.5960716379833215,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "2*r",
+      "r_value": 0.5960716379833215,
+      "target_value": 1.192143275966643,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": -0.6823278038280194,
+      "target_value": 0.3176721961719806,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "2*r",
+      "r_value": -0.6823278038280194,
+      "target_value": -1.3646556076560388,
+      "canonical_solvable": true
+    }
+  ]
+}

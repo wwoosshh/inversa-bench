@@ -1,0 +1,35 @@
+{
+  "name": "struct_pose_targets",
+  "targets": [
+    {
+      "target_desc": "3",
+      "target_value": 3.0,
+      "novelty": "integer"
+    },
+    {
+      "target_desc": "4817",
+      "target_value": 4817.0,
+      "novelty": "large-integer"
+    },
+    {
+      "target_desc": "7/3",
+      "target_value": 2.3333333333333335,
+      "novelty": "rational"
+    },
+    {
+      "target_desc": "sqrt(2) + 1",
+      "target_value": 2.414213562373095,
+      "novelty": "quadratic-irrational"
+    },
+    {
+      "target_desc": "the real root of t**3 - t - 1 = 0 (~1.3247)",
+      "target_value": 1.324717957244746,
+      "novelty": "cubic-irrational"
+    },
+    {
+      "target_desc": "sqrt(2) + sqrt(3)",
+      "target_value": 3.1462643699419726,
+      "novelty": "sum-of-surds"
+    }
+  ]
+}
