@@ -15,7 +15,7 @@ class OpenAICompatibleAdapter:
         key = api_key or (os.environ.get(api_key_env) if api_key_env else None)
         # max_retries: SDK retries 429/5xx/timeout with exponential backoff, so a
         # transient upstream rate-limit doesn't crash a long multi-model experiment.
-        self._client = OpenAI(base_url=base_url, api_key=key, max_retries=6, timeout=60.0)
+        self._client = OpenAI(base_url=base_url, api_key=key, max_retries=3, timeout=45.0)
         self._model = model
         self._max_tokens = max_tokens
 
