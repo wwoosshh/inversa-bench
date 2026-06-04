@@ -6,6 +6,7 @@ This is the slice-1 "validity" layer (depth constraints come later).
 """
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -24,6 +25,30 @@ _TOL = 1e-6  # max |solution - target| to count as a match (sympy returns exact/
 # builtins so untrusted model output cannot execute arbitrary Python (e.g. __import__).
 _SAFE_GLOBAL = {k: getattr(sp, k) for k in dir(sp) if not k.startswith("_")}
 _SAFE_GLOBAL["__builtins__"] = {}
+
+_SOLVE_TIMEOUT = 10.0  # seconds; sp.solve can spin forever on pathological transcendental input
+
+
+def _solve_with_timeout(eq, sym, timeout: float = _SOLVE_TIMEOUT):
+    """Run sp.solve on a daemon thread and abandon it past `timeout`. sympy has no native
+    timeout and can hang indefinitely on adversarial model output; this bounds every verify.
+    A timed-out solve raises TimeoutError (caller treats it as an unverifiable -> invalid pose)."""
+    box: dict = {}
+
+    def _work():
+        try:
+            box["sol"] = sp.solve(eq, sym, dict=False)
+        except Exception as exc:  # noqa: BLE001 - re-raised on the calling thread
+            box["err"] = exc
+
+    t = threading.Thread(target=_work, daemon=True)
+    t.start()
+    t.join(timeout)
+    if t.is_alive():
+        raise TimeoutError(f"solve exceeded {timeout}s")
+    if "err" in box:
+        raise box["err"]
+    return box["sol"]
 
 
 @dataclass
@@ -82,7 +107,7 @@ def verify_equation(equation_str: str, target: float) -> VerificationResult:
 
     eq = sp.Eq(lhs, rhs)
     try:
-        solutions = sp.solve(eq, _X, dict=False)
+        solutions = _solve_with_timeout(eq, _X)
     except Exception as e:
         return VerificationResult(True, False, False, [], f"solve error: {e}")
 
