@@ -7,8 +7,19 @@ import json
 from dotenv import load_dotenv
 
 from inversa.adapters.anthropic_adapter import AnthropicAdapter
+from inversa.adapters.openai_compatible import OpenAICompatibleAdapter
 from inversa.experiment import correlations, evaluate_model_detailed
 from inversa.report_html import render_html_detailed
+
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
+
+def _make_adapter(model: str, provider: str, base_url: str, key_env: str):
+    """Build an adapter for `model`. provider=anthropic -> native Anthropic;
+    anything else -> OpenAI-compatible endpoint (OpenRouter, Ollama, ...)."""
+    if provider == "anthropic":
+        return AnthropicAdapter(model=model)
+    return OpenAICompatibleAdapter(model, base_url=base_url, api_key_env=key_env)
 
 
 def main(argv=None) -> None:
@@ -18,6 +29,13 @@ def main(argv=None) -> None:
                         default="claude-opus-4-8,claude-sonnet-4-6,claude-haiku-4-5-20251001",
                         help="comma-separated poser models")
     parser.add_argument("--weak-model", default="claude-haiku-4-5-20251001")
+    parser.add_argument("--provider", default="anthropic",
+                        choices=["anthropic", "openrouter", "openai_compatible"],
+                        help="adapter provider for all models")
+    parser.add_argument("--base-url", default=OPENROUTER_BASE_URL,
+                        help="base URL for openrouter/openai_compatible providers")
+    parser.add_argument("--key-env", default="OPENROUTER_API_KEY",
+                        help="env var holding the API key for openrouter/openai_compatible")
     parser.add_argument("--solve-bank", default="data/banks/solve_set_v1.json")
     parser.add_argument("--targets", default="3,7,12,42")
     parser.add_argument("--levels", default="1,2,3")
@@ -30,11 +48,11 @@ def main(argv=None) -> None:
     targets = [int(x) for x in args.targets.split(",")]
     levels = [int(x) for x in args.levels.split(",")]
     models = [m.strip() for m in args.models.split(",") if m.strip()]
-    weak = AnthropicAdapter(model=args.weak_model)
+    weak = _make_adapter(args.weak_model, args.provider, args.base_url, args.key_env)
 
     runs = []
     for m in models:
-        poser = AnthropicAdapter(model=m)
+        poser = _make_adapter(m, args.provider, args.base_url, args.key_env)
         run = evaluate_model_detailed(m, poser, weak, solve_problems, targets, levels, targets)
         runs.append(run)
         s = run.scores
