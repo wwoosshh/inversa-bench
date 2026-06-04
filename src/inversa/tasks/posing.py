@@ -9,12 +9,24 @@ from inversa.verifiers.math_equation import parse_sides, verify_equation, Verifi
 
 _MARKER_RE = re.compile(r"####\s*(.+)")
 _LABEL_RE = re.compile(r"^\s*(the\s+)?(equation|answer|result|f\s*\(\s*x\s*\))\s*[:=]?\s*", re.I)
+_SUP = {"⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5",
+        "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9"}
+_SUP_RE = re.compile("[" + "".join(_SUP) + "]+")
+
+
+def _norm_unicode(s: str) -> str:
+    """Normalize the unicode math glyphs models emit so sympy can parse them: superscript
+    powers (x² -> x**2), and the unicode minus/times/dot/divide operators."""
+    s = _SUP_RE.sub(lambda m: "**" + "".join(_SUP[c] for c in m.group(0)), s)
+    return (s.replace("−", "-").replace("×", "*").replace("⋅", "*")
+            .replace("÷", "/").replace("√", "sqrt"))
 
 
 def _clean(s: str) -> str:
     """Strip the cosmetic noise weak/verbose models wrap equations in: LaTeX delimiters,
-    code fences, \\cdot, a leading 'f(x) =' label, and '^' caret powers (sympy reads '^' as XOR)."""
-    s = s.strip()
+    code fences, \\cdot, a leading 'f(x) =' label, '^' caret powers (sympy reads '^' as XOR),
+    and unicode math glyphs."""
+    s = _norm_unicode(s.strip())
     for tok in ("$$", "$", "\\(", "\\)", "\\[", "\\]", "`"):
         s = s.replace(tok, "")
     s = s.replace("\\cdot", "*").replace("\\times", "*").replace("\\,", "").replace("\\!", "")
@@ -24,12 +36,16 @@ def _clean(s: str) -> str:
     return s.strip().rstrip(".").strip()
 
 
-def _parses(s: str) -> bool:
+def parses(s: str) -> bool:
+    """True if `s` is a well-formed equation our verifier can parse (used to decide retries)."""
     try:
         parse_sides(s)
         return True
     except Exception:
         return False
+
+
+_parses = parses  # backward-compatible alias
 
 PROMPT_TEMPLATE = (
     "You are constructing a math problem.\n"

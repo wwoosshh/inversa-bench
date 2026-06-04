@@ -29,3 +29,22 @@ def test_extracted_equation_round_trips_through_verifier():
     raw = "Reasoning blah blah.\n#### x**3 - 27 = 0"
     eq = extract_equation(raw)
     assert verify_equation(eq, 3).unique is True
+
+
+def test_unicode_superscript_and_minus_normalized():
+    from inversa.tasks.posing import extract_equation
+    from inversa.verifiers.math_equation import verify_equation
+    assert extract_equation("#### x³ - 27 = 0") == "x**3 - 27 = 0"
+    # unicode minus (U+2212) and superscript together
+    eq = extract_equation("#### x² − 9 = 0")
+    assert verify_equation(eq, 3).valid is True
+
+
+def test_reformat_retry_recovers_buried_equation():
+    from inversa.adapters.fake import FakeAdapter
+    from inversa.tasks.structural import run_struct_pose_item
+    # first reply is prose with no equation; the one-shot reformat retry supplies it
+    poser = FakeAdapter(["Let me think about this, the answer is three.", "#### x = 3"])
+    item = run_struct_pose_item(poser, "3", 3.0)
+    assert item.valid is True
+    assert "[reformat-retry]" in item.raw_output

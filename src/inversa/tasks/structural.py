@@ -20,8 +20,27 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from inversa.adapters.base import Adapter
-from inversa.tasks.posing import extract_equation
+from inversa.tasks.posing import extract_equation, parses
 from inversa.verifiers.math_equation import verify_equation, VerificationResult
+
+_REFORMAT_PROMPT = (
+    "Your previous reply did not end with a parseable equation. Output ONLY the final equation "
+    "as '<lhs> = <rhs>' in sympy syntax on a single line prefixed by '#### ', and nothing else.\n"
+    "Your previous reply was:\n{raw}"
+)
+
+
+def _extract_or_retry(adapter: Adapter, raw: str):
+    """Get a parseable equation from a reply; if the model buried it in prose / never emitted
+    one, re-prompt ONCE for the bare equation. Defeats format-compliance false-zeros without
+    rewarding a model that genuinely cannot construct (the retry only reformats, never hints)."""
+    eq = extract_equation(raw)
+    if parses(eq):
+        return eq, raw
+    raw2 = adapter.generate(_REFORMAT_PROMPT.format(raw=raw[:600]))
+    eq2 = extract_equation(raw2)
+    combined = raw + "\n[reformat-retry]\n" + raw2
+    return (eq2 if parses(eq2) else eq), combined
 
 STRUCT_POSE_PROMPT = (
     "Construct a single-variable equation in x whose UNIQUE real solution is exactly {target_desc}.\n"
@@ -62,7 +81,7 @@ class StructPoseItem:
 def run_struct_pose_item(adapter: Adapter, target_desc: str, target_value,
                          novelty: str = "") -> StructPoseItem:
     raw = adapter.generate(build_struct_pose_prompt(target_desc))
-    equation = extract_equation(raw)
+    equation, raw = _extract_or_retry(adapter, raw)
     ver = verify_equation(equation, float(target_value))
     return StructPoseItem(target_desc, float(target_value), novelty, raw, equation, ver, ver.unique)
 
@@ -82,7 +101,7 @@ class TransformItem:
 def run_transform_item(adapter: Adapter, source: str, g_desc: str,
                        r_value, target_value) -> TransformItem:
     raw = adapter.generate(build_transform_prompt(source, g_desc))
-    equation = extract_equation(raw)
+    equation, raw = _extract_or_retry(adapter, raw)
     ver = verify_equation(equation, float(target_value))
     return TransformItem(source, g_desc, float(r_value), float(target_value),
                          raw, equation, ver, ver.unique)
