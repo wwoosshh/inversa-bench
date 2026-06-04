@@ -1,0 +1,81 @@
+{
+  "name": "solve_set_graded",
+  "note": "Integer unique answers, graded easy->hard; sympy-verified unique-real. Clean capability axis (no irrational-precision noise).",
+  "problems": [
+    {
+      "equation": "2*x = 8",
+      "answer": 4,
+      "tier": "easy"
+    },
+    {
+      "equation": "x + 5 = 12",
+      "answer": 7,
+      "tier": "easy"
+    },
+    {
+      "equation": "3*x - 6 = 9",
+      "answer": 5,
+      "tier": "easy"
+    },
+    {
+      "equation": "2**x = 32",
+      "answer": 5,
+      "tier": "moderate"
+    },
+    {
+      "equation": "x**3 = 27",
+      "answer": 3,
+      "tier": "moderate"
+    },
+    {
+      "equation": "3**(x - 1) = 81",
+      "answer": 5,
+      "tier": "moderate"
+    },
+    {
+      "equation": "x + sqrt(x) = 6",
+      "answer": 4,
+      "tier": "moderate"
+    },
+    {
+      "equation": "x + sqrt(x + 7) = 5",
+      "answer": 2,
+      "tier": "hard-extraneous"
+    },
+    {
+      "equation": "sqrt(x + 4) + sqrt(x - 1) = 5",
+      "answer": 5,
+      "tier": "hard-radical"
+    },
+    {
+      "equation": "sqrt(2*x + 8) - sqrt(x + 5) = 1",
+      "answer": 4,
+      "tier": "hard-extraneous"
+    },
+    {
+      "equation": "sqrt(2*x + 6) + sqrt(x + 11) = 2*x - 2",
+      "answer": 5,
+      "tier": "hard-radical"
+    },
+    {
+      "equation": "x**3 + 3*x**2 + 3*x + 1 = 8",
+      "answer": 1,
+      "tier": "hard-disguised"
+    },
+    {
+      "equation": "sqrt(x + 15) + sqrt(x) = 15",
+      "answer": 49,
+      "tier": "hard-radical"
+    },
+    {
+      "equation": "x**5 + x**3 + x - 3 = 0",
+      "answer": 1,
+      "tier": "hard-quintic"
+    },
+    {
+      "equation": "(x - 7)*(x**2 + x + 1) = 0",
+      "answer": 7,
+      "tier": "hard-factored"
+    }
+  ]
+}
