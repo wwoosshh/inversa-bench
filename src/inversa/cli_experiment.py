@@ -3,7 +3,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from concurrent.futures import ThreadPoolExecutor
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from dotenv import load_dotenv
 
@@ -47,6 +48,8 @@ def main(argv=None) -> None:
                         help="models evaluated concurrently (each is network-bound; wall-clock ~ slowest model)")
     parser.add_argument("--out", default="data/results/report.html")
     parser.add_argument("--json-out", default="data/results/results.json")
+    parser.add_argument("--deadline", type=float, default=1200.0,
+                        help="overall seconds before abandoning stuck/slow models (keeps partial results)")
     args = parser.parse_args(argv)
 
     with open(args.solve_bank, encoding="utf-8") as f:
@@ -70,20 +73,36 @@ def main(argv=None) -> None:
               f"mace={s.calibration_mace} adv={s.adversarial_success_rate:.0%}", flush=True)
         return run
 
-    # Models are independent network-bound jobs -> run concurrently. Wall-clock collapses
-    # from the SUM of per-model times to roughly the SLOWEST single model. ex.map preserves
-    # input order, so the report keeps the requested model ordering.
-    with ThreadPoolExecutor(max_workers=min(len(models), args.max_workers)) as ex:
-        runs = [r for r in ex.map(run_one, models) if r is not None]
+    def writeout(runs):
+        scores = [r.scores for r in runs]
+        cors = correlations(scores)
+        with open(args.out, "w", encoding="utf-8") as f:
+            f.write(render_html_detailed(runs, cors))
+        with open(args.json_out, "w", encoding="utf-8") as f:
+            json.dump({"scores": [s.__dict__ for s in scores], "correlations": cors}, f, indent=2)
+        return cors
 
-    scores = [r.scores for r in runs]
-    cors = correlations(scores)
-    with open(args.out, "w", encoding="utf-8") as f:
-        f.write(render_html_detailed(runs, cors))
-    with open(args.json_out, "w", encoding="utf-8") as f:
-        json.dump({"scores": [s.__dict__ for s in scores], "correlations": cors}, f, indent=2)
+    # Incremental write per completed model + overall deadline + force-exit: a network drop or a
+    # GIL-holding verify hang can no longer lose the models that already finished (this exact
+    # failure cost a full multi-model run earlier).
+    runs = []
+    ex = ThreadPoolExecutor(max_workers=min(len(models), args.max_workers))
+    futs = {ex.submit(run_one, m): m for m in models}
+    try:
+        for fut in as_completed(futs, timeout=args.deadline):
+            r = fut.result()
+            if r is not None:
+                runs.append(r)
+                writeout(runs)
+    except TimeoutError:
+        stuck = [m for f, m in futs.items() if not f.done()]
+        print(f"[deadline] {len(stuck)} model(s) abandoned: {stuck}", flush=True)
+
+    cors = writeout(runs)
     print(f"correlations: {cors}")
-    print(f"wrote {args.out} and {args.json_out}")
+    print(f"wrote {args.out} and {args.json_out} ({len(runs)} models)")
+    ex.shutdown(wait=False)
+    os._exit(0)
 
 
 if __name__ == "__main__":
