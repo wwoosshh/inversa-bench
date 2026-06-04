@@ -23,6 +23,20 @@
       "canonical_solvable": true
     },
     {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.5944144760162495,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.4055855239837505,
+      "canonical_solvable": true
+    },
+    {
       "source": "x**3 + x - 3 = 0",
       "g_desc": "r + 1",
       "r_value": 1.2134116627622296,
@@ -41,6 +55,20 @@
       "g_desc": "1/r",
       "r_value": 1.2134116627622296,
       "target_value": 0.824122621109133,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.2134116627622296,
+      "target_value": 0.45179124011303384,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.2134116627622296,
+      "target_value": 0.5482087598869662,
       "canonical_solvable": true
     },
     {
@@ -65,6 +93,20 @@
       "canonical_solvable": true
     },
     {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.3282688556686084,
+      "target_value": 0.42950366215882324,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.3282688556686084,
+      "target_value": 0.5704963378411767,
+      "canonical_solvable": true
+    },
+    {
       "source": "x**3 - x - 1 = 0",
       "g_desc": "r + 1",
       "r_value": 1.324717957244746,
@@ -83,6 +125,20 @@
       "g_desc": "1/r",
       "r_value": 1.324717957244746,
       "target_value": 0.7548776662466927,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.324717957244746,
+      "target_value": 0.4301597090019467,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.324717957244746,
+      "target_value": 0.5698402909980532,
       "canonical_solvable": true
     },
     {
@@ -107,6 +163,20 @@
       "canonical_solvable": true
     },
     {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 0.5960716379833215,
+      "target_value": 0.6265382932707997,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 0.5960716379833215,
+      "target_value": 0.37346170672920026,
+      "canonical_solvable": true
+    },
+    {
       "source": "x**3 + x + 1 = 0",
       "g_desc": "r + 1",
       "r_value": -0.6823278038280194,
@@ -125,6 +195,20 @@
       "g_desc": "1/r",
       "r_value": -0.6823278038280194,
       "target_value": -1.465571231876768,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": -0.6823278038280194,
+      "target_value": 3.147899035704788,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": -0.6823278038280194,
+      "target_value": -2.147899035704788,
       "canonical_solvable": true
     }
   ]

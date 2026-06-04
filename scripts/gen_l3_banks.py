@@ -34,15 +34,16 @@ POSE_TARGETS = [
 # x**3 + p*x + q with 4p**3 + 27q**2 > 0 -> exactly one real root (irrational, un-memorable).
 CUBICS = [(1, -1), (1, -3), (2, -5), (-1, -1), (3, -2), (1, 1)]
 # g(r) as (label, lambda building the *canonical* answer equation in x, and g as a sympy fn)
+# Each transform is a Mobius map s = g(r); we store r expressed in the new variable x so the
+# canonical answer is numerator(P(r(x))) = 0. Mobius maps are bijective on the roots -> the
+# single real root maps to a single real s, so UNIQUENESS is preserved. The composed ones
+# (1/(r+1), r/(r+1)) need multi-step structural manipulation -> ceiling-stretch for strong models.
 TRANSFORMS = [
-    ("r + 1", lambda src: src.subs(X, X - 1), lambda r: r + 1),
-    ("2*r",   lambda src: src.subs(X, X / 2), lambda r: 2 * r),
-    # 1/r: reverse the coefficients (x^n * P(1/x)) -> roots are reciprocals; the one real root
-    # maps to 1/r (the complex pair stays complex), so uniqueness is preserved. Harder than an
-    # affine shift -> stretches the ceiling for strong models.
-    ("1/r",   lambda src: sp.expand(src.subs(X, 1 / X) * X**sp.degree(src, X)), lambda r: 1 / r),
-    # r**2 omitted: no clean root-substitution guarantees a UNIQUE real root, so it would be
-    # an unfairly/possibly-unsolvable task. Every kept transform is canonical-solvable=True.
+    ("r + 1",     X - 1,        lambda r: r + 1),
+    ("2*r",       X / 2,        lambda r: 2 * r),
+    ("1/r",       1 / X,        lambda r: 1 / r),
+    ("1/(r + 1)", (1 - X) / X,  lambda r: 1 / (r + 1)),
+    ("r/(r + 1)", X / (1 - X),  lambda r: r / (r + 1)),
 ]
 
 
@@ -61,13 +62,11 @@ def build():
         src_expr = X**3 + p * X + q
         src_str = f"{sp.printing.sstr(src_expr)} = 0"
         r = real_root(src_expr)
-        for (g_desc, canon, g_fn) in TRANSFORMS:
+        for (g_desc, r_of_x, g_fn) in TRANSFORMS:
             target = float(g_fn(sp.Float(r, 20)))
-            solvable = None
-            if canon is not None:
-                cand = canon(src_expr)
-                cand_str = f"{sp.printing.sstr(sp.expand(cand))} = 0"
-                solvable = verify_equation(cand_str, target).unique
+            num, _ = sp.fraction(sp.together(src_expr.subs(X, r_of_x)))
+            cand_str = f"{sp.printing.sstr(sp.expand(num))} = 0"
+            solvable = verify_equation(cand_str, target).unique
             transform.append({
                 "source": src_str, "g_desc": g_desc,
                 "r_value": float(r), "target_value": target,

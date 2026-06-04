@@ -1,0 +1,96 @@
+{
+  "name": "solve_set_hard2",
+  "note": "Hard integer unique answers (clean), tuned so <=1 model maxes -> the top of the solve axis becomes measurable. sympy-verified unique-real.",
+  "problems": [
+    {
+      "equation": "sqrt(x) + sqrt(x + 9) = 9",
+      "answer": 16,
+      "tag": "multi-radical"
+    },
+    {
+      "equation": "sqrt(x + 40) - sqrt(x) = 4",
+      "answer": 9,
+      "tag": "multi-radical"
+    },
+    {
+      "equation": "sqrt(x + 15) + sqrt(x) = 15",
+      "answer": 49,
+      "tag": "multi-radical"
+    },
+    {
+      "equation": "x + sqrt(x + 7) = 5",
+      "answer": 2,
+      "tag": "extraneous"
+    },
+    {
+      "equation": "sqrt(x + 4) + sqrt(x - 1) = 5",
+      "answer": 5,
+      "tag": "multi-radical"
+    },
+    {
+      "equation": "sqrt(2*x + 8) - sqrt(x + 5) = 1",
+      "answer": 4,
+      "tag": "extraneous"
+    },
+    {
+      "equation": "sqrt(2*x + 6) + sqrt(x + 11) = 2*x - 2",
+      "answer": 5,
+      "tag": "radical-quadratic"
+    },
+    {
+      "equation": "sqrt(x - 1) + sqrt(2*x + 6) = 6",
+      "answer": 5,
+      "tag": "extraneous"
+    },
+    {
+      "equation": "x**3 - 6*x**2 + 12*x - 8 = 0",
+      "answer": 2,
+      "tag": "disguised-cube"
+    },
+    {
+      "equation": "x**3 - 9*x**2 + 27*x - 27 = 0",
+      "answer": 3,
+      "tag": "disguised-cube"
+    },
+    {
+      "equation": "(x**2 - 4*x + 4)*(x**2 + 1) = 0",
+      "answer": 2,
+      "tag": "disguised-factored"
+    },
+    {
+      "equation": "x**3 + 3*x**2 + 3*x + 1 = 8",
+      "answer": 1,
+      "tag": "disguised-cube"
+    },
+    {
+      "equation": "x**6 - 2*x**3 + 1 = 0",
+      "answer": 1,
+      "tag": "disguised-power"
+    },
+    {
+      "equation": "x**5 + x**3 + x - 3 = 0",
+      "answer": 1,
+      "tag": "quintic-monotone"
+    },
+    {
+      "equation": "(x - 7)*(x**2 + x + 1) = 0",
+      "answer": 7,
+      "tag": "factored"
+    },
+    {
+      "equation": "2**(x + 1) + 2**(x - 1) = 20",
+      "answer": 3,
+      "tag": "exponential"
+    },
+    {
+      "equation": "3**x + 3**(x + 1) = 108",
+      "answer": 3,
+      "tag": "exponential"
+    },
+    {
+      "equation": "x + 2**x = 6",
+      "answer": 2,
+      "tag": "transcendental-monotone"
+    }
+  ]
+}

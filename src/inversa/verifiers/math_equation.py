@@ -29,15 +29,15 @@ _SAFE_GLOBAL["__builtins__"] = {}
 _SOLVE_TIMEOUT = 10.0  # seconds; sp.solve can spin forever on pathological transcendental input
 
 
-def _solve_with_timeout(eq, sym, timeout: float = _SOLVE_TIMEOUT):
-    """Run sp.solve on a daemon thread and abandon it past `timeout`. sympy has no native
-    timeout and can hang indefinitely on adversarial model output; this bounds every verify.
-    A timed-out solve raises TimeoutError (caller treats it as an unverifiable -> invalid pose)."""
+def _call_with_timeout(fn, timeout: float):
+    """Run fn() on a daemon thread and abandon it past `timeout`. Neither sp.solve NOR the
+    numeric scan/lambdify have native timeouts and either can hang forever on adversarial
+    model output; this bounds them. A timeout raises TimeoutError on the calling thread."""
     box: dict = {}
 
     def _work():
         try:
-            box["sol"] = sp.solve(eq, sym, dict=False)
+            box["v"] = fn()
         except Exception as exc:  # noqa: BLE001 - re-raised on the calling thread
             box["err"] = exc
 
@@ -45,10 +45,14 @@ def _solve_with_timeout(eq, sym, timeout: float = _SOLVE_TIMEOUT):
     t.start()
     t.join(timeout)
     if t.is_alive():
-        raise TimeoutError(f"solve exceeded {timeout}s")
+        raise TimeoutError(f"exceeded {timeout}s")
     if "err" in box:
         raise box["err"]
-    return box["sol"]
+    return box["v"]
+
+
+def _solve_with_timeout(eq, sym, timeout: float = _SOLVE_TIMEOUT):
+    return _call_with_timeout(lambda: sp.solve(eq, sym, dict=False), timeout)
 
 
 def _eval_real(f, val) -> Optional[float]:
@@ -195,8 +199,11 @@ def verify_equation(equation_str: str, target: float) -> VerificationResult:
 
     # Symbolic couldn't confirm the target (transcendental embedding, timeout, or genuinely
     # absent). Fall back to numeric verification so valid-but-hard-to-symbolically-solve
-    # constructions are not falsely rejected.
-    num = _numeric_verify(lhs - rhs, target_f)
+    # constructions are not falsely rejected. Bound it too — the scan/lambdify can also hang.
+    try:
+        num = _call_with_timeout(lambda: _numeric_verify(lhs - rhs, target_f), _SOLVE_TIMEOUT)
+    except Exception:
+        num = None
     if num is not None:
         valid, unique, roots = num
         note = None if valid else "target is not a real root (numeric)"
