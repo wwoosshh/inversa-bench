@@ -40,7 +40,8 @@ sharper axis; §5.6).
 | Inverse is **measurable & coherent** (a score: IGS) | gen axes intercorrelate (CIs exclude 0); `cli_bench` engine | **Established** |
 | Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
 | IGS **agrees with a hard forward benchmark** (AIME) | **Spearman +0.93 [+0.65,+1.0]** (E10) → construct-valid | **Established** |
-| IGS **out-discriminates** hard forward | comparable overall; AIME sharper at the top (IGS top-saturated) | **Not supported** (value = contamination-immunity + auto-scaling, not sharpness) |
+| IGS **out-discriminates** hard forward | easy bank: comparable, AIME sharper at top. **E8 hard transform resolves the IGS top** (spread 6–100%, only 2 tied) → headroom exists | **Improving** (top-2 still tied; needs one more difficulty step) |
+| Generative difficulty is **scalable** to discriminate top models | E8: harder polynomial transforms separate the easy-bank-saturated top tier + reorder by elimination skill | **Established** |
 
 ---
 
@@ -345,8 +346,14 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   does); keep a private held-out bank; report results on never-published items.
 - **E7 — Kill measurement artifacts.** Constrained/structured decoding (or tool-call output) so
   format compliance cannot depress scores; finish unicode/marker normalization.
-- **E8 — Harden generative ceiling.** Multi-step composed transforms / conjunctive pose
-  constraints so the top tier (currently IGS ≈ 0.83–0.92) is resolved.
+- **E8 — Harden generative ceiling. [DONE, partial]** Polynomial transforms (root = r², r³, r²−2 —
+  require power-raising/elimination, not Möbius substitution; uniqueness verified via minimal
+  polynomial). Result (N=14): the easy-bank top (3 models tied at 1.0) **resolved** — spread now
+  **6%–100%**, only 2 tied at max. gemini-flash-lite 100→78%, deepseek 100→83% separate from
+  opus/qwen3.7 (still 100%). Notable reordering — llama-3.3-70b 77→**6%**, claude-sonnet-4.6
+  63→**22%** — shows the hard bank measures a *deeper* construction skill (elimination), not uniform
+  difficulty. → The construction axis has real headroom above easy-bank saturation; one more step
+  (r⁴ / composite / conjunctive) is needed to separate the very top 2.
 - **E9 — Ablations & baselines.** Human baseline on a subset; trivial-templater baseline to show
   IGS > template-instantiation; sensitivity of IGS to its weighting.
 - **E10 — The value-decision test (most decisive, §5.6).** Run the same models on a *hard,
