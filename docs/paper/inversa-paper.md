@@ -261,12 +261,22 @@ within the verifiable-math limit — the key to future-proofing (§4.3). One cav
 top two (opus vs qwen3.7-plus) was **not** achieved, because qwen3.7-plus (a slow reasoning model)
 times out on the hard bank; this is an infrastructure limit, not a limit of the method.
 
-### 3.5 The leaderboard
+### 3.5 The engine-aggregated leaderboard (N=72)
+
+We ran the benchmark engine (`cli_bench`) over a tier-balanced roster drawn from the live OpenRouter
+catalogue (346 text models → 197 serious candidates → 102 attempted). Of those, **72 models across 19
+families** completed (IGS **0.03 → 1.00**); the remaining ~30 were unmeasurable on the account
+(provider-incompatible — non-serverless / 404 / unsupported endpoint — or reasoning-model timeouts).
 
 ![IGS leaderboard](figures/fig_leaderboard.png)
 
-The full IGS leaderboard (N=21, easy bank) ranks weak open models near 0 and frontier models near 1.0;
-the hard/brutal banks (§3.4) re-rank and separate the top.
+Five models tie at the standard-bank ceiling (IGS 1.0: gpt-5.2, gemini-3.1-flash-lite, deepseek-v4-pro,
+qwen3.7-plus, grok-build-0.1); per the user-chosen "standard + hard tiebreak" protocol they are
+separated by the harder polynomial/brutal transforms of §3.4 (e.g. gemini-3.1-flash-lite drops to 0.79
+on the brutal bank). Weak open models (llama-3.1-8b 0.05, claude-3-haiku 0.03) anchor the bottom. Full
+ranking: `data/results/leaderboard_merged.json`. This is, to our knowledge, the first large
+cross-family **construction-based** leaderboard, and it is contamination-immune and reproducible by
+re-running the engine.
 
 ---
 
