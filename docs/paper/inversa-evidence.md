@@ -25,6 +25,18 @@ confirmed **both by literature and by our own E12** (GSM8K vs GSM-Symbolic, mean
 [+1.0,+5.7], §5.7); the *relative claim* holds as **forward +3.2% vs inverse structurally-0**
 (fully-empirical inverse arm = E12b). Pillar-2 hinges on E10 (§5.6).
 
+### Evidence at a glance (what the vision rests on)
+
+| Vision claim | Evidence | Status |
+|---|---|---|
+| Forward (problem→answer) scores are **inflated by contamination** | GSM1k (lit.) + **our E12**: GSM8K vs GSM-Symbolic = **+3.2% [+1.0,+5.7]**, 8/9 models | **Established** |
+| Inverse (answer→problem) is **recall-resistant** | transform pinned to randomized inputs (structural) + E12b | **Established (structural)** |
+| Inverse is **more contamination-robust** than forward | forward gap **+3.2%** vs inverse gap **≈0** | **Established (head-to-head)** |
+| Inverse ability is **real construction**, not recall | recall-proof transform spreads 0→1 via verified structural substitutions | **Established** |
+| Inverse is **measurable & coherent** (a score: IGS) | gen axes intercorrelate (CIs exclude 0); `cli_bench` engine | **Established** |
+| Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
+| Inverse adds value over a **hard** forward benchmark | — | **Open (E10)** |
+
 ---
 
 ## 1. Motivation
@@ -115,7 +127,10 @@ Code, banks, and per-item evidence reports are version-controlled (repo
 `scripts/gen_l3_banks.py` / `gen_solve_hard2.py` / `gen_perturbation_bank.py` (banks),
 `cli_structural.py` / `cli_experiment.py` / `scripts/run_perturbation.py` (runners),
 `scripts/build_leaderboard.py` (IGS leaderboard), `scripts/macro_analyze.py` (correlations +
-bootstrap CIs), `analysis.py` (`spearman_ci`).
+bootstrap CIs), `analysis.py` (`spearman_ci`). **Benchmark engine:** `cli_bench.py`
+(`python -m inversa.cli_bench --models ...` → ranked IGS + glass-box leaderboard). **Contamination
+head-to-head:** `scripts/run_forward_gap.py` (E12, GSM8K vs GSM-Symbolic via HF `datasets`),
+`scripts/run_inverse_gap.py` (E12b, familiar vs random source transforms).
 
 ---
 
