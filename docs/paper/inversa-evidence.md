@@ -41,7 +41,7 @@ sharper axis; §5.6).
 | Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
 | IGS **agrees with a hard forward benchmark** (AIME) | **Spearman +0.93 [+0.65,+1.0]** (E10) → construct-valid | **Established** |
 | IGS discrimination vs hard forward (AIME) | easy-IGS: AIME sharper at top. **hard-IGS (E8) → top tie resolved (1 tied like AIME), distinct 10≥9, agreement +0.89** | **Competitive** (E10-redux: matches AIME's discrimination, keeps rank agreement) |
-| Generative difficulty is **scalable** to discriminate top models | E8: harder polynomial transforms separate the easy-bank-saturated top tier + reorder by elimination skill | **Established** |
+| Generative difficulty is **scalable** to discriminate top models | E8: polynomial transforms resolve the top; **brutal (r⁴/composite) breaks the ceiling fully — no model at 100%, opus 88%** | **Established** |
 
 ---
 
@@ -357,8 +357,12 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   weakness** — top tie drops 2→1 (opus alone, matching AIME), distinct levels 10 ≥ AIME's 9, std
   0.256 (AIME 0.275), rank-agreement +0.89 [+0.47,+0.99] maintained. So at matched difficulty
   hard-IGS is **discrimination-competitive with a gold-standard hard forward benchmark** while
-  keeping its structural edge (contamination-immune, auto-scaling). Separating the very top 2
-  (opus vs qwen3.7) would need one more step (r⁴ / composite / conjunctive).
+  keeping its structural edge (contamination-immune, auto-scaling).
+  **Brutal tier (r⁴, r²+r, r³−r, r⁴−2r): ceiling fully broken.** On the hardest transforms **no model
+  reaches 100%** — opus tops out at **88%** (100→100→88 across easy→hard→brutal), full spread 12–88%.
+  So the construction axis keeps resolving past where even the best model saturated → IGS difficulty
+  is scalable to the frontier, within the verifiable-math limit. (Satisfies the "≤1 model at max"
+  criterion for a measurable top.)
 - **E9 — Ablations & baselines.** Human baseline on a subset; trivial-templater baseline to show
   IGS > template-instantiation; sensitivity of IGS to its weighting.
 - **E10 — The value-decision test (most decisive, §5.6).** Run the same models on a *hard,
