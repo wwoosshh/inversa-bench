@@ -16,14 +16,18 @@
 > **recall-resistant by construction**, so it is a **more contamination-robust** way to measure
 > ability.
 >
-> **Pillar 2 (complementary — non-saturation).** Inverse construction **still discriminates models
-> where (our) forward banks saturate**, giving a frontier discriminator.
+> **Pillar 2 (revised by E10 — validity, not superiority).** IGS **agrees with a gold-standard hard
+> forward benchmark** (AIME, Spearman **+0.93**) → it is a *validated, contamination-robust,
+> auto-scaling measure of math ability*. It does **not** measure a distinct capability (it tracks
+> general ability) nor out-discriminate hard forward (comparable; AIME sharper at the very top).
+> Its edge is being contamination-immune and machine-generated, not a new axis.
 
 We operationalize both with the **Inversa Generative Score (IGS)**, a machine-verified,
 recall-resistant score. **Status:** Pillar-1's *premise* (forward is contaminated) is now
 confirmed **both by literature and by our own E12** (GSM8K vs GSM-Symbolic, mean gap +3.2%
 [+1.0,+5.7], §5.7); the *relative claim* holds as **forward +3.2% [+1.0,+5.7] (CI≠0) vs inverse +0.0% [−10.5,+11.0]
-(CI∋0, E12b)**. Pillar-2 hinges on E10 (§5.6).
+(CI∋0, E12b)**. Pillar-2 resolved by E10: IGS↔AIME **+0.93** (validated measure, not a distinct or
+sharper axis; §5.6).
 
 ### Evidence at a glance (what the vision rests on)
 
@@ -35,7 +39,8 @@ confirmed **both by literature and by our own E12** (GSM8K vs GSM-Symbolic, mean
 | Inverse ability is **real construction**, not recall | recall-proof transform spreads 0→1 via verified structural substitutions | **Established** |
 | Inverse is **measurable & coherent** (a score: IGS) | gen axes intercorrelate (CIs exclude 0); `cli_bench` engine | **Established** |
 | Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
-| Inverse adds value over a **hard** forward benchmark | — | **Open (E10)** |
+| IGS **agrees with a hard forward benchmark** (AIME) | **Spearman +0.93 [+0.65,+1.0]** (E10) → construct-valid | **Established** |
+| IGS **out-discriminates** hard forward | comparable overall; AIME sharper at the top (IGS top-saturated) | **Not supported** (value = contamination-immunity + auto-scaling, not sharpness) |
 
 ---
 
@@ -252,6 +257,18 @@ Operationally: rank-agreement = Spearman(IGS, hard-forward); discrimination powe
 (1 − fraction-tied-at-max) / number of distinct rank levels, measured on the same model set. This
 experiment (E10, §7) is the single most decisive test of whether IGS deserves to exist.
 
+**E10 result [DONE].** vs AIME 2024+25 (hard, non-saturated; integer-graded), N=13:
+**Spearman(IGS, AIME) = +0.93, 95% CI [+0.65, +1.0]** — strong agreement (IGS ranks models like a
+gold-standard hard forward benchmark → construct validity). Discrimination is **comparable**, not a
+clear IGS win: overall spread slightly favors IGS (std 0.31 vs 0.27; 11 vs 10 distinct levels) **but
+AIME resolves the TOP better** — it separates opus (100%) from gemini-flash-lite (50%), whereas IGS
+ties both at 1.0 (IGS top saturated). So the auto-classifier's "B2 (IGS sharper)" is too generous;
+the honest verdict is **B-agree, comparable discrimination, AIME sharper at the top.** → IGS's
+durable value is therefore **not** raw discrimination superiority but: (i) it *agrees with* a hard
+forward benchmark (validated), and (ii) it is **contamination-immune (E12) and auto-scaling** where
+AIME needs annual human authoring and decays as it leaks. Out-discriminating hard forward needs
+harder generative tasks — E8.
+
 ### 5.7 Forward scores ARE inflated — measured in our harness (E12) **[ESTABLISHED]**
 
 We replicated the contamination test on our own models: per template (difficulty fixed), accuracy
@@ -375,8 +392,9 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 | It discriminates where *our* solve banks saturate | **Supported, suggestive** (8 solve-100% models span IGS 0.65–1.00, N=21) |
 | Forward solving here is genuine, not memorized | **NOT established** (Exp-F is only number-swaps on simple algebra; merely *agrees* with GSM1k frontier-robustness; needs E11) |
 | Forward benchmarks saturate / are memorized *in general* | **NOT claimed** (contamination is real but frontier-small per GSM1k; hard benchmarks don't saturate; literature cited, not re-proven) |
-| It is a *distinct dimension* from general capability | **Not yet** (ceiling confound; needs E3) |
-| It adds value over a hard forward benchmark | **Untested — decisive** (needs E10 / §5.6: rank-agreement × discrimination power) |
+| It is a *distinct dimension* from general capability | **Not supported** (E10: IGS↔AIME Spearman **+0.93** → IGS *tracks* general math ability; it is a contamination-robust *measure* of that ability, not a separate construct) |
+| It agrees with a hard forward benchmark (construct validity) | **Supported** (E10: +0.93 [+0.65,+1.0]) |
+| It *out-discriminates* a hard forward benchmark | **Not supported** (comparable; AIME sharper at top). Value = contamination-immunity + auto-scaling, not sharpness |
 | It *generalizes beyond algebra* | **Untested** (needs E4) |
 | It *predicts anything external* | **Untested** (needs E5) |
 
@@ -406,9 +424,11 @@ cores, each with one decisive experiment:
 - **E10 (Pillar 2):** vs a hard non-saturated forward benchmark — rank-agreement × discrimination
   power (B2 = durable value).
 
-**E12 and E12b are DONE** (§5.7: forward +3.2% [+1.0,+5.7]; inverse +0.0% [−10.5,+11.0]) — the
-contamination head-to-head (Pillar 1) is established. The benchmark **engine** (`cli_bench`) ships.
-The remaining decisive test is **E10** (Pillar-2: IGS vs a hard, non-saturated forward benchmark —
-rank-agreement × discrimination power). After E10: E3 (discriminant residual), E4 (generality),
-E5 (predictive), and larger N to tighten the (currently wide) inverse-gap CI. Experiment F (§5.5)
-is retained only as a scoped robustness note — E12 is what proves the memorization premise.
+**E12, E12b, E10 are DONE.** Pillar 1 (contamination head-to-head: forward +3.2% [+1.0,+5.7] vs
+inverse +0.0% [−10.5,+11.0]) is established. E10 resolved Pillar 2: IGS↔AIME **+0.93 [+0.65,+1.0]**
+→ IGS is a *validated, contamination-robust, auto-scaling measure of math ability* that ranks like a
+hard forward benchmark — **not** a distinct capability nor a sharper discriminator. The benchmark
+**engine** (`cli_bench`) ships. Remaining (for a stronger paper): **E8** (harder generative tasks so
+IGS resolves its top and could out-discriminate hard forward), **E4** (generality beyond algebra),
+**E2** (test-retest reliability), larger N. Experiment F (§5.5) is a scoped robustness note only —
+E12 proves the memorization premise.
