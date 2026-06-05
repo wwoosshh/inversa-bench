@@ -176,18 +176,28 @@ success is genuine construction, not memorized output (refuting threat-level 1).
   itself a methodological contribution: clean axis measurement is mandatory before claiming
   dissociation.)
 
-### 5.5 Forward solving is robust, not memorized (Experiment F) **[ESTABLISHED]**
+### 5.5 Number-perturbation robustness on simple algebra (Experiment F) **[WEAK — scoped, not a memorization refutation]**
 
-To test the common "forward scores are memorization-inflated" premise, we measured accuracy on
-4 templates × 6 **isomorphic** instances (identical structure, perturbed constants → different
-answers, sympy-verified). A memorizer fragments across equi-difficult fresh variants; a reasoner
-is flat. Result (N=7): **5 of 7 models scored 100% across *all* templates** — including disguised
-cubes, complex-root factorizations, and extraneous-root radicals. Only weak models fragmented
-(llama-3.1-8b 62%, T3/T4 ≈ 50%), and that is *capability*, not memorization.
-→ **In the verifiable-algebra domain, strong-model solving is genuine; the saturation of §5.1 is
-real mastery, not memorized scores.** We therefore *scope down* the memorization-inflation claim
-(cite GSM-Symbolic for the word-problem regime) and position IGS as a **non-saturating,
-recall-resistant frontier discriminator** rather than a remedy for "fake" forward scores.
+We ran a *number-swap* perturbation test: 4 templates × 6 **isomorphic** instances (identical
+structure, perturbed constants → different answers, sympy-verified). Result (N=7): **5 of 7 models
+scored 100% across all templates**; only weak models fragmented (llama-3.1-8b 62%). 
+
+**This does NOT prove forward solving is un-memorized — we initially overclaimed it.** Against the
+literature it is the *weakest* possible slice: (i) number-swaps are the perturbation with the
+*smallest* effect, whereas GSM-Symbolic (Apple, ICLR 2025, arXiv:2410.05229) shows an irrelevant
+*added clause* drops even frontier models **up to 65%**; (ii) our domain is simple integer algebra,
+which is *computed* not memorized — real contamination evidence is on word-problems/specific items;
+(iii) self-authored items mean there was no "canonical (likely-memorized)" version to compare a
+fresh one against, so we measured fragility, not a contamination *gap*. Our "frontier-robust"
+result merely **agrees with** GSM1k (Scale AI, arXiv:2405.00332: GPT/Claude/Gemini show minimal
+GSM8K→GSM1k drop; Phi/Mistral up to **13%**) — it does not refute contamination.
+
+**Honest status:** we did *not* establish "forward is genuine, not memorized." We showed only that
+strong models compute simple algebra robustly under number-swaps (consistent with the literature).
+A real refutation needs the stronger probes (added-clause distractors, word-problem domain,
+canonical-vs-fresh gap, larger N) — see E11, §7. Crucially, Inversa's thesis does **not depend** on
+this: its value rests on being a non-saturating, recall-resistant, auto-scaling axis (§5.6), not on
+forward being "fake."
 
 ### 5.6 The value-decision framework — when is IGS worth keeping? **[DESIGN, not yet tested]**
 
@@ -276,6 +286,20 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   but forward resolves finer → IGS dies first, no value; **(B2)** agree but IGS resolves finer →
   validated *and* future-proof (the win condition). This single experiment determines whether IGS
   is worth keeping.
+- **E11 — Proper memorization/contamination probe (if we keep any forward claim).** Replicate the
+  literature's *strong* tests rather than the weak number-swap of §5.5: (a) added-clause/distractor
+  perturbation (GSM-NoOp style) on multi-step problems; (b) a word-problem domain where solution
+  *paths* can be recalled; (c) a canonical-vs-fresh contamination *gap* (likely-trained items vs
+  matched novel items, à la GSM1k); (d) larger N. Note: Inversa's thesis does not require this —
+  it only matters if we want to assert anything about forward being contaminated.
+
+### Related work (for citation)
+- GSM-Symbolic — Mirzadeh et al., Apple, ICLR 2025 (arXiv:2410.05229): perturbation fragility;
+  added clause drops frontier models up to 65%.
+- GSM1k / "A Careful Examination…" — Zhang et al., Scale AI, 2024 (arXiv:2405.00332): contamination
+  gap up to 13% for Phi/Mistral; minimal for GPT/Claude/Gemini.
+- Rephrased-samples contamination — Yang et al., 2023 (arXiv:2311.04850): n-gram-undetectable
+  contamination inflates MMLU/GSM8K/HumanEval.
 
 ---
 
@@ -286,8 +310,8 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 | Generative construction is *real* (not pure recall) | **Supported** (recall-proof transform spreads 0–1 via genuine substitution) |
 | It is *measurable* and *internally coherent* | **Supported** (gen axes intercorrelate, CIs exclude 0; IGS defined & reproducible) |
 | It discriminates where *our* solve banks saturate | **Supported, suggestive** (8 solve-100% models span IGS 0.65–1.00, N=21) |
-| Forward solving here is genuine, not memorized | **Supported** (Experiment F: strong models robust to isomorphic perturbation) |
-| Forward benchmarks saturate *in general* | **NOT claimed** (hard ones don't; scoped to our banks + the treadmill) |
+| Forward solving here is genuine, not memorized | **NOT established** (Exp-F is only number-swaps on simple algebra; merely *agrees* with GSM1k frontier-robustness; needs E11) |
+| Forward benchmarks saturate / are memorized *in general* | **NOT claimed** (contamination is real but frontier-small per GSM1k; hard benchmarks don't saturate; literature cited, not re-proven) |
 | It is a *distinct dimension* from general capability | **Not yet** (ceiling confound; needs E3) |
 | It adds value over a hard forward benchmark | **Untested — decisive** (needs E10 / §5.6: rank-agreement × discrimination power) |
 | It *generalizes beyond algebra* | **Untested** (needs E4) |
