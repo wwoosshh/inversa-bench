@@ -1,0 +1,216 @@
+{
+  "name": "transform_bank_familiar",
+  "note": "Famous/textbook cubic sources (irrational roots, difficulty-matched to random) for the E12b inverse contamination-gap test.",
+  "items": [
+    {
+      "source": "x**3 - 2 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.2599210498948732,
+      "target_value": 2.2599210498948734,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.2599210498948732,
+      "target_value": 2.5198420997897464,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2 = 0",
+      "g_desc": "1/r",
+      "r_value": 1.2599210498948732,
+      "target_value": 0.7937005259840997,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.2599210498948732,
+      "target_value": 0.4424933340244421,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.2599210498948732,
+      "target_value": 0.5575066659755579,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 3 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.4422495703074083,
+      "target_value": 2.4422495703074083,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 3 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.4422495703074083,
+      "target_value": 2.8844991406148166,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 3 = 0",
+      "g_desc": "1/r",
+      "r_value": 1.4422495703074083,
+      "target_value": 0.6933612743506348,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 3 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.4422495703074083,
+      "target_value": 0.40945856318612395,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 3 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.4422495703074083,
+      "target_value": 0.590541436813876,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": 1.324717957244746,
+      "target_value": 2.3247179572447463,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "2*r",
+      "r_value": 1.324717957244746,
+      "target_value": 2.649435914489492,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "1/r",
+      "r_value": 1.324717957244746,
+      "target_value": 0.7548776662466927,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 1.324717957244746,
+      "target_value": 0.4301597090019467,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 1.324717957244746,
+      "target_value": 0.5698402909980532,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": 0.6823278038280194,
+      "target_value": 1.6823278038280194,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "2*r",
+      "r_value": 0.6823278038280194,
+      "target_value": 1.3646556076560388,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "1/r",
+      "r_value": 0.6823278038280194,
+      "target_value": 1.465571231876768,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.5944144760162495,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.4055855239837505,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2*x - 5 = 0",
+      "g_desc": "r + 1",
+      "r_value": 2.0945514815423265,
+      "target_value": 3.0945514815423265,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2*x - 5 = 0",
+      "g_desc": "2*r",
+      "r_value": 2.0945514815423265,
+      "target_value": 4.189102963084653,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2*x - 5 = 0",
+      "g_desc": "1/r",
+      "r_value": 2.0945514815423265,
+      "target_value": 0.47742918176623106,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2*x - 5 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 2.0945514815423265,
+      "target_value": 0.3231486068222072,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - 2*x - 5 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 2.0945514815423265,
+      "target_value": 0.6768513931777929,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 1 = 0",
+      "g_desc": "r + 1",
+      "r_value": 0.3221853546260856,
+      "target_value": 1.3221853546260856,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 1 = 0",
+      "g_desc": "2*r",
+      "r_value": 0.3221853546260856,
+      "target_value": 0.6443707092521712,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 1 = 0",
+      "g_desc": "1/r",
+      "r_value": 0.3221853546260856,
+      "target_value": 3.1038034027355366,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 1 = 0",
+      "g_desc": "1/(r + 1)",
+      "r_value": 0.3221853546260856,
+      "target_value": 0.7563236096218902,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 1 = 0",
+      "g_desc": "r/(r + 1)",
+      "r_value": 0.3221853546260856,
+      "target_value": 0.24367639037810981,
+      "canonical_solvable": true
+    }
+  ]
+}
