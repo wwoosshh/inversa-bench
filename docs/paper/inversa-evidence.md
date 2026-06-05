@@ -8,40 +8,54 @@
 
 ---
 
-## 0. One-sentence thesis
+## 0. One-sentence thesis (two pillars)
 
-> Measuring whether a model can, given an answer, **construct a problem that yields it** (the
-> *inverse* task) is a valid indicator of mathematical ability that is **distinct from, and
-> remains discriminative where, forward problem-*solving* saturates.**
+> **Pillar 1 (primary — contamination-robustness).** Forward (problem→answer) benchmarks suffer
+> *measurable memorization contamination* (objectively documented in the literature); the
+> *inverse* task (answer→problem), and especially structural transforms of randomized inputs, is
+> **recall-resistant by construction**, so it is a **more contamination-robust** way to measure
+> ability.
+>
+> **Pillar 2 (complementary — non-saturation).** Inverse construction **still discriminates models
+> where (our) forward banks saturate**, giving a frontier discriminator.
 
-We operationalize this with the **Inversa Generative Score (IGS)**, a machine-verified,
-memorization-resistant score, and show that among frontier models that all score 100% on a
-clean solve benchmark, IGS still spreads them across a wide range.
+We operationalize both with the **Inversa Generative Score (IGS)**, a machine-verified,
+recall-resistant score. **Status:** Pillar-1's *premise* (forward is contaminated) is
+literature-established (cite); its *relative claim* (inverse contaminates less) is **ours to
+prove** via a head-to-head contamination-gap test (§7, E12). Pillar-2 hinges on E10 (§5.6).
 
 ---
 
 ## 1. Motivation
 
-Forward benchmarks (problem → answer) increasingly **saturate**: frontier models score at or
-near 100% on school/competition algebra, so the benchmark can no longer rank the top — we
-cannot tell a "100-point" model from a "150-point" model. A measure that still discriminates in
-that regime would be valuable both practically (frontier evaluation) and scientifically (does
-"understanding" decompose into more than recall of solutions?).
+**Primary motivation — contamination (literature-established).** Forward (problem→answer)
+benchmarks suffer *measurable memorization contamination*: fixed public test sets leak into
+training corpora, inflating scores above genuine reasoning. This is **objectively documented**,
+not hypothetical:
+- **GSM1k** (Zhang et al., Scale AI, 2024, arXiv:2405.00332) built a fresh GSM8K-parallel set and
+  measured an overfitting gap **up to 13%** for some families (Phi, Mistral); the gap correlates
+  with a model's propensity to emit GSM8K examples — direct evidence of partial memorization.
+- **Replica-loss** studies show a *single* MATH test-set replica in pretraining drastically lowers
+  loss; **rephrased-sample contamination** (arXiv:2311.04850) evades n-gram detection while
+  inflating MMLU/GSM8K/HumanEval.
 
-The candidate: **inverse construction.** *Constructing* a problem to specification — especially
-under constraints with no memorized template — appears to demand compositional manipulation of
-structure. The empirical question is whether this is (a) real (not itself recall) and (b)
-discriminative where forward solving has saturated.
+**Honest nuance:** the contamination gap is *model-dependent* — large for some families, **minimal
+for frontier (GPT/Claude/Gemini)** per GSM1k. So the claim is "forward has measurable, uneven
+contamination," not "all forward scores are fake."
 
-**On the memorization motivation (scoped, after testing).** A common framing — "forward scores
-are inflated by memorization" — is *not* our primary motivation, and we tested it: in our
-verifiable-algebra domain, strong models are **robust to isomorphic perturbation** (§5.5), i.e.
-their solving is genuine computation, not recall of specific instances. So the saturation we
-observe is *real mastery*, not fake memorized scores. The memorization-inflation critique is
-real for *multi-step word-problem* benchmarks where the solution path can be recalled (e.g.
-GSM-Symbolic, Mirzadeh et al. 2024); we **cite** that literature for that regime rather than
-re-claim it. Inversa's contribution is therefore scoped to: **a non-saturating, recall-resistant
-discriminator for the frontier**, not a replacement for "memorized" forward benchmarks.
+**The candidate fix — inverse construction.** A benchmark whose items are *generated fresh at test
+time* cannot be contaminated. Constructing a problem to specification — especially transforming a
+*randomized* input — is **recall-resistant by construction**: no fixed item exists to leak. Hence
+the thesis: **inverse is a more contamination-robust benchmark.** The literature establishes the
+*premise* (forward is contaminated); **our job is the *relative* claim** — that inverse exhibits a
+*smaller contamination gap* than forward on the same models (head-to-head, §7 E12). A secondary,
+already-observed benefit is non-saturation (§5.6).
+
+> **Correction note (intellectual honesty).** An earlier draft over-read our own Experiment F
+> (§5.5) as "forward solving is genuine, not memorized" and pivoted the thesis to non-saturation
+> only. That was wrong: Exp-F tested the *weakest* slice (number-swaps on simple computed algebra)
+> and merely *agrees* with GSM1k's frontier-robustness — it does **not** refute contamination,
+> which the literature establishes. The contamination pillar is therefore **restored as primary.**
 
 ---
 
@@ -293,6 +307,15 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   matched novel items, à la GSM1k); (d) larger N. Note: Inversa's thesis does not require this —
   it only matters if we want to assert anything about forward being contaminated.
 
+- **E12 — Head-to-head contamination gap (Pillar-1 core proof, §0/§1).** On the same models,
+  measure (a) a *forward* contamination gap = acc(likely-contaminated/standard items) −
+  acc(structurally-matched fresh items), and (b) an *inverse* gap computed the same way on
+  answer→problem tasks (predicted ≈ 0, since transform inputs are randomized at test time). The
+  vision is supported iff **inverse gap < forward gap** with separated CIs. This is the experiment
+  that proves the *original* thesis (inverse is more contamination-robust). Note: forward gaps are
+  small for frontier models (GSM1k), so include weaker/mid families where the gap is large enough
+  to resolve, and a contamination-prone setup (reused public items) for the forward arm.
+
 ### Related work (for citation)
 - GSM-Symbolic — Mirzadeh et al., Apple, ICLR 2025 (arXiv:2410.05229): perturbation fragility;
   added clause drops frontier models up to 65%.
@@ -307,6 +330,9 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 
 | Claim | Status |
 |---|---|
+| Forward benchmarks have *measurable* contamination | **Supported by literature** (GSM1k up to 13%; replica-loss; rephrase) — cite, not re-proven |
+| Inverse is *recall-resistant by construction* | **Supported** (transform pinned to randomized test-time input; no fixed item to leak) |
+| Inverse has a *smaller* contamination gap than forward | **NOT yet — Pillar-1 core** (needs E12 head-to-head) |
 | Generative construction is *real* (not pure recall) | **Supported** (recall-proof transform spreads 0–1 via genuine substitution) |
 | It is *measurable* and *internally coherent* | **Supported** (gen axes intercorrelate, CIs exclude 0; IGS defined & reproducible) |
 | It discriminates where *our* solve banks saturate | **Supported, suggestive** (8 solve-100% models span IGS 0.65–1.00, N=21) |
@@ -336,8 +362,13 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 
 ## 10. Next action
 
-E7 (artifacts) and E1 (scale + bootstrap CIs) are **done**; Experiment F (forward robustness)
-is **done** and scoped the memorization claim out. The **decisive** next step is **E10 (§5.6):
-compare IGS to a hard, non-saturated forward benchmark on the same models** — rank-agreement ×
-discrimination power decides whether IGS has durable value (B2) or dies first (B1) or needs a
-construct proof (A). After E10: E3 (discriminant residual), E4 (generality), E5 (predictive).
+E7 (artifacts) and E1 (scale + bootstrap CIs) are **done**. The thesis now has two falsifiable
+cores, each with one decisive experiment:
+- **E12 (Pillar 1, primary):** head-to-head contamination gap — does inverse leak *less* than
+  forward on the same models? Proves the original "more objective benchmark" vision.
+- **E10 (Pillar 2):** vs a hard non-saturated forward benchmark — rank-agreement × discrimination
+  power (B2 = durable value).
+
+Recommended: **E12 first** (it proves the primary, literature-grounded vision), then E10. After:
+E3 (discriminant residual), E4 (generality), E5 (predictive). (Experiment F is retained only as a
+scoped robustness note, §5.5 — it does not prove the memorization claim.)
