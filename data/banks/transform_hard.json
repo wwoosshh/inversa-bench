@@ -1,0 +1,132 @@
+{
+  "name": "transform_hard",
+  "note": "Polynomial root transforms (r^2, r^3, r^2-2) \u2014 require power-raising/elimination, harder than Mobius; uniqueness verified via minimal polynomial (1 real root).",
+  "items": [
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.465571231876768,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.31767219617198067,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": 0.6823278038280194,
+      "target_value": -1.534428768123232,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.2134116627622296,
+      "target_value": 1.4723678633273989,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.2134116627622296,
+      "target_value": 1.7865883372377704,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": 1.2134116627622296,
+      "target_value": -0.5276321366726011,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.3282688556686084,
+      "target_value": 1.7642981529391943,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.3282688556686084,
+      "target_value": 2.343462288662783,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": 1.3282688556686084,
+      "target_value": -0.23570184706080557,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.324717957244746,
+      "target_value": 1.7548776662466927,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.324717957244746,
+      "target_value": 2.324717957244746,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": 1.324717957244746,
+      "target_value": -0.24512233375330725,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.5960716379833215,
+      "target_value": 0.3553013976081199,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.5960716379833215,
+      "target_value": 0.21178508605003543,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": 0.5960716379833215,
+      "target_value": -1.6446986023918801,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r**2",
+      "r_value": -0.6823278038280194,
+      "target_value": 0.465571231876768,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r**3",
+      "r_value": -0.6823278038280194,
+      "target_value": -0.31767219617198067,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r**2 - 2",
+      "r_value": -0.6823278038280194,
+      "target_value": -1.534428768123232,
+      "canonical_solvable": true
+    }
+  ]
+}
