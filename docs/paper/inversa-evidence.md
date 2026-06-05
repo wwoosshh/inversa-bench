@@ -362,7 +362,11 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   reaches 100%** — opus tops out at **88%** (100→100→88 across easy→hard→brutal), full spread 12–88%.
   So the construction axis keeps resolving past where even the best model saturated → IGS difficulty
   is scalable to the frontier, within the verifiable-math limit. (Satisfies the "≤1 model at max"
-  criterion for a measurable top.)
+  criterion for a measurable top.) opus's misses are on the *composite* transforms (r²+r, r³−r) —
+  it still aces the r⁴-only subset (100%). The very-top opus-vs-qwen3.7 tiebreak is **unresolved
+  due to infra, not method**: qwen3.7-plus (a reasoning model) times out on the hard bank in 3
+  attempts (24/12/8 items), so it can't be scored at this difficulty within deadline; on easy
+  subsets both max. → measurement at extreme difficulty is latency-bound for slow reasoners.
 - **E9 — Ablations & baselines.** Human baseline on a subset; trivial-templater baseline to show
   IGS > template-instantiation; sensitivity of IGS to its weighting.
 - **E10 — The value-decision test (most decisive, §5.6).** Run the same models on a *hard,

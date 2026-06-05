@@ -1,0 +1,90 @@
+{
+  "name": "transform_brutal",
+  "note": "Degree-raising/composite polynomial root transforms (r^4, r^2+r, r^3-r, r^4-2r); uniqueness verified via minimal polynomial. Hardest construction tier.",
+  "items": [
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.6823278038280194,
+      "target_value": 0.2167565719512513,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 1 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": 0.6823278038280194,
+      "target_value": -1.1478990357047874,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.2134116627622296,
+      "target_value": 2.16786712495929,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x - 3 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": 1.2134116627622296,
+      "target_value": -0.25895620056516927,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.3282688556686084,
+      "target_value": 3.112747972464653,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 2*x - 5 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": 1.3282688556686084,
+      "target_value": 0.4562102611274363,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.324717957244746,
+      "target_value": 3.079595623491439,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 - x - 1 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": 1.324717957244746,
+      "target_value": 0.4301597090019467,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.5960716379833215,
+      "target_value": 0.12623908314228333,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + 3*x - 2 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": 0.5960716379833215,
+      "target_value": -1.0659041928243598,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r**4",
+      "r_value": -0.6823278038280194,
+      "target_value": 0.2167565719512513,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**3 + x + 1 = 0",
+      "g_desc": "r**4 - 2*r",
+      "r_value": -0.6823278038280194,
+      "target_value": 1.58141217960729,
+      "canonical_solvable": true
+    }
+  ]
+}
