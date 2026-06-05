@@ -11,7 +11,7 @@ import html
 import json
 import sys
 
-from inversa.analysis import spearman
+from inversa.analysis import spearman_ci
 
 exp_path = sys.argv[1] if len(sys.argv) > 1 else "data/results/macro_experiment.json"
 lvl_path = sys.argv[2] if len(sys.argv) > 2 else "data/results/macro_level3.json"
@@ -37,10 +37,11 @@ rows.sort(key=lambda r: (r["solve"], r["l3_transform"]))
 
 
 def _corr(ka, kb):
-    pairs = [(r[ka], r[kb]) for r in rows if r[ka] is not None and r[kb] is not None]
-    if len(pairs) < 3:
-        return None
-    return spearman([p[0] for p in pairs], [p[1] for p in pairs])
+    """Returns (rho, lo, hi) with a seeded bootstrap 95% CI, or None if too few pairs."""
+    xs = [r[ka] for r in rows if r[ka] is not None and r[kb] is not None]
+    ys = [r[kb] for r in rows if r[ka] is not None and r[kb] is not None]
+    rho, lo, hi = spearman_ci(xs, ys)
+    return None if rho is None else (rho, lo, hi)
 
 
 GEN = [("calib_mace", "calibration MACE (lower=better)"),
@@ -58,7 +59,11 @@ coh = {
 
 
 def f(v):
-    return "n/a" if v is None else f"{v:+.2f}"
+    if v is None:
+        return "n/a"
+    rho, lo, hi = v
+    ci = "" if lo is None else f"  95% CI [{lo:+.2f}, {hi:+.2f}]"
+    return f"{rho:+.2f}{ci}"
 
 
 def fp(v):

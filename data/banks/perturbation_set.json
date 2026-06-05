@@ -1,0 +1,126 @@
+{
+  "name": "perturbation_set",
+  "note": "Isomorphic instances per template (same structure, perturbed constants, sympy-verified unique integer root). Within-template accuracy spread tests robustness of forward solving vs surface/shortcut fragility.",
+  "problems": [
+    {
+      "equation": "2*x + 1 = 7",
+      "answer": 3,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "3*x + 2 = 17",
+      "answer": 5,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "5*x + -3 = 32",
+      "answer": 7,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "4*x + 5 = 41",
+      "answer": 9,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "7*x + 1 = 29",
+      "answer": 4,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "6*x + -2 = 46",
+      "answer": 8,
+      "template": "T1_linear"
+    },
+    {
+      "equation": "x**3 - 6*x**2 + 12*x - 8 = 0",
+      "answer": 2,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 9*x**2 + 27*x - 27 = 0",
+      "answer": 3,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 12*x**2 + 48*x - 64 = 0",
+      "answer": 4,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 15*x**2 + 75*x - 125 = 0",
+      "answer": 5,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 21*x**2 + 147*x - 343 = 0",
+      "answer": 7,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 18*x**2 + 108*x - 216 = 0",
+      "answer": 6,
+      "template": "T2_disguised_cube"
+    },
+    {
+      "equation": "x**3 - 2*x**2 - 2*x - 3 = 0",
+      "answer": 3,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x**3 - 3*x**2 - 3*x - 4 = 0",
+      "answer": 4,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x**3 - 4*x**2 - 4*x - 5 = 0",
+      "answer": 5,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x**3 - 6*x**2 - 6*x - 7 = 0",
+      "answer": 7,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x**3 - 7*x**2 - 7*x - 8 = 0",
+      "answer": 8,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x**3 - 10*x**2 - 10*x - 11 = 0",
+      "answer": 11,
+      "template": "T3_factored_complex"
+    },
+    {
+      "equation": "x + sqrt(x + 7) = 5",
+      "answer": 2,
+      "template": "T4_radical_extraneous"
+    },
+    {
+      "equation": "x + sqrt(x + -1) = 7",
+      "answer": 5,
+      "template": "T4_radical_extraneous"
+    },
+    {
+      "equation": "x + sqrt(x + 13) = 7",
+      "answer": 3,
+      "template": "T4_radical_extraneous"
+    },
+    {
+      "equation": "x + sqrt(x + 2) = 10",
+      "answer": 7,
+      "template": "T4_radical_extraneous"
+    },
+    {
+      "equation": "x + sqrt(x + 21) = 9",
+      "answer": 4,
+      "template": "T4_radical_extraneous"
+    },
+    {
+      "equation": "x + sqrt(x + -5) = 11",
+      "answer": 9,
+      "template": "T4_radical_extraneous"
+    }
+  ]
+}
