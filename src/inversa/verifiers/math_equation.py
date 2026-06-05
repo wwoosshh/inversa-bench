@@ -6,6 +6,8 @@ This is the slice-1 "validity" layer (depth constraints come later).
 """
 from __future__ import annotations
 
+import multiprocessing as _mp
+import os
 import threading
 from dataclasses import dataclass
 from typing import List, Optional
@@ -174,7 +176,7 @@ def parse_sides(equation_str: str):
     return lhs, rhs
 
 
-def verify_equation(equation_str: str, target: float) -> VerificationResult:
+def _verify_core(equation_str: str, target: float) -> VerificationResult:
     try:
         lhs, rhs = parse_sides(equation_str)
     except ValueError as e:
@@ -211,3 +213,43 @@ def verify_equation(equation_str: str, target: float) -> VerificationResult:
 
     sols_repr = [str(s) for s in solutions] if solutions is not None else []
     return VerificationResult(True, False, False, sols_repr, "unverifiable (symbolic + numeric)")
+
+
+# --- Process-isolated verification (opt-in via INVERSA_ISOLATE_VERIFY=1) ---------------------
+# sympy can hang inside GIL-holding C code, which *thread* timeouts cannot interrupt — under a
+# concurrent batch runner this stalls every worker and the whole run makes zero progress. Running
+# the verify in a separate process lets us TERMINATE it on timeout. Opt-in (env) so unit tests and
+# normal single calls stay fast/in-process; large parallel runs (cli_bench) set the flag.
+_ISOLATE = os.environ.get("INVERSA_ISOLATE_VERIFY") == "1"
+_PROC_TIMEOUT = float(os.environ.get("INVERSA_VERIFY_TIMEOUT", "15"))
+
+
+def _verify_proc(equation_str: str, target: float, q) -> None:
+    try:
+        q.put(_verify_core(equation_str, float(target)))
+    except Exception as e:  # noqa: BLE001
+        q.put(VerificationResult(False, False, False, [], f"worker error: {e}"))
+
+
+def verify_equation(equation_str: str, target: float) -> VerificationResult:
+    """Verify a posed equation. With INVERSA_ISOLATE_VERIFY=1, runs in a separate process that is
+    KILLED on timeout (the only way to stop a GIL-holding sympy hang); otherwise runs in-process."""
+    if not _ISOLATE:
+        return _verify_core(equation_str, target)
+    try:
+        ctx = _mp.get_context("spawn")
+        q = ctx.Queue()
+        p = ctx.Process(target=_verify_proc, args=(equation_str, target, q), daemon=True)
+        p.start()
+        try:
+            res = q.get(timeout=_PROC_TIMEOUT)
+        except Exception:  # queue.Empty -> the worker hung past the timeout
+            res = VerificationResult(True, False, False, [], "verify timeout (process killed)")
+        finally:
+            if p.is_alive():
+                p.terminate()
+            p.join(2.0)
+        return res
+    except Exception:
+        # if multiprocessing itself fails, never crash the run — fall back to in-process
+        return _verify_core(equation_str, target)
