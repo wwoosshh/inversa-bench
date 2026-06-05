@@ -28,11 +28,20 @@ cannot tell a "100-point" model from a "150-point" model. A measure that still d
 that regime would be valuable both practically (frontier evaluation) and scientifically (does
 "understanding" decompose into more than recall of solutions?).
 
-The candidate: **inverse construction.** Solving a known problem can be satisfied by retrieval
-of a memorized solution path; *constructing* a problem to specification — especially under
-constraints with no memorized template — appears to demand compositional manipulation of
+The candidate: **inverse construction.** *Constructing* a problem to specification — especially
+under constraints with no memorized template — appears to demand compositional manipulation of
 structure. The empirical question is whether this is (a) real (not itself recall) and (b)
-distinct from solving.
+discriminative where forward solving has saturated.
+
+**On the memorization motivation (scoped, after testing).** A common framing — "forward scores
+are inflated by memorization" — is *not* our primary motivation, and we tested it: in our
+verifiable-algebra domain, strong models are **robust to isomorphic perturbation** (§5.5), i.e.
+their solving is genuine computation, not recall of specific instances. So the saturation we
+observe is *real mastery*, not fake memorized scores. The memorization-inflation critique is
+real for *multi-step word-problem* benchmarks where the solution path can be recalled (e.g.
+GSM-Symbolic, Mirzadeh et al. 2024); we **cite** that literature for that regime rather than
+re-claim it. Inversa's contribution is therefore scoped to: **a non-saturating, recall-resistant
+discriminator for the frontier**, not a replacement for "memorized" forward benchmarks.
 
 ---
 
@@ -88,49 +97,62 @@ reference.
 Code, banks, and per-item evidence reports are version-controlled (repo
 `wwoosshh/inversa-bench`, branch `scoring-validity`). Key components: `tasks/structural.py`
 (tasks), `verifiers/math_equation.py` (oracle), `scoring.py` (IGS),
-`scripts/gen_l3_banks.py` / `gen_solve_hard2.py` (banks), `cli_structural.py` /
-`cli_experiment.py` (runners), `scripts/build_leaderboard.py` (IGS leaderboard).
+`scripts/gen_l3_banks.py` / `gen_solve_hard2.py` / `gen_perturbation_bank.py` (banks),
+`cli_structural.py` / `cli_experiment.py` / `scripts/run_perturbation.py` (runners),
+`scripts/build_leaderboard.py` (IGS leaderboard), `scripts/macro_analyze.py` (correlations +
+bootstrap CIs), `analysis.py` (`spearman_ci`).
 
 ---
 
 ## 4. Experimental setup
 
-- **Models:** up to 15 across 7 families (Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek,
-  Qwen), spanning weak (llama-3.1-8b, qwen-2.5-7b, claude-3.5-haiku) to frontier
-  (opus-4.8, qwen3.7-plus, deepseek-v3.2, gpt-4o). Accessed via OpenRouter.
+- **Models:** up to **22 across 8 families** (Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek,
+  Qwen, Cohere, Amazon), spanning weak (llama-3.1-8b, qwen-2.5-7b, command-r) through mid
+  (gpt-4o-mini, mistral-large, nova-pro) to frontier (opus-4.8, qwen3.7-plus, deepseek-v3.2/r1).
+  Accessed via OpenRouter. (Per-run N varies 12→21 as the roster grew and infra/rate-limits
+  dropped individual models; partial-result writing preserves completed models.)
 - **Solve axis:** graded integer-answer banks, sympy-verified unique
   (`solve_set_graded`, `solve_set_hard2`).
-- **Generative axes:** pose ladder (6 targets), transform bank (30 random-cubic × Möbius items).
+- **Generative axes:** pose ladder (6 targets), transform bank (30 random-cubic × {affine,
+  reciprocal, Möbius} items).
+- **Perturbation axis (Experiment F):** 4 templates × 6 isomorphic instances (constants
+  perturbed, sympy-verified unique) — `solve_set` robustness probe.
 
 ---
 
 ## 5. Results
 
-### 5.1 Forward solving saturates **[ESTABLISHED]**
+### 5.1 *Our* verifiable solve banks saturate at the top **[ESTABLISHED — scoped]**
 
-On the hardest clean integer-answer bank (`solve_set_hard2`, 18 items incl. extraneous-root
-radical traps, disguised cubes/powers, transcendental-monotone), **6 of 12 models scored
-100%**; the range was 72%–100%. Even competition-style traps do not break the ceiling for the
-frontier tier. → *The solve axis cannot rank the top.*
+On our hardest clean integer-answer bank (`solve_set_hard2`, 18 items incl. extraneous-root
+radical traps, disguised cubes/powers, transcendental-monotone), **8 of the 19 evaluated models
+scored 100%**; the range was 28%–100%. → *Our solve axis cannot rank the top tier.*
+
+**Important scope (do not overclaim).** This shows *our banks* saturate, **not** that forward
+benchmarks saturate in general. Old/easy public benchmarks (GSM8K, MATH) are indeed saturated
+for frontier models, but deliberately-hard ones (AIME, GPQA, FrontierMath, HLE) are **not** —
+they discriminate with large headroom. Forward benchmarking is a *treadmill*: each benchmark
+saturates as models improve and the field authors harder ones. So IGS's value cannot rest on
+"forward is saturated/broken"; it must rest on being an **orthogonal, recall-resistant,
+auto-scaling** axis — and on the decision framework in §5.6, which is **not yet tested**.
 
 ### 5.2 IGS discriminates where solve cannot — the headline **[ESTABLISHED, suggestive]**
 
-Among the **6 models tied at solve = 100%**, IGS ranged **0.27 – 0.92** (e.g.
-gemini-3.1-flash-lite 0.92 vs gemini-3.5-flash 0.27, both solve 100%). A measure that is flat
-(all 100%) on solving is spread > 3× on IGS over the identical model set. *This is the core
-demonstration of the thesis's value proposition.* (Source: `igs_leaderboard.json`, N=12.)
+Among the **8 models tied at solve = 100%**, IGS ranged **0.65 – 1.00**. A measure that is flat
+(all 100%) on solving spreads widely on IGS over the identical model set. *This is the core
+demonstration of the thesis's value proposition.* (Source: `igs_leaderboard.json`, N=21.)
 
 | rank | model | IGS | pose | transform | solve (ref) |
 |---|---|---|---|---|---|
-| 1 | gemini-3.1-flash-lite | 0.92 | 0.83 | 1.00 | 100% |
-| 2 | llama-4-scout | 0.83 | 0.83 | 0.83 | 100% |
-| 3 | claude-opus-4.8 | 0.83 | 0.67 | 1.00 | 100% |
-| 4 | deepseek-v3.2 | 0.73 | 0.50 | 0.97 | 94% |
+| 1 | gemini-3.1-flash-lite | 1.00 | 1.00 | 1.00 | 100% |
+| 2 | claude-opus-4.8 | 1.00 | 1.00 | 1.00 | 100% |
+| 3 | qwen3.7-plus | 1.00 | 1.00 | 1.00 | n/a |
+| 4 | deepseek-v3.2 | 0.92 | 0.83 | 1.00 | 100% |
+| 5 | claude-haiku-4.5 | 0.88 | 0.83 | 0.93 | 100% |
 | … | … | … | … | … | … |
-| 11 | gemini-3.5-flash | 0.27 | 0.00* | 0.53 | 100% |
-| 12 | llama-3.1-8b | 0.07 | 0.00 | 0.13 | 72% |
-
-\*known format artifact (see §6.4).
+| 19 | qwen-2.5-7b | 0.18 | 0.00 | 0.37 | 89% |
+| 20 | command-r-08-2024 | 0.10 | 0.17 | 0.03 | 28% |
+| 21 | llama-3.1-8b | 0.07 | 0.00 | 0.13 | 50% |
 
 ### 5.3 Recall is refuted on the recall-proof axis **[ESTABLISHED]**
 
@@ -138,25 +160,65 @@ Transform is impossible to satisfy by retrieval (output pinned to a random input
 ranged 0.03–1.00 with high scorers producing verified structural substitutions. → Generative
 success is genuine construction, not memorized output (refuting threat-level 1).
 
-### 5.4 Convergent vs discriminant validity — an honest, instructive reversal **[PARTIAL]**
+### 5.4 Convergent vs discriminant validity — with bootstrap CIs **[PARTIAL]**
 
-- **Convergent:** the generative measures intercorrelate (e.g. adversarial-validity ~ pose
-  Spearman ≈ +0.76; pose ~ transform ≈ +0.47–0.60) — consistent with a single latent
-  "generative" factor.
-- **Discriminant (caveat):** with a *noisy* solve axis, solve↔generative looked weak
-  (+0.16–0.47, apparent dissociation); after **cleaning** the solve axis the correlation rose
-  (+0.61–0.87, apparent tracking). **The early "dissociation" was substantially solve-axis
-  measurement noise.** The defensible signal is therefore **not** a low global correlation but
-  the **within-solve-ceiling spread** of §5.2: when solving is held constant at its maximum,
-  generative ability still varies. (This reversal is itself a methodological contribution: it
-  shows why clean axis measurement is mandatory before claiming dissociation.)
+(N=20 intersection of solve+IGS; Spearman, seeded percentile bootstrap 95% CI.)
+
+- **Convergent:** the generative measures intercorrelate — pose ~ transform **+0.58 [+0.14,
+  +0.85]**, adversarial-validity ~ transform **+0.54 [+0.16, +0.80]** (CIs exclude 0) —
+  consistent with a single latent "generative" factor.
+- **Discriminant — an instructive reversal:** with a *noisy* solve axis, solve↔generative looked
+  weak (+0.16–0.47, apparent dissociation); after **cleaning** the solve axis it rose to
+  solve ~ transform **+0.74 [+0.40, +0.92]**, solve ~ pose **+0.73 [+0.43, +0.89]** (tracking).
+  **The early "dissociation" was substantially solve-axis measurement noise.** The defensible
+  signal is therefore **not** a low global correlation but the **within-solve-ceiling spread**
+  (§5.2): when solving is held at its maximum, IGS still varies 0.65–1.00. (This reversal is
+  itself a methodological contribution: clean axis measurement is mandatory before claiming
+  dissociation.)
+
+### 5.5 Forward solving is robust, not memorized (Experiment F) **[ESTABLISHED]**
+
+To test the common "forward scores are memorization-inflated" premise, we measured accuracy on
+4 templates × 6 **isomorphic** instances (identical structure, perturbed constants → different
+answers, sympy-verified). A memorizer fragments across equi-difficult fresh variants; a reasoner
+is flat. Result (N=7): **5 of 7 models scored 100% across *all* templates** — including disguised
+cubes, complex-root factorizations, and extraneous-root radicals. Only weak models fragmented
+(llama-3.1-8b 62%, T3/T4 ≈ 50%), and that is *capability*, not memorization.
+→ **In the verifiable-algebra domain, strong-model solving is genuine; the saturation of §5.1 is
+real mastery, not memorized scores.** We therefore *scope down* the memorization-inflation claim
+(cite GSM-Symbolic for the word-problem regime) and position IGS as a **non-saturating,
+recall-resistant frontier discriminator** rather than a remedy for "fake" forward scores.
+
+### 5.6 The value-decision framework — when is IGS worth keeping? **[DESIGN, not yet tested]**
+
+Assume a *hard* forward benchmark that currently discriminates models well (the honest baseline,
+since hard forward benchmarks are **not** saturated, §5.1). Run the same models on it; compare
+the forward ranking to the IGS ranking. The outcome decides IGS's fate:
+
+- **(A) Rankings DIFFER.** Being "different" is *not* automatically a virtue — it could be noise.
+  IGS is trustworthy only if we can **objectively establish what ability it measures** and *why*
+  a high-IGS / low-forward model is good at something real (construct + predictive validity, E3/E5).
+  Until then, divergence is unexplained, not validated.
+- **(B) Rankings AGREE (Spearman high).** Split by **discrimination power** (resolving power:
+  spread, fewer ceiling ties, more distinct rank levels before saturation):
+  - **(B1) forward resolves more finely than IGS** → IGS is the *weaker* instrument; as models
+    improve it **saturates/dies first**. → **no value.**
+  - **(B2) IGS resolves more finely than forward** → **best case.** Agreement gives IGS construct
+    credibility (it tracks the same capability ordering), *and* its finer resolution means that as
+    future models compress forward scores toward the ceiling, **IGS still discriminates** →
+    durable competitive value.
+
+Operationally: rank-agreement = Spearman(IGS, hard-forward); discrimination power = score spread /
+(1 − fraction-tied-at-max) / number of distinct rank levels, measured on the same model set. This
+experiment (E10, §7) is the single most decisive test of whether IGS deserves to exist.
 
 ---
 
 ## 6. Threats to validity (what a reviewer will attack — and our position)
 
-1. **Small N, ties.** N=12 with many tied/ceilinged values → all global correlations are
-   *suggestive, not conclusive*. Bootstrap CIs not yet computed. → §7.
+1. **Moderate N, ties.** N up to 21 (20 for solve∩IGS) with several tied/ceilinged values →
+   correlations now carry bootstrap 95% CIs (§5.4) but remain *moderately* wide; larger N would
+   tighten them. → §7 (E1).
 2. **Single domain.** Univariate algebraic equations only. Construct generality untested. → §7.
 3. **Ceiling confound.** Because solve saturates, we cannot cleanly separate "generative
    ability" from a general capability factor; the within-ceiling spread (§5.2) is the workaround
@@ -207,6 +269,13 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   constraints so the top tier (currently IGS ≈ 0.83–0.92) is resolved.
 - **E9 — Ablations & baselines.** Human baseline on a subset; trivial-templater baseline to show
   IGS > template-instantiation; sensitivity of IGS to its weighting.
+- **E10 — The value-decision test (most decisive, §5.6).** Run the same models on a *hard,
+  non-saturated* forward benchmark (AIME-level / FrontierMath subset / hard public set).
+  Compute rank-agreement Spearman(IGS, hard-forward) and each axis's discrimination power.
+  Outcomes: **(A)** rankings differ → must prove IGS's construct (gate on E3/E5); **(B1)** agree
+  but forward resolves finer → IGS dies first, no value; **(B2)** agree but IGS resolves finer →
+  validated *and* future-proof (the win condition). This single experiment determines whether IGS
+  is worth keeping.
 
 ---
 
@@ -215,9 +284,12 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 | Claim | Status |
 |---|---|
 | Generative construction is *real* (not pure recall) | **Supported** (recall-proof transform spreads 0–1 via genuine substitution) |
-| It is *measurable* and *internally coherent* | **Supported** (gen axes intercorrelate; IGS defined & reproducible) |
-| It *discriminates where solving saturates* | **Supported, suggestive** (6 solve-100% models span IGS 0.27–0.92, N=12) |
+| It is *measurable* and *internally coherent* | **Supported** (gen axes intercorrelate, CIs exclude 0; IGS defined & reproducible) |
+| It discriminates where *our* solve banks saturate | **Supported, suggestive** (8 solve-100% models span IGS 0.65–1.00, N=21) |
+| Forward solving here is genuine, not memorized | **Supported** (Experiment F: strong models robust to isomorphic perturbation) |
+| Forward benchmarks saturate *in general* | **NOT claimed** (hard ones don't; scoped to our banks + the treadmill) |
 | It is a *distinct dimension* from general capability | **Not yet** (ceiling confound; needs E3) |
+| It adds value over a hard forward benchmark | **Untested — decisive** (needs E10 / §5.6: rank-agreement × discrimination power) |
 | It *generalizes beyond algebra* | **Untested** (needs E4) |
 | It *predicts anything external* | **Untested** (needs E5) |
 
@@ -225,19 +297,23 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 
 ## 9. Data & artifact index (for the eventual paper)
 
-- IGS leaderboard: `data/results/igs_leaderboard.{html,json}` (N=12).
-- Macro battery: `data/results/macro3_experiment.json` (solve+adversarial),
-  `macro3_level3.json` (pose+transform); earlier sweeps `macro_*`, `macro_*_v2` (solve-axis
-  cleaning study, §5.4).
+- IGS leaderboard (N=21): `data/results/igs_leaderboard.{html,json}` (built from
+  `paper_level3_all.json` + `paper_experiment.json`).
+- Paper batteries (N≈22): `data/results/paper_experiment.json` (solve+adversarial),
+  `paper_level3_all.json` (pose+transform), `perturbation_results.json` (Experiment F).
+  Earlier sweeps `macro3_*`, `macro_*`, `macro_*_v2` (solve-axis cleaning study, §5.4).
 - Per-item glass-box reports: `*_report.html` (every equation, target, verdict).
-- Banks: `data/banks/{struct_pose_targets,transform_bank,solve_set_graded,solve_set_hard2}.json`.
+- Banks: `data/banks/{struct_pose_targets,transform_bank,solve_set_graded,solve_set_hard2,
+  perturbation_set}.json`.
 - Methods provenance: commit history on `scoring-validity` (verifier hardening, scoring
-  decomposition, ceiling-break, IGS formalization).
+  decomposition, ceiling-break, IGS formalization, format-artifact removal, bootstrap CIs).
 
 ---
 
 ## 10. Next action
 
-Pick the gap to close first. Recommended order for maximal reviewer impact:
-**E7 (artifacts) → E1/E2 (scale + reliability) → E3 (discriminant done right) → E4 (generality).**
-E5 (predictive validity) is the highest-value but hardest; plan it once the above hold.
+E7 (artifacts) and E1 (scale + bootstrap CIs) are **done**; Experiment F (forward robustness)
+is **done** and scoped the memorization claim out. The **decisive** next step is **E10 (§5.6):
+compare IGS to a hard, non-saturated forward benchmark on the same models** — rank-agreement ×
+discrimination power decides whether IGS has durable value (B2) or dies first (B1) or needs a
+construct proof (A). After E10: E3 (discriminant residual), E4 (generality), E5 (predictive).
