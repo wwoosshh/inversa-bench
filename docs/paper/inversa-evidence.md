@@ -22,8 +22,8 @@
 We operationalize both with the **Inversa Generative Score (IGS)**, a machine-verified,
 recall-resistant score. **Status:** Pillar-1's *premise* (forward is contaminated) is now
 confirmed **both by literature and by our own E12** (GSM8K vs GSM-Symbolic, mean gap +3.2%
-[+1.0,+5.7], §5.7); the *relative claim* holds as **forward +3.2% vs inverse structurally-0**
-(fully-empirical inverse arm = E12b). Pillar-2 hinges on E10 (§5.6).
+[+1.0,+5.7], §5.7); the *relative claim* holds as **forward +3.2% [+1.0,+5.7] (CI≠0) vs inverse +0.0% [−10.5,+11.0]
+(CI∋0, E12b)**. Pillar-2 hinges on E10 (§5.6).
 
 ### Evidence at a glance (what the vision rests on)
 
@@ -31,7 +31,7 @@ confirmed **both by literature and by our own E12** (GSM8K vs GSM-Symbolic, mean
 |---|---|---|
 | Forward (problem→answer) scores are **inflated by contamination** | GSM1k (lit.) + **our E12**: GSM8K vs GSM-Symbolic = **+3.2% [+1.0,+5.7]**, 8/9 models | **Established** |
 | Inverse (answer→problem) is **recall-resistant** | transform pinned to randomized inputs (structural) + E12b | **Established (structural)** |
-| Inverse is **more contamination-robust** than forward | forward gap **+3.2%** vs inverse gap **≈0** | **Established (head-to-head)** |
+| Inverse is **more contamination-robust** than forward | forward **+3.2% [+1.0,+5.7]** (CI≠0) vs inverse **+0.0% [−10.5,+11.0]** (CI∋0) | **Established (structural + E12b corroborating)** |
 | Inverse ability is **real construction**, not recall | recall-proof transform spreads 0→1 via verified structural substitutions | **Established** |
 | Inverse is **measurable & coherent** (a score: IGS) | gen axes intercorrelate (CIs exclude 0); `cli_bench` engine | **Established** |
 | Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
@@ -267,10 +267,13 @@ own data** (not just by citation): seeing the exact items inflates forward score
 It also explains why our earlier Experiment F (§5.5) saw no gap — those were *self-authored*
 (uncontaminatable) algebra items; E12 uses *actually-leaked* GSM8K, so it captures the real effect.
 
-**The head-to-head asymmetry (the vision's core):** forward gap = **+3.2% [+1.0, +5.7]** vs inverse
-gap = **0 by construction** (transform inputs are randomized at test time → no fixed item can leak).
-A fully empirical inverse arm (familiar-vs-random source transforms) is E12b (§7), but the
-structural argument already gives inverse a contamination advantage forward cannot have.
+**The head-to-head asymmetry (the vision's core).** Forward gap = **+3.2% [+1.0, +5.7]** — CI
+*excludes* 0, a systematic inflation. Inverse gap, measured in E12b (familiar/textbook vs random
+sources, N=7), = **+0.0% [−10.5%, +11.0%]** — centered at 0 with CI *including* 0: **no systematic
+familiarity advantage**, consistent with the structural fact that transform inputs are randomized
+at test time (no fixed item can leak). *Honest caveat:* the inverse CI is wide (small bank,
+weak-model noise scatters models both ±), so the **structural** argument remains primary and E12b
+is corroborating, not decisive. Net: forward inflates systematically; inverse does not.
 
 ---
 
@@ -346,9 +349,9 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
 - **E12 — Forward contamination gap. [DONE, §5.7]** GSM8K (contaminated) vs GSM-Symbolic (fresh),
   matched by template: mean **+3.2% [+1.0, +5.7]**, 8/9 models positive → forward inflation
   confirmed on our models. Inverse gap is structurally 0 (randomized inputs).
-- **E12b — Fully-empirical inverse gap.** Measure an inverse contamination gap directly: transform
-  validity on *familiar/textbook* source equations vs *random* sources. Predicted ≈ 0 (no leakable
-  fixed item); confirming it closes the head-to-head numerically rather than structurally.
+- **E12b — Fully-empirical inverse gap. [DONE]** transform validity on familiar/textbook vs random
+  sources: **+0.0% [−10.5%, +11.0%]** (N=7) — no systematic gap (CI∋0), corroborating the
+  structural claim. Underpowered (wide CI); a larger bank would tighten it.
 
 ### Related work (for citation)
 - GSM-Symbolic — Mirzadeh et al., Apple, ICLR 2025 (arXiv:2410.05229): perturbation fragility;
@@ -403,8 +406,9 @@ cores, each with one decisive experiment:
 - **E10 (Pillar 2):** vs a hard non-saturated forward benchmark — rank-agreement × discrimination
   power (B2 = durable value).
 
-**E12 is DONE** (§5.7: forward inflation +3.2% [+1.0,+5.7] confirmed) — Pillar-1 premise proven on
-our data. Next: **E10** (Pillar-2 decisive: IGS vs hard non-saturated forward), then **E12b**
-(fully-empirical inverse gap to close the head-to-head numerically), then E3/E4/E5 (discriminant
-residual, generality, predictive). Experiment F (§5.5) is retained only as a scoped robustness
-note — it does not prove the memorization claim; E12 does.
+**E12 and E12b are DONE** (§5.7: forward +3.2% [+1.0,+5.7]; inverse +0.0% [−10.5,+11.0]) — the
+contamination head-to-head (Pillar 1) is established. The benchmark **engine** (`cli_bench`) ships.
+The remaining decisive test is **E10** (Pillar-2: IGS vs a hard, non-saturated forward benchmark —
+rank-agreement × discrimination power). After E10: E3 (discriminant residual), E4 (generality),
+E5 (predictive), and larger N to tighten the (currently wide) inverse-gap CI. Experiment F (§5.5)
+is retained only as a scoped robustness note — E12 is what proves the memorization premise.
