@@ -40,7 +40,7 @@ sharper axis; §5.6).
 | Inverse is **measurable & coherent** (a score: IGS) | gen axes intercorrelate (CIs exclude 0); `cli_bench` engine | **Established** |
 | Inverse **discriminates where (our) solving saturates** | 8 solve-100% models span IGS 0.65–1.00 | **Suggestive (N=21)** |
 | IGS **agrees with a hard forward benchmark** (AIME) | **Spearman +0.93 [+0.65,+1.0]** (E10) → construct-valid | **Established** |
-| IGS **out-discriminates** hard forward | easy bank: comparable, AIME sharper at top. **E8 hard transform resolves the IGS top** (spread 6–100%, only 2 tied) → headroom exists | **Improving** (top-2 still tied; needs one more difficulty step) |
+| IGS discrimination vs hard forward (AIME) | easy-IGS: AIME sharper at top. **hard-IGS (E8) → top tie resolved (1 tied like AIME), distinct 10≥9, agreement +0.89** | **Competitive** (E10-redux: matches AIME's discrimination, keeps rank agreement) |
 | Generative difficulty is **scalable** to discriminate top models | E8: harder polynomial transforms separate the easy-bank-saturated top tier + reorder by elimination skill | **Established** |
 
 ---
@@ -352,8 +352,13 @@ The thesis is currently *demonstrated as plausible*, not *proven*. To make it re
   **6%–100%**, only 2 tied at max. gemini-flash-lite 100→78%, deepseek 100→83% separate from
   opus/qwen3.7 (still 100%). Notable reordering — llama-3.3-70b 77→**6%**, claude-sonnet-4.6
   63→**22%** — shows the hard bank measures a *deeper* construction skill (elimination), not uniform
-  difficulty. → The construction axis has real headroom above easy-bank saturation; one more step
-  (r⁴ / composite / conjunctive) is needed to separate the very top 2.
+  difficulty. The construction axis has real headroom above easy-bank saturation.
+  **E10-redux (hard-IGS vs AIME, N=11):** recomputing IGS with the hard transform **fixes the E10
+  weakness** — top tie drops 2→1 (opus alone, matching AIME), distinct levels 10 ≥ AIME's 9, std
+  0.256 (AIME 0.275), rank-agreement +0.89 [+0.47,+0.99] maintained. So at matched difficulty
+  hard-IGS is **discrimination-competitive with a gold-standard hard forward benchmark** while
+  keeping its structural edge (contamination-immune, auto-scaling). Separating the very top 2
+  (opus vs qwen3.7) would need one more step (r⁴ / composite / conjunctive).
 - **E9 — Ablations & baselines.** Human baseline on a subset; trivial-templater baseline to show
   IGS > template-instantiation; sensitivity of IGS to its weighting.
 - **E10 — The value-decision test (most decisive, §5.6).** Run the same models on a *hard,
