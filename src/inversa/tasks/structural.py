@@ -59,8 +59,16 @@ TRANSFORM_PROMPT = (
 )
 
 
-def build_struct_pose_prompt(target_desc: str) -> str:
-    return STRUCT_POSE_PROMPT.format(target_desc=target_desc)
+_NONTRIVIAL_CLAUSE = (
+    "\nYour equation must be NON-TRIVIAL: a linear equation that merely restates the answer "
+    "(e.g. 'x = <target>' or 'x - <target> = 0') is NOT accepted. Build genuine structure — "
+    "degree >= 2, or radicals / exponentials / logs — so the target emerges as the unique real root."
+)
+
+
+def build_struct_pose_prompt(target_desc: str, require_nontrivial: bool = False) -> str:
+    base = STRUCT_POSE_PROMPT.format(target_desc=target_desc)
+    return base + _NONTRIVIAL_CLAUSE if require_nontrivial else base
 
 
 def build_transform_prompt(source: str, g_desc: str) -> str:
@@ -79,11 +87,14 @@ class StructPoseItem:
 
 
 def run_struct_pose_item(adapter: Adapter, target_desc: str, target_value,
-                         novelty: str = "") -> StructPoseItem:
-    raw = adapter.generate(build_struct_pose_prompt(target_desc))
+                         novelty: str = "", require_nontrivial: bool = False) -> StructPoseItem:
+    raw = adapter.generate(build_struct_pose_prompt(target_desc, require_nontrivial))
     equation, raw = _extract_or_retry(adapter, raw)
     ver = verify_equation(equation, float(target_value))
-    return StructPoseItem(target_desc, float(target_value), novelty, raw, equation, ver, ver.unique)
+    # In strict mode a linear restatement (x = target) is correct but not *construction* -> reject
+    # it so the score reflects real structure-building (anti-gaming, rebuttal #5).
+    valid = ver.unique and not (require_nontrivial and ver.trivial)
+    return StructPoseItem(target_desc, float(target_value), novelty, raw, equation, ver, valid)
 
 
 @dataclass

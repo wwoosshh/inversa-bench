@@ -116,6 +116,10 @@ def main(argv=None) -> None:
                          "targets are recorded in the output JSON so the run stays reproducible.")
     ap.add_argument("--pose-seed", type=int, default=None,
                     help="seed for --pose-random (default: a fresh OS-random seed each run).")
+    ap.add_argument("--pose-no-trivial", action="store_true",
+                    help="reject trivial pose answers: a linear restatement (x = target) does not "
+                         "count, forcing genuine construction (degree>=2 or radicals/exp/log). "
+                         "Anti-gaming; off by default for comparability with the fixed-bank runs.")
     ap.add_argument("--transform-bank", default="data/banks/transform_bank.json")
     ap.add_argument("--solve-bank", default="", help="optional solve bank for a saturation-reference column")
     ap.add_argument("--out", default="data/results/igs_benchmark.html")
@@ -167,7 +171,8 @@ def main(argv=None) -> None:
         ad = get_adapter(model)
         if bank == "pose":
             it = run_struct_pose_item(ad, item["target_desc"], item["target_value"],
-                                      item.get("novelty", ""))
+                                      item.get("novelty", ""),
+                                      require_nontrivial=args.pose_no_trivial)
         else:
             it = run_transform_item(ad, item["source"], item["g_desc"], item["r_value"],
                                     item["target_value"])
@@ -221,7 +226,7 @@ def main(argv=None) -> None:
         r["solve_ref"] = solve_ref.get(r["model"])
     meta = {"benchmark": BENCHMARK_NAME, "n_models": len(ranked),
             "pose_source": pose_source, "pose_seed": pose_seed,
-            "transform_bank": args.transform_bank,
+            "transform_bank": args.transform_bank, "pose_no_trivial": args.pose_no_trivial,
             "repeats_max": max(1, args.repeats), "adaptive": not args.no_adaptive}
     if args.pose_random > 0:  # record the fresh targets so a contamination-immune run stays auditable
         meta["pose_targets"] = pose_targets

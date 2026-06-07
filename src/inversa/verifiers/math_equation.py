@@ -139,6 +139,17 @@ class VerificationResult:
     unique: bool             # the real solution set is exactly {target}
     solutions: List[str]     # string repr of all solutions (evidence)
     error: Optional[str] = None
+    trivial: bool = False    # equation is linear in x (a*x+b=0) -> just RESTATES the answer,
+    #                          not construction; pose can opt to reject these (anti-gaming, #5)
+
+
+def _is_linear_in_x(diff) -> bool:
+    """True if `diff` is a degree-1 polynomial in x (i.e. the equation is a*x+b=0, whose solution
+    is merely the literal -b/a). Non-polynomial or higher-degree -> False (genuine structure)."""
+    try:
+        return sp.Poly(diff, _X).degree() == 1
+    except Exception:
+        return False
 
 
 def _real_solutions(solutions) -> List[float]:
@@ -186,6 +197,7 @@ def _verify_core(equation_str: str, target: float) -> VerificationResult:
         return VerificationResult(False, False, False, [],
                                   "equation does not constrain x (x absent or cancels out)")
 
+    trivial = _is_linear_in_x(lhs - rhs)
     eq = sp.Eq(lhs, rhs)
     target_f = float(target)
     try:
@@ -197,7 +209,8 @@ def _verify_core(equation_str: str, target: float) -> VerificationResult:
         reals = _real_solutions(solutions)
         if any(abs(rs - target_f) < _TOL for rs in reals):
             # symbolic solve is authoritative when it confirms the target as a root
-            return VerificationResult(True, True, len(reals) == 1, [str(s) for s in solutions])
+            return VerificationResult(True, True, len(reals) == 1,
+                                      [str(s) for s in solutions], trivial=trivial)
 
     # Symbolic couldn't confirm the target (transcendental embedding, timeout, or genuinely
     # absent). Fall back to numeric verification so valid-but-hard-to-symbolically-solve
@@ -209,10 +222,12 @@ def _verify_core(equation_str: str, target: float) -> VerificationResult:
     if num is not None:
         valid, unique, roots = num
         note = None if valid else "target is not a real root (numeric)"
-        return VerificationResult(True, valid, unique, [f"~{r:.6f}" for r in roots], note)
+        return VerificationResult(True, valid, unique, [f"~{r:.6f}" for r in roots], note,
+                                  trivial=trivial)
 
     sols_repr = [str(s) for s in solutions] if solutions is not None else []
-    return VerificationResult(True, False, False, sols_repr, "unverifiable (symbolic + numeric)")
+    return VerificationResult(True, False, False, sols_repr, "unverifiable (symbolic + numeric)",
+                              trivial=trivial)
 
 
 # --- Process-isolated verification (opt-in via INVERSA_ISOLATE_VERIFY=1) ---------------------

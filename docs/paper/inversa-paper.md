@@ -115,6 +115,14 @@ records the seed + generated targets in the output. This makes the pose axis **c
 like the transform axis** — with fresh targets there is no fixed (target → good-equation) pair to
 leak — closing the one asymmetry where a *fixed* pose bank could in principle be memorized once public.
 
+A second hardening, `--pose-no-trivial`, blocks **gaming**: a linear equation `x = target` is *correct
+but not construction* (it just restates the answer), so the verifier flags any degree-1-in-x answer
+(`trivial`) and strict mode scores it invalid — forcing degree ≥ 2 or a non-polynomial form where the
+target emerges as the unique real root. The effect is large (a small probe halved a frontier-mini
+model's permissive pose validity once restatements were excluded), which means permissive pose is
+partly inflated by answer-copying; we therefore report it as an **opt-in** rigor mode (the headline
+runs used permissive scoring, so their pose half should be read with this caveat).
+
 **Task B — "Transform" (the recall-proof core).** We generate a **random** cubic with one ugly
 (irrational) real root *r*, show it to the model, and ask it to build a *new* equation whose unique
 real solution is a function *g(r)* — without computing *r* numerically. Exact prompt:

@@ -48,6 +48,7 @@ python -m inversa.cli_bench --models "anthropic/claude-opus-4.8,openai/gpt-4o-mi
 - `--models` 쉼표 구분. `--max-workers` 동시도. 중간에 끊겨도 같은 `--cache`로 재실행하면 이어서 진행.
 - 점수 = **IGS = mean(pose validity, transform validity)**. 둘 다 sympy 유일근 검증.
 - **오염 면역 pose:** `--pose-random N` 으로 pose 타깃을 *고정 뱅크 대신 매 실행 새로 생성*(시드·타깃은 결과 JSON에 기록). 유출될 고정 문항이 없어 pose 축도 transform 축처럼 오염 불가가 됨.
+- **자명형 차단(anti-gaming):** `--pose-no-trivial` 로 `x = target` 같은 1차식 복붙을 무효 처리 → 차수 ≥ 2 또는 비다항식의 *진짜 구성*만 인정(옵트인; 기본은 비교성 위해 OFF).
 
 ### ⚠️ 추론(reasoning) 모델 주의 — 토큰 예산이 점수와 비용을 좌우
 추론 모델은 내부 추론이 출력 토큰 예산을 먹는다. 예산이 작으면 OpenRouter provider가 두 갈래로 갈린다(실측):
