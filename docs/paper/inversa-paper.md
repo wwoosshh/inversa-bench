@@ -174,7 +174,7 @@ A worked example. Model output `Reasoning…\n#### x**3 - 27 = 0`, target `3`: e
 `x**3 - 27 = 0`; solve → roots `{3, complex, complex}`; real roots `{3}`; `valid = True`,
 `unique = True` → **counts**. Output `x**2 - 9 = 0`, target `3`: real roots `{3, -3}` →
 `unique = False` → **does not count** (it also solves to −3). Everything is reproducible and
-inspectable; the suite has **163 passing unit tests** (verifier, scoring, extraction, and the
+inspectable; the suite has **185 passing unit tests** (verifier, scoring, extraction, and the
 benchmark engine) — run `python -m pytest -q`.
 
 ### 2.4 The score: IGS
@@ -190,6 +190,16 @@ each in [0, 1]:
 IGS is **generative-only**; forward solving is never part of it (it is reported separately as a
 saturation reference). The benchmark engine is `python -m inversa.cli_bench --models ...`, which
 outputs a ranked IGS leaderboard (JSON + HTML) with full per-item evidence.
+
+**Interval scaling (optional).** Raw IGS is an *ordinal* index — a 0.9-vs-0.8 gap is not metrically
+equal across the range, and pose/transform are pooled with arbitrary equal weight. `scripts/build_irt.py`
+recovers the model×item correctness matrix from the run cache and fits a **Rasch (1PL)** model,
+placing each model on an interval **logit θ scale** (P(correct) = σ(θ−b)) with a difficulty *b* and a
+point-biserial discrimination per item. θ is a *monotone* rescaling of IGS (Spearman θ-vs-IGS =
+**+1.00** on the N=46 complete-case run), so the **ranking is unchanged** but the spacing becomes
+meaningful — the saturated 0.98→1.00 top compresses into a large θ gap near the ceiling — and pooling
+the two item types into one matrix drops the 50/50 weight. Output: `data/results/igs_irt.json`. (We
+report IGS as the headline for readability and θ as the metrically-honest companion.)
 
 ### 2.5 Models, data, infrastructure
 
@@ -456,7 +466,7 @@ Repository `wwoosshh/inversa-bench`, branch `scoring-validity`. Engine: `python 
 Core: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. Experiments:
 `scripts/run_forward_gap.py` (E12), `run_inverse_gap.py` (E12b), `run_e10.py` + `e10_redux.py` (E10),
 `run_transform_hard.py` + `gen_transform_{hard,brutal}_bank.py` (E8). Figures: `scripts/make_figures.py`.
-All scores are sympy-verified; **163 passing unit tests** cover the verifier, scoring, extraction, and
+All scores are sympy-verified; **185 passing unit tests** cover the verifier, scoring, extraction, and
 the benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under
 `data/banks/`.
 
@@ -480,7 +490,8 @@ command to regenerate it.
 | E8 hard: llama-3.3-70b **77%→6%** (§3.4) | `transform_hard_results.json` + `paper_level3_all.json` | easy 0.77 → hard 0.056 | **77% → 5.6%** | inspect per-model fields |
 | Leaderboard **N=59, 7 families, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7 families** | `python -m inversa.cli_bench …`; `python scripts/build_dashboard.py` |
 | Discriminant validity (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,logic)=.66, Williams t=3.49 p<.05, partial=.88 | `discriminant_results.json` (control `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; nonmath range 0.50 | re-derived: gap +0.27, partial +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
-| Verifier soundness | `tests/` | — | **163 tests pass** | `python -m pytest -q` |
+| Interval (Rasch) scaling (§2.4): θ monotone in IGS, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | re-derived from the run cache, no API | `python scripts/build_irt.py` |
+| Verifier soundness | `tests/` | — | **185 tests pass** | `python -m pytest -q` |
 
 **Scope notes carried by the data (read with the numbers):** (i) §3.3's ρ is *range-dominated* — anchored
 by very-weak and frontier models; the defensible figure is the CI lower bound (**+0.65**; redux **+0.47**),

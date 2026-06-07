@@ -160,7 +160,7 @@ equation in x whose unique real solution is exactly {g}  (where r is that soluti
 **예시.** 출력 `추론…\n#### x**3 - 27 = 0`, 타깃 `3`: 추출 → `x**3 - 27 = 0`; 풀이 → 근
 `{3, 복소, 복소}`; 실근 `{3}`; `valid=True, unique=True` → **인정**. 출력 `x**2 - 9 = 0`, 타깃 `3`:
 실근 `{3, -3}` → `unique=False` → **불인정**(−3도 답이므로). 전부 재현·검사 가능하며, 스위트는
-**163개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
+**185개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
 
 ### 2.4 점수: IGS
 
@@ -174,6 +174,14 @@ equation in x whose unique real solution is exactly {g}  (where r is that soluti
 IGS는 **생성 전용**이며 forward 풀이는 포함하지 않습니다(포화 참조로만 별도 표기). 엔진은
 `python -m inversa.cli_bench --models ...`로, 항목별 증거까지 담은 순위 IGS 리더보드(JSON+HTML)를
 출력합니다.
+
+**구간 척도화(선택).** 원 IGS는 *서열* 지표다 — 0.9 대 0.8 격차가 구간 전체에서 동일한 크기가 아니고,
+pose/transform은 임의의 동일 가중으로 합쳐진다. `scripts/build_irt.py`는 실행 캐시에서 모델×문항 정오
+행렬을 복원해 **Rasch(1PL)** 모델을 적합하고, 각 모델을 구간 **로짓 θ 척도**(P(정답)=σ(θ−b))에 놓으며
+문항마다 난이도 *b*·변별도(point-biserial)를 준다. θ는 IGS의 *단조* 재척도라(N=46 완전사례 런에서
+θ-vs-IGS Spearman **+1.00**) **순위는 그대로**지만 간격이 의미를 갖는다 — 포화된 0.98→1.00 상단이 천장
+부근에서 큰 θ 간격으로 벌어진다 — 그리고 두 문항형을 한 행렬로 합쳐 50/50 가중을 없앤다. 출력:
+`data/results/igs_irt.json`. (가독성을 위해 IGS를 헤드라인으로, θ를 척도상 정직한 동반 지표로 보고한다.)
 
 ### 2.5 모델·데이터·인프라
 
@@ -411,7 +419,7 @@ AIME와 ρ=0.93) 단순 일반역량도 **아니다**(H8 지지: 수학-특이�
 핵심: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. 실험:
 `scripts/run_forward_gap.py`(E12), `run_inverse_gap.py`(E12b), `run_e10.py`+`e10_redux.py`(E10),
 `run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8). 그림: `scripts/make_figures.py`.
-모든 점수는 sympy 검증; **163개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
+모든 점수는 sympy 검증; **185개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
 결과 JSON은 `data/results/`, 은행은 `data/banks/`.
 
 ---
@@ -432,7 +440,8 @@ AIME와 ρ=0.93) 단순 일반역량도 **아니다**(H8 지지: 수학-특이�
 | E8 hard: llama-3.3-70b **77%→6%** (§3.4) | `transform_hard_results.json`+`paper_level3_all.json` | easy 0.77 → hard 0.056 | **77% → 5.6%** | 모델별 필드 |
 | 리더보드 **N=59, 7패밀리, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7패밀리** | `cli_bench …`; `build_dashboard.py` |
 | 판별타당도 (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,논리)=.66, Williams t=3.49 p<.05, 편상관=.88 | `discriminant_results.json` (통제 `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; 비수학 range 0.50 | 재도출: gap +0.27, 편상관 +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
-| 검증기 건전성 | `tests/` | — | **163개 통과** | `python -m pytest -q` |
+| 구간(Rasch) 척도화 (§2.4): θ는 IGS의 단조 재척도, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | 실행 캐시에서 재도출, API 불필요 | `python scripts/build_irt.py` |
+| 검증기 건전성 | `tests/` | — | **185개 통과** | `python -m pytest -q` |
 
 **수치와 함께 읽어야 할 범위 주의:** (i) §3.3의 ρ는 *범위 지배* — 극단(약함·프런티어)에 고정됨. 방어값은
 CI 하한(**+0.65**; redux **+0.47**), gpt-4o-mini(IGS 0.73 / AIME 3%)는 실제 부분 괴리. (ii) §3.2의
