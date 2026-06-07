@@ -180,7 +180,8 @@ def evaluate_leaderboard(models: Sequence[str], pose_items: Sequence[Dict[str, A
                          *, repeats: int = 1, max_workers: int = 8,
                          cache: Optional[ResultCache] = None, adaptive: bool = True,
                          on_rep_done: Optional[Callable[[int], None]] = None,
-                         log: Optional[Callable[[str], None]] = None) -> List[Dict[str, Any]]:
+                         log: Optional[Callable[[str], None]] = None,
+                         abort: Optional["threading.Event"] = None) -> List[Dict[str, Any]]:
     """Score a roster on the two IGS banks with the three efficiency levers wired together:
 
       A (concurrency): every (model, bank, item) call for a repeat is scheduled in ONE bounded
@@ -202,7 +203,8 @@ def evaluate_leaderboard(models: Sequence[str], pose_items: Sequence[Dict[str, A
     trans_rates: Dict[str, List[float]] = {m: [] for m in models}
     reps_done: Dict[str, int] = {m: 0 for m in models}
     broken: set = set()
-    abort = threading.Event()  # tripped by an account-wide fatal error (out of credit / bad key)
+    # tripped by an account-wide fatal error (out of credit / bad key) OR by the caller (GUI Stop)
+    abort = abort or threading.Event()
 
     def _run_rep(rep: int, rep_models: Sequence[str]):
         """Returns (attempted, ok) call counts for this repeat so the caller can see failures."""

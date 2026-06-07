@@ -17,14 +17,17 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 def _make_adapter(model: str, provider: str, base_url: str, key_env: str, max_tokens: int = 512,
-                  reasoning_max_tokens: int | None = None, temperature: float | None = None):
+                  reasoning_max_tokens: int | None = None, temperature: float | None = None,
+                  api_key: str | None = None):
     """Build an adapter for `model`. provider=anthropic -> native Anthropic;
     anything else -> OpenAI-compatible endpoint (OpenRouter, Ollama, ...).
     `reasoning_max_tokens` bounds reasoning-model spend on OpenRouter (ignored by Anthropic);
-    `temperature` (e.g. 0.0) cuts run-to-run noise so fewer repeats are needed."""
+    `temperature` (e.g. 0.0) cuts run-to-run noise so fewer repeats are needed.
+    `api_key`, if given, is used directly (e.g. a key typed into the GUI) instead of `key_env`."""
     if provider == "anthropic":
         return AnthropicAdapter(model=model)
-    return OpenAICompatibleAdapter(model, base_url=base_url, api_key_env=key_env,
+    return OpenAICompatibleAdapter(model, base_url=base_url, api_key=api_key,
+                                   api_key_env=(None if api_key else key_env),
                                    max_tokens=max_tokens,
                                    reasoning_max_tokens=reasoning_max_tokens,
                                    temperature=temperature)

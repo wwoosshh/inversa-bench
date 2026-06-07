@@ -36,7 +36,25 @@
 
 ---
 
-## 빠른 시작 — 벤치마크 엔진
+## 빠른 시작 (GUI) — 클릭 세 번이면 끝
+
+명령어를 외울 필요 없이, **브라우저 GUI**로 엔진을 완전히 제어합니다(추가 설치 0 — 파이썬 표준 라이브러리만 사용).
+
+```bash
+git clone https://github.com/wwoosshh/inversa-bench && cd inversa-bench
+python -m pip install -e .            # 의존성 설치 (Python 3.11+)
+python -m inversa.gui                 # → 브라우저가 http://127.0.0.1:8000 자동 오픈
+```
+
+1. **모델 선택** — 내장 102개 로스터에서 체크(또는 직접 입력).
+2. **API 키** — `.env`에 `OPENROUTER_API_KEY`가 있으면 자동 감지, 없으면 칸에 입력(해당 실행에만 사용).
+3. **Run** — 실시간 진행 로그 + 완료 시 IGS 순위표 · 대시보드 링크. (고급 패널에서 반복·동시도·pose 무작위화·자명형 차단·truncation 처리 등 모든 옵션 제어. 실행 전 비용 확인 모달.)
+
+> 로컬 전용(127.0.0.1)·외부 비노출. 연구·대중 모두 별도 학습 없이 바로 사용 가능.
+
+---
+
+## 빠른 시작 (CLI) — 파워유저·자동화용
 
 ```bash
 # .env 에 OPENROUTER_API_KEY 저장 후
