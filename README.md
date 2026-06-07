@@ -55,6 +55,7 @@ python -m inversa.cli_bench --models "anthropic/claude-opus-4.8,openai/gpt-4o-mi
 - **max_tokens를 지키는 provider**(예: minimax-m1): 추론이 예산을 다 써 `#### 식` 줄 전에 잘려(`finish_reason=length`, 빈 응답) → **점수가 가짜로 0에 수렴**. → `--max-tokens`를 충분히(기본 8000) 줄 것.
 - **max_tokens를 무시하는 provider**(예: deepseek-r1): 추론이 무제한으로 돌아 **설정의 3~4배 토큰을 청구**. `--reasoning-max-tokens`는 이를 지원하는 provider에서만 상한이 걸리고, 순수 추론 모델(끌 수 없음)에는 안 듣는다 — 대신 결과 JSON의 모델별 `usage`(completion·reasoning 토큰, `truncations`)로 폭주·잘림을 **눈으로 확인**하고 제외 여부를 판단할 것.
 - 콘솔 `[done]` 줄과 종료 요약에 토큰 지출/truncation 경고가 찍힌다.
+- `--truncation-missing` 으로 잘린(truncation) 문항을 **오답이 아니라 결측**으로 처리(분모에서 제외) → 예산 부족이 추론 모델 점수를 거짓으로 깎는 것을 방지(옵트인).
 
 ### ⚙️ 시스템 자원 (RAM)
 대규모 병렬 측정(예: ~100개 모델 동시)은 sympy 검증 워커·HTTP 클라이언트가 메모리를 점유한다. **피크 시 시스템 RAM 약 8–10GB**(가용 최대치 범위 내)를 사용하도록 운영했다. RAM이 부족한 환경에서는 `--max-workers`를 낮추거나(예: 4~6) 모델을 배치로 나눠 실행할 것. (워커를 과도하게 높이면 sympy의 GIL-점유 검증이 동시에 겹쳐 프로세스가 멈출 수 있으므로 6~12 권장.)
@@ -86,6 +87,6 @@ python -m inversa.cli_bench --models "anthropic/claude-opus-4.8,openai/gpt-4o-mi
 - **논문:** [`docs/paper/inversa-paper.md`](docs/paper/inversa-paper.md) (영문 정본) · [`docs/paper/inversa-paper.ko.md`](docs/paper/inversa-paper.ko.md) (한국어)
 - **핵심 코드:** `tasks/structural.py`(구성 과제) · `verifiers/math_equation.py`(검증 오라클) · `scoring.py`(IGS) · `cli_bench.py`(엔진)
 - **실험 스크립트:** `scripts/run_forward_gap.py`(오염), `run_e10.py`(AIME 변별), `run_transform_hard.py`+`gen_transform_*`(난이도 확장), `make_figures.py`(그림)
-- **테스트:** 185개 단위테스트(검증기·채점·추출·엔진). `data/banks/` 문제은행, `data/results/` 결과.
+- **테스트:** 191개 단위테스트(검증기·채점·추출·엔진). `data/banks/` 문제은행, `data/results/` 결과.
 
 **참고문헌:** GSM-Symbolic (Mirzadeh et al., Apple, ICLR 2025, arXiv:2410.05229) · GSM1k (Zhang et al., Scale AI, 2024, arXiv:2405.00332) · arXiv:2311.04850.

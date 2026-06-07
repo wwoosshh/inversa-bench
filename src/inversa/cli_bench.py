@@ -120,6 +120,10 @@ def main(argv=None) -> None:
                     help="reject trivial pose answers: a linear restatement (x = target) does not "
                          "count, forcing genuine construction (degree>=2 or radicals/exp/log). "
                          "Anti-gaming; off by default for comparability with the fixed-bank runs.")
+    ap.add_argument("--truncation-missing", action="store_true",
+                    help="treat a truncated item (model ran out of token budget before emitting an "
+                         "equation) as MISSING — excluded from the validity rate — instead of a "
+                         "wrong answer. Avoids deflating reasoning models; off by default.")
     ap.add_argument("--transform-bank", default="data/banks/transform_bank.json")
     ap.add_argument("--solve-bank", default="", help="optional solve bank for a saturation-reference column")
     ap.add_argument("--out", default="data/results/igs_benchmark.html")
@@ -183,6 +187,8 @@ def main(argv=None) -> None:
             print(f"[progress] {n} live calls completed", flush=True)
         if cache is not None and n % 250 == 0:
             cache.save()
+        if args.truncation_missing and not it.answered:
+            return None  # truncated, no equation -> missing (engine excludes it from the rate)
         return it.valid
 
     def on_rep_done(rep):
@@ -227,6 +233,7 @@ def main(argv=None) -> None:
     meta = {"benchmark": BENCHMARK_NAME, "n_models": len(ranked),
             "pose_source": pose_source, "pose_seed": pose_seed,
             "transform_bank": args.transform_bank, "pose_no_trivial": args.pose_no_trivial,
+            "truncation_missing": args.truncation_missing,
             "repeats_max": max(1, args.repeats), "adaptive": not args.no_adaptive}
     if args.pose_random > 0:  # record the fresh targets so a contamination-immune run stays auditable
         meta["pose_targets"] = pose_targets

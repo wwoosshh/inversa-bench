@@ -84,6 +84,8 @@ class StructPoseItem:
     equation: str
     verification: VerificationResult
     valid: bool               # target is the UNIQUE real solution (level-3 success)
+    answered: bool = True      # False if the model truncated with no parseable equation (missing,
+    #                            not a wrong answer) — lets scoring exclude it (rebuttal #10)
 
 
 def run_struct_pose_item(adapter: Adapter, target_desc: str, target_value,
@@ -94,7 +96,9 @@ def run_struct_pose_item(adapter: Adapter, target_desc: str, target_value,
     # In strict mode a linear restatement (x = target) is correct but not *construction* -> reject
     # it so the score reflects real structure-building (anti-gaming, rebuttal #5).
     valid = ver.unique and not (require_nontrivial and ver.trivial)
-    return StructPoseItem(target_desc, float(target_value), novelty, raw, equation, ver, valid)
+    answered = parses(equation) or not getattr(adapter, "last_truncated", False)
+    return StructPoseItem(target_desc, float(target_value), novelty, raw, equation, ver, valid,
+                          answered)
 
 
 @dataclass
@@ -107,6 +111,7 @@ class TransformItem:
     equation: str
     verification: VerificationResult
     valid: bool               # E' has target_value as its UNIQUE real solution
+    answered: bool = True      # False if the model truncated with no parseable equation (missing)
 
 
 def run_transform_item(adapter: Adapter, source: str, g_desc: str,
@@ -114,8 +119,9 @@ def run_transform_item(adapter: Adapter, source: str, g_desc: str,
     raw = adapter.generate(build_transform_prompt(source, g_desc))
     equation, raw = _extract_or_retry(adapter, raw)
     ver = verify_equation(equation, float(target_value))
+    answered = parses(equation) or not getattr(adapter, "last_truncated", False)
     return TransformItem(source, g_desc, float(r_value), float(target_value),
-                         raw, equation, ver, ver.unique)
+                         raw, equation, ver, ver.unique, answered)
 
 
 def validity_rate(items) -> float:

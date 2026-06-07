@@ -216,13 +216,20 @@ def evaluate_leaderboard(models: Sequence[str], pose_items: Sequence[Dict[str, A
             if cache is not None:
                 hit = cache.get(key)
                 if hit is not None:
+                    if hit.get("missing"):
+                        return (m, bank, False, False)  # cached as not-answered -> excluded
                     return (m, bank, True, bool(hit["valid"]))
             try:
-                valid = bool(score_item(m, bank, it, rep))
+                v = score_item(m, bank, it, rep)  # None => item not answered (truncated/missing)
             except Exception as e:
                 if is_fatal_account_error(e):
                     abort.set()  # every further call will fail the same way — stop scheduling
                 return (m, bank, False, False)  # ok=False: infra failure, not a wrong answer
+            if v is None:  # missing: excluded from the rate denominator, not scored as wrong (#10)
+                if cache is not None:
+                    cache.put(key, {"missing": True})
+                return (m, bank, False, False)
+            valid = bool(v)
             if cache is not None:
                 cache.put(key, {"valid": valid})
             return (m, bank, True, valid)

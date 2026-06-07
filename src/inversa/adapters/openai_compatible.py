@@ -47,6 +47,8 @@ class OpenAICompatibleAdapter:
         # the usage tally is mutated from several threads — guard it to keep totals exact.
         self._usage_lock = threading.Lock()
         self.usage = UsageTotals()
+        self.last_truncated = False  # did the most recent generate() truncate (budget exhausted,
+        #                              empty content)? lets the runner treat it as missing, not wrong.
 
     def generate(self, prompt: str) -> str:
         kwargs = dict(
@@ -71,6 +73,7 @@ class OpenAICompatibleAdapter:
 
     def _record_usage(self, resp, finish_reason, content: str) -> None:
         u = getattr(resp, "usage", None)
+        self.last_truncated = finish_reason == "length" and not content.strip()
         with self._usage_lock:
             self.usage.calls += 1
             if u is not None:
