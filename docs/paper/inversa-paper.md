@@ -486,12 +486,32 @@ ranking), not a new predictive dimension. Caveats: the cohort's IGS here is the 
 - The contamination gap mixes leakage with surface-fragility (we did not separate them).
 - The inverse-gap CI is wide; the structural claim is primary.
 - Cheap verification holds for the *algebraic* regime; transcendental uniqueness can be expensive or
-  undecidable (mitigated by timeouts + numeric fallback).
+  undecidable (mitigated by timeouts + numeric fallback). On the deeper scope question this raises —
+  whether self-scaling has a ceiling — see the *verifiability-horizon* note below; it is a boundary of
+  evaluation itself, not a defect specific to Inversa.
 - Extreme-difficulty measurement is latency-bound for slow reasoning models (qwen3.7-plus).
 - Reasoning models can **truncate** (budget exhausted before the `#### eq` line), which the headline
   runs scored as a wrong answer (a false zero that deflates the strongest models). `--truncation-missing`
   instead treats a truncated item as **missing** (excluded from the rate, not counted wrong); the
   adapter flags each truncated call and the missing items are reported, so the strict mode is opt-in.
+
+**On the verifiability horizon (scope, not defect).** A natural worry is that self-scaling must break
+where construction outruns verification — in the transcendental/undecidable regime, checking an answer
+can cost more than producing it. This is real, but it is a boundary of *objective evaluation itself*, and
+the boundary is **formal checkability, not human comprehension.** Four regimes: (a) cheaply checkable
+(sympy in seconds — Inversa's sweet spot); (b) checkable but expensive (a long formal proof); (c)
+**beyond human reading yet machine-verified** — e.g. the Four Color Theorem and the Flyspeck proof of the
+Kepler conjecture are objectively certified by proof checkers no human reads end-to-end; (d) genuinely
+undecidable, where *no* sound terminating verifier exists. The construction>verification asymmetry *holds*
+through (a)–(c), so a sound checker (sympy, or a Lean/Coq proof checker) extends the scoreable frontier
+**far past what humans can follow** — superhuman answers can still be objectively scored as long as they
+are formally checkable, which is *not* an LLM judge. Only regime (d) defeats scoring — and there it
+defeats **every** objective benchmark, leaving only AI-judges-AI (which abandons the objectivity Inversa
+exists to provide; that is *peer review*, not measurement). Crucially the comparison favors Inversa: a
+**forward** benchmark can only pose problems **whose answer is already known**, whereas Inversa needs only
+to *verify* a constructed object against a spec — so its horizon (formally-checkable specs) reaches
+*further* than the answer-key horizon. The verifiability limit is thus where Inversa stops **later** than
+answer-key methods, not a weakness peculiar to it.
 
 ### 4.3 What remains for a stronger paper
 
