@@ -1,10 +1,13 @@
 # Inversa: Problem *Construction* as a Distinct, Recall-Resistant Measure of AI Mathematical Ability
 
-> **Status: paper-preparation scaffold (v0).** This document organizes the thesis, the
-> evidence gathered so far, and — critically — the evidence still required for a publishable,
-> reviewer-proof claim. Sections marked **[ESTABLISHED]** rest on data we have collected;
-> sections marked **[TODO/NEEDED]** are gaps that must be closed before the headline claim is
-> defensible. Honesty here is strategic: an overclaiming draft dies in review.
+> **⚠ SUPERSEDED — historical scaffold (v0).** The canonical write-up is now
+> [`inversa-paper.md`](inversa-paper.md) (EN) / [`inversa-paper.ko.md`](inversa-paper.ko.md) (KO),
+> with the full hypothesis ledger (H1–H9), Appendix V (every number → source → recompute), and the
+> §3.7 construct definition. This file is kept only for history; its section numbers (§5.x) and
+> "[TODO]" gaps predate the paper and may be stale. Read the paper instead.
+>
+> *Original status note:* paper-preparation scaffold organizing the thesis, evidence gathered, and
+> evidence still required; **[ESTABLISHED]** = data collected, **[TODO/NEEDED]** = gaps to close.
 
 ---
 

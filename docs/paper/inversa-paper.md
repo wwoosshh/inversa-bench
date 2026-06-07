@@ -13,7 +13,8 @@ reasoning (*contamination*), and (2) each benchmark eventually **saturates** as 
 forcing ever harder human-authored problems. We study the **inverse** task — given an answer, ask the
 model to **construct a problem** that yields it — and ask whether it is a more trustworthy basis for
 measurement. We define a machine-verified score, the **Inversa Generative Score (IGS)**, computed
-with a sympy oracle and **no LLM judge**. Across 22 models from 8 families we find: (i) forward
+with a sympy oracle and **no LLM judge**. Across per-experiment cohorts of 7–22 models (plus a
+59-model engine leaderboard) we find: (i) forward
 scores are measurably inflated by contamination on our own models (**+3.2%**, 95% CI [+1.0, +5.7];
 GSM8K vs the fresh GSM-Symbolic), whereas the inverse task shows **no systematic gap** (+0.0%,
 [−10.5, +11.0]) and is contamination-immune by construction; (ii) IGS **strongly agrees** with a
@@ -204,14 +205,17 @@ report IGS as the headline for readability and θ as the metrically-honest compa
 
 ### 2.5 Models, data, infrastructure
 
-- **22 models, 8 families** (Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, Cohere,
-  Amazon), weak (llama-3.1-8b, command-r) through frontier (opus-4.8, qwen3.7-plus, deepseek), via
-  OpenRouter. Per-run N varies (12–22) as the roster grew and rate limits dropped individual models.
-- **Banks** (all sympy-verified unique): pose targets, transform items (random ugly-root cubics ×
-  {affine, reciprocal, Möbius} maps), plus harder polynomial transforms for §5.4. Forward
-  comparisons use **GSM8K** and **GSM-Symbolic** (HuggingFace) and **AIME 2024+2025**.
-- Runs write results **incrementally** and enforce an overall deadline, so a hang or a network drop
-  never discards completed models.
+- **Models.** Per-experiment cohorts of **7–22 models**, weak (llama-3.1-8b, command-r) through
+  frontier (opus-4.8, qwen3.7-plus, deepseek), via OpenRouter; the engine **leaderboard (§3.5)** covers
+  **59 models / 7 families**. Per-experiment N varies as rate limits and credit drop individual models.
+- **Banks** (all sympy-verified unique): pose targets (a fixed bank, or fresh via `--pose-random`,
+  §2.1); transform items (random ugly-root cubics × {affine, reciprocal, Möbius} maps), plus the harder
+  polynomial/brutal transforms of **§3.4**. Forward comparisons use **GSM8K**, **GSM-Symbolic**
+  (HuggingFace) and **AIME 2024+2025**; the discriminant/predictive controls (§3.6, §3.8) add a logic
+  bank and construction/verification banks.
+- **Engine.** `cli_bench` schedules every (model, item) call in one bounded pool with an **item-level
+  resume cache** (a re-run skips calls already made) and a **fast-abort** on account-wide failures — so a
+  crash, network drop, or credit exhaustion never discards completed work and the run is resumable.
 
 ---
 
@@ -539,10 +543,12 @@ answer-key methods, not a weakness peculiar to it.
 Repository `wwoosshh/inversa-bench`, branch `scoring-validity`. Engine: `python -m inversa.cli_bench`.
 Core: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. Experiments:
 `scripts/run_forward_gap.py` (E12), `run_inverse_gap.py` (E12b), `run_e10.py` + `e10_redux.py` (E10),
-`run_transform_hard.py` + `gen_transform_{hard,brutal}_bank.py` (E8). Figures: `scripts/make_figures.py`.
-All scores are sympy-verified; **198 passing unit tests** cover the verifier, scoring, extraction, and
-the benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under
-`data/banks/`.
+`run_transform_hard.py` + `gen_transform_{hard,brutal}_bank.py` (E8), `run_discriminant.py` (E13),
+`run_predictive.py` (E14), `build_irt.py` (Rasch θ), `build_dashboard.py`. Figures: `scripts/make_figures.py`.
+Engine flags for the validity hardenings: `--pose-random` (contamination-immune pose, §2.1),
+`--pose-no-trivial` (anti-gaming, §2.1), `--truncation-missing` (§4.2), `--cache` (resume). All scores
+are sympy-verified; **198 passing unit tests** cover the verifier, scoring, extraction, and the
+benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under `data/banks/`.
 
 ---
 

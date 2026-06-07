@@ -12,7 +12,8 @@
 (2) 모델이 강해지면 각 벤치마크는 결국 **포화**되어 더 어려운 문제를 사람이 계속 출제해야 합니다.
 우리는 그 **역(inverse)** 과제 — *답을 주고, 그 답이 나오는 문제를 구성하게 하는 것* — 이 더
 신뢰할 만한 측정 기반인지 연구합니다. 우리는 기계로 검증되는 점수 **Inversa Generative Score(IGS)**
-를 정의하며, 이는 sympy 오라클로 채점하고 **LLM 심판을 쓰지 않습니다**. 8개 패밀리 22개 모델에서:
+를 정의하며, 이는 sympy 오라클로 채점하고 **LLM 심판을 쓰지 않습니다**. 실험별 코호트 7~22개 모델
+(및 59개 모델 엔진 리더보드)에서:
 (i) forward 점수는 우리 모델에서도 오염으로 **측정 가능하게 부풀려집니다**(GSM8K vs 신선한
 GSM-Symbolic, **+3.2%**, 95% CI [+1.0, +5.7]). 반면 역과제는 **체계적 격차가 없고**(+0.0%,
 [−10.5, +11.0]) 설계상 오염 불가능합니다. (ii) IGS는 어려운 비포화 forward 벤치(AIME)와 **강하게
@@ -186,13 +187,16 @@ pose/transform은 임의의 동일 가중으로 합쳐진다. `scripts/build_irt
 
 ### 2.5 모델·데이터·인프라
 
-- **22개 모델, 8개 패밀리**(Anthropic·OpenAI·Google·Meta·Mistral·DeepSeek·Qwen·Cohere·Amazon),
-  약체(llama-3.1-8b, command-r)부터 프런티어(opus-4.8, qwen3.7-plus, deepseek)까지, OpenRouter
-  경유. 로스터가 커지고 레이트리밋이 일부 모델을 떨어뜨려 실행별 N은 12~22로 변동.
-- **문제은행**(전부 sympy로 유일근 검증): pose 타깃, transform 항목(무작위 못생긴근 3차식 ×
-  {평행이동·역수·뫼비우스} 변환), §3.4용 더 어려운 다항 변환. forward 비교엔 **GSM8K**·
-  **GSM-Symbolic**(HuggingFace)과 **AIME 2024+2025**.
-- 실행은 결과를 **증분 기록**하고 전체 데드라인을 둬, 행이나 네트워크 끊김에도 완료된 모델은 보존.
+- **모델.** 실험별 코호트 **7~22개 모델**(약체 llama-3.1-8b·command-r부터 프런티어 opus-4.8·
+  qwen3.7-plus·deepseek), OpenRouter 경유; 엔진 **리더보드(§3.5)는 59개 모델 / 7개 패밀리**. 레이트리밋·
+  크레딧이 일부 모델을 떨어뜨려 실험별 N은 변동.
+- **문제은행**(전부 sympy 유일근 검증): pose 타깃(고정 뱅크 또는 `--pose-random`으로 즉석 생성, §2.1);
+  transform 항목(무작위 못생긴근 3차식 × {평행이동·역수·뫼비우스} 변환), §3.4의 더 어려운 다항/brutal
+  변환. forward 비교엔 **GSM8K**·**GSM-Symbolic**(HuggingFace)·**AIME 2024+2025**; 판별/예측 통제(§3.6,
+  §3.8)는 논리 뱅크와 구성/검증 뱅크를 추가.
+- **엔진.** `cli_bench`는 모든 (모델,문항) 호출을 단일 상한 풀에 스케줄하며 **문항 단위 resume 캐시**
+  (재실행 시 이미 한 호출은 건너뜀)와 계정 차원 오류 시 **즉시 중단(fast-abort)**을 둬 — 크래시·네트워크
+  끊김·크레딧 소진에도 완료분을 잃지 않고 이어서 진행 가능.
 
 ---
 
@@ -478,9 +482,11 @@ yes/no로 라벨). 각각 *AIME를 통제한 뒤* IGS가 그 결과를 예측하
 저장소 `wwoosshh/inversa-bench`, 브랜치 `scoring-validity`. 엔진: `python -m inversa.cli_bench`.
 핵심: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. 실험:
 `scripts/run_forward_gap.py`(E12), `run_inverse_gap.py`(E12b), `run_e10.py`+`e10_redux.py`(E10),
-`run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8). 그림: `scripts/make_figures.py`.
-모든 점수는 sympy 검증; **198개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
-결과 JSON은 `data/results/`, 은행은 `data/banks/`.
+`run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8), `run_discriminant.py`(E13),
+`run_predictive.py`(E14), `build_irt.py`(Rasch θ), `build_dashboard.py`. 그림: `scripts/make_figures.py`.
+타당도 강화 엔진 플래그: `--pose-random`(오염 면역 pose, §2.1)·`--pose-no-trivial`(자명형 차단, §2.1)·
+`--truncation-missing`(§4.2)·`--cache`(resume). 모든 점수는 sympy 검증; **198개 단위테스트**가 검증기·
+채점·추출·엔진을 커버(`python -m pytest -q`). 결과 JSON은 `data/results/`, 은행은 `data/banks/`.
 
 ---
 
