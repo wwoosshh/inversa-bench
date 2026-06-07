@@ -19,7 +19,9 @@ GSM8K vs the fresh GSM-Symbolic), whereas the inverse task shows **no systematic
 [−10.5, +11.0]) and is contamination-immune by construction; (ii) IGS **strongly agrees** with a
 hard, non-saturated forward benchmark (AIME) — **Spearman +0.93** [+0.65, +1.0] — so it is a
 *validated measure of math ability*, **not** a distinct capability (the original "generation ≠
-solving" hypothesis is refuted); (iii) IGS difficulty is **self-scaling**: raising construction
+solving" hypothesis is refuted) — and a **discriminant** test (E13) shows this agreement is
+*math-specific*, not mere general capability: IGS tracks AIME far more than a hard non-math logic
+control (ρ +0.93 vs +0.66, Williams p<0.05; partial ρ +0.88); (iii) IGS difficulty is **self-scaling**: raising construction
 difficulty (Möbius → polynomial → degree-4/composite root transforms) breaks the top ceiling so that
 **no model reaches 100%** (the best, opus-4.8, tops out at 88%). We report several hypotheses we
 tested and **rejected** along the way. Conclusion: problem construction is not a *separate* ability,
@@ -72,6 +74,7 @@ tests these directly — including hypotheses that turned out to be **wrong**.
 | H5 | Forward solving here is *not* memorized (early over-claim) | **Rejected** | weak test; corrected by H1/E12 |
 | H6 | IGS measures the same ability as a gold-standard hard forward test | **Supported** | E10: +0.93 [+0.65,+1.0] |
 | H7 | IGS difficulty can be scaled to discriminate the frontier | **Supported** | E8: ceiling broken, opus 88% |
+| H8 | IGS is math-*specific*, not merely general capability (g) | **Supported** | E13: ρ(IGS,AIME)=.93 ≫ ρ(IGS,non-math logic)=.66, Williams p<.05; partial .88 |
 
 The honest narrative is: the *strong* form of the original vision (a brand-new ability axis) is
 **false**, but a *more defensible* form (a contamination-proof, self-scaling, validated measure)
@@ -302,7 +305,8 @@ not "near-identical"; (ii) there is a real **partial dissociation** — gpt-4o-m
 (IGS 0.73) yet barely solves AIME (3%), ranking ~5 places higher on IGS than on AIME. So H3 is rejected
 only in its *strong* form (full orthogonality); construction and solving are *correlated but not
 identical*, and the residual is itself informative. Independently recomputed Spearman = **+0.9253**
-(Appendix V).
+(Appendix V). The worry that this 0.93 is *just* the general-capability factor (g) is tested
+head-on, and rejected, in §3.6.
 
 ### 3.4 Difficulty is self-scaling: breaking the top ceiling (H7)
 
@@ -359,6 +363,33 @@ scores are low-confidence — e.g. glm-5 was scored on only 27 of 60 items); the
 dashboard. Full ranking and coverage accounting: `data/results/igs_dashboard.html` and
 `igs_leaderboard_30.json`. Completing the roster is a credit-bound re-run with the same `--cache`
 (already-measured models are skipped, so only the unmeasured set is paid for).
+
+### 3.6 Discriminant validity: IGS measures *math*, not just general capability (H8)
+
+A high IGS↔AIME correlation (§3.3) is necessary but not sufficient to call IGS a *math* measure:
+strong models tend to be strong at everything (a large general-capability factor, g), so almost any
+two benchmarks correlate across a wide model range. The convergent result alone cannot tell "IGS is a
+math test" from "IGS is a g-meter." So we test **discriminant validity** — does IGS track AIME (math)
+*more* than a non-math axis? We ran the same E10 models on a HARD non-math control: 18 deductive
+**logic** ordering puzzles (no arithmetic; the prose and the answer key are generated from one
+constraint spec and the unique answer is **brute-force-verified**, so the key is correct by
+construction — `data/banks/nonmath_logic.json`). Crucially the control **spreads** the field (50%–100%),
+so it is a usable capability axis — unlike a factual-knowledge control, which these models saturate
+(we tried; even an obscure-facts bank left the field at 92%–100%, an invalid degenerate control).
+
+**Result (N=13):** ρ(IGS, AIME) = **+0.93**, but ρ(IGS, logic) = **+0.66** [+0.17, +0.81]; the
+general-capability baseline ρ(AIME, logic) = +0.79. IGS↔AIME *exceeds* both and survives partialling
+out the logic axis: partial ρ(IGS, AIME | logic) = **+0.88**. The 0.93-vs-0.66 gap is **statistically
+significant** despite the small sample (Williams's test for two dependent correlations, t = 3.49,
+df = 10, p < 0.05). The mechanism is visible in the weak tail: **llama-3.1-8b solves the logic puzzles
+reasonably (78%) yet scores ≈0 on both IGS and AIME** — it can reason, but it cannot construct or solve
+*mathematics*, and IGS tracks the latter. So both extremes are ruled out: IGS is **not** an orthogonal
+new axis (H3 rejected: ρ=0.93 with AIME) **and not** merely general capability (H8 supported: it is
+specifically mathematical). Caveats: N=13 (wide CIs); a single non-math control; the top 9 models
+saturate the logic control, so the discriminant signal is carried by the lower-ability range;
+Williams's test applies a Pearson approximation to Spearman ρ. Source/reproduce:
+`python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` →
+`data/results/discriminant_results.json`.
 
 ---
 
@@ -433,6 +464,7 @@ command to regenerate it.
 | E8 brutal: opus **88%**, spread **12–88%**, none 100% (§3.4) | `transform_brutal_results.json` (`hard_transform_validity`) | opus 0.875; max 0.875; min 0.125 | opus **87.5%**, **12.5–87.5%** | inspect per-model field (7 models) |
 | E8 hard: llama-3.3-70b **77%→6%** (§3.4) | `transform_hard_results.json` + `paper_level3_all.json` | easy 0.77 → hard 0.056 | **77% → 5.6%** | inspect per-model fields |
 | Leaderboard **N=59, 7 families, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7 families** | `python -m inversa.cli_bench …`; `python scripts/build_dashboard.py` |
+| Discriminant validity (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,logic)=.66, Williams t=3.49 p<.05, partial=.88 | `discriminant_results.json` (control `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; nonmath range 0.50 | re-derived: gap +0.27, partial +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
 | Verifier soundness | `tests/` | — | **163 tests pass** | `python -m pytest -q` |
 
 **Scope notes carried by the data (read with the numbers):** (i) §3.3's ρ is *range-dominated* — anchored

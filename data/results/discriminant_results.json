@@ -1,0 +1,105 @@
+{
+  "analysis": {
+    "n": 13,
+    "rho_igs_aime": 0.9253120883981288,
+    "ci_igs_aime": [
+      0.6460674157303371,
+      1.0
+    ],
+    "rho_igs_nonmath": 0.659487962583336,
+    "ci_igs_nonmath": [
+      0.17285087776705582,
+      0.8132500607904443
+    ],
+    "rho_aime_nonmath": 0.7884376290604647,
+    "partial_rho_igs_aime_given_nonmath": 0.8766324105407934,
+    "rule": "STRONG iff (rho_igs_aime - rho_igs_nonmath) >= 0.15 AND partial >= 0.30",
+    "strong_supported": true,
+    "verdict": "STRONG supported: IGS is math-specific (correlates with AIME well above the non-math axis, and survives controlling for it)",
+    "control": "non-math deductive logic (nonmath_logic.json, 18 brute-force-verified ordering puzzles)",
+    "williams_t": 3.487,
+    "williams_df": 10,
+    "williams_significant_p05": true,
+    "caveats": "N=13 (wide CIs); single non-math control (logic); top 9 models saturate the logic control so the discriminant signal is carried by the lower-ability range; Williams's test is a Pearson approximation applied to Spearman rho."
+  },
+  "models": [
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "igs": 1.0,
+      "aime": 1.0,
+      "nonmath": 1.0
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "igs": 1.0,
+      "aime": 0.5,
+      "nonmath": 1.0
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "igs": 0.8833,
+      "aime": 0.5,
+      "nonmath": 1.0
+    },
+    {
+      "model": "meta-llama/llama-4-scout",
+      "igs": 0.8667,
+      "aime": 0.3,
+      "nonmath": 1.0
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "igs": 0.8,
+      "aime": 0.26666666666666666,
+      "nonmath": 1.0
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "igs": 0.7333,
+      "aime": 0.03333333333333333,
+      "nonmath": 0.9444444444444444
+    },
+    {
+      "model": "mistralai/mistral-large",
+      "igs": 0.7167,
+      "aime": 0.23333333333333334,
+      "nonmath": 1.0
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "igs": 0.6333,
+      "aime": 0.16666666666666666,
+      "nonmath": 1.0
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "igs": 0.5,
+      "aime": 0.1,
+      "nonmath": 1.0
+    },
+    {
+      "model": "anthropic/claude-3.5-haiku",
+      "igs": 0.5,
+      "aime": 0.06666666666666667,
+      "nonmath": 1.0
+    },
+    {
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "igs": 0.1833,
+      "aime": 0.03333333333333333,
+      "nonmath": 0.5
+    },
+    {
+      "model": "cohere/command-r-08-2024",
+      "igs": 0.1,
+      "aime": 0.0,
+      "nonmath": 0.5555555555555556
+    },
+    {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "igs": 0.0667,
+      "aime": 0.0,
+      "nonmath": 0.7777777777777778
+    }
+  ]
+}

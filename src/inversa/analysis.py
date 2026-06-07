@@ -39,6 +39,23 @@ def spearman(xs: Sequence[float], ys: Sequence[float]) -> Optional[float]:
     return _pearson(_avg_ranks(xs), _avg_ranks(ys))
 
 
+def partial_spearman(xs: Sequence[float], ys: Sequence[float],
+                     zs: Sequence[float]) -> Optional[float]:
+    """Rank partial correlation of x and y **controlling for z** — the discriminant-validity tool.
+    A high raw Spearman(IGS, AIME) may just reflect the shared general-capability factor (g): every
+    benchmark correlates with overall model strength. Partialling out a *non-math* axis z estimates
+    how much of the IGS↔AIME agreement is math-specific signal *above* g. Returns None if any
+    pairwise correlation is undefined or the denominator collapses (a control that fully determines
+    a variable). Formula: r_xy.z = (r_xy − r_xz·r_yz) / sqrt((1−r_xz²)(1−r_yz²))."""
+    rxy, rxz, ryz = spearman(xs, ys), spearman(xs, zs), spearman(ys, zs)
+    if rxy is None or rxz is None or ryz is None:
+        return None
+    denom = ((1 - rxz ** 2) * (1 - ryz ** 2)) ** 0.5
+    if denom == 0:
+        return None
+    return (rxy - rxz * ryz) / denom
+
+
 def spearman_ci(xs: Sequence[float], ys: Sequence[float],
                 n_boot: int = 2000, alpha: float = 0.05,
                 seed: int = 0) -> Tuple[Optional[float], Optional[float], Optional[float]]:

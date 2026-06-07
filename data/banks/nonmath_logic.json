@@ -1,0 +1,240 @@
+{
+  "name": "nonmath-logic-v3",
+  "note": "Hard non-math deductive ordering puzzles for E13 v3 discriminant validity. Prose + answer key generated from one constraint spec; answers brute-force verified unique (no arithmetic). Tuned to spread weak->frontier models.",
+  "questions": [
+    {
+      "id": 1,
+      "domain": "logic",
+      "question": "5 runners — Ana, Ben, Cara, Dan, Eve — finished a race with no ties. Ana finished ahead of Ben. Ben finished ahead of Cara. Cara finished ahead of Dan. Dan finished ahead of Eve. Who finished second?",
+      "choices": {
+        "A": "Ana",
+        "B": "Ben",
+        "C": "Cara",
+        "D": "Dan"
+      },
+      "answer": "B",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 2,
+      "domain": "logic",
+      "question": "5 runners — Ana, Ben, Cara, Dan, Eve — finished a race with no ties. Eve finished ahead of Ana. Ana finished ahead of Dan. Dan finished ahead of Ben. Ben finished ahead of Cara. Who finished first?",
+      "choices": {
+        "A": "Ana",
+        "B": "Ben",
+        "C": "Cara",
+        "D": "Eve"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 3,
+      "domain": "logic",
+      "question": "5 runners — Tom, Uma, Vic, Wes, Xena — finished a race with no ties. Uma finished ahead of Tom. Tom finished ahead of Wes. Vic finished ahead of Uma. Wes finished ahead of Xena. Who finished third?",
+      "choices": {
+        "A": "Tom",
+        "B": "Uma",
+        "C": "Vic",
+        "D": "Wes"
+      },
+      "answer": "A",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 4,
+      "domain": "logic",
+      "question": "6 runners — Tom, Uma, Vic, Wes, Xena, Yan — finished a race with no ties. Yan finished ahead of Vic. Vic finished ahead of Tom. Tom finished ahead of Uma. Uma finished ahead of Wes. Wes finished ahead of Xena. Who finished fourth?",
+      "choices": {
+        "A": "Tom",
+        "B": "Uma",
+        "C": "Vic",
+        "D": "Wes"
+      },
+      "answer": "B",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 5,
+      "domain": "logic",
+      "question": "5 runners — Pat, Quin, Rio, Sam, Tess — finished a race with no ties. Sam finished ahead of Pat. Pat finished ahead of Quin. Rio finished ahead of Sam. Quin finished ahead of Tess. Who finished fifth?",
+      "choices": {
+        "A": "Pat",
+        "B": "Quin",
+        "C": "Rio",
+        "D": "Tess"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 6,
+      "domain": "logic",
+      "question": "6 runners — Pat, Quin, Rio, Sam, Tess, Uri — finished a race with no ties. Rio finished ahead of Uri. Uri finished ahead of Pat. Pat finished ahead of Tess. Tess finished ahead of Quin. Quin finished ahead of Sam. Who finished second?",
+      "choices": {
+        "A": "Pat",
+        "B": "Quin",
+        "C": "Rio",
+        "D": "Uri"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 7,
+      "domain": "logic",
+      "question": "7 runners — Amy, Bo, Cy, Di, Ed, Fi, Gus — finished a race with no ties. Cy finished ahead of Amy. Amy finished ahead of Ed. Ed finished ahead of Bo. Bo finished ahead of Di. Di finished ahead of Fi. Fi finished ahead of Gus. Who finished third?",
+      "choices": {
+        "A": "Amy",
+        "B": "Bo",
+        "C": "Cy",
+        "D": "Ed"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 8,
+      "domain": "logic",
+      "question": "6 runners — Amy, Bo, Cy, Di, Ed, Fi — finished a race with no ties. Di finished ahead of Amy. Amy finished ahead of Fi. Fi finished ahead of Bo. Bo finished ahead of Cy. Cy finished ahead of Ed. Who finished first?",
+      "choices": {
+        "A": "Amy",
+        "B": "Bo",
+        "C": "Cy",
+        "D": "Di"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 9,
+      "domain": "logic",
+      "question": "5 runners — Leo, Mia, Ned, Ole, Pia — finished a race with no ties. Mia finished ahead of Leo. Ned finished ahead of Mia. Leo finished ahead of Ole. Ole finished ahead of Pia. Who finished fourth?",
+      "choices": {
+        "A": "Leo",
+        "B": "Mia",
+        "C": "Ned",
+        "D": "Ole"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 10,
+      "domain": "logic",
+      "question": "6 runners — Leo, Mia, Ned, Ole, Pia, Ravi — finished a race with no ties. Pia finished ahead of Ned. Ned finished ahead of Ravi. Ravi finished ahead of Leo. Leo finished ahead of Mia. Mia finished ahead of Ole. Who finished fifth?",
+      "choices": {
+        "A": "Leo",
+        "B": "Mia",
+        "C": "Ned",
+        "D": "Ole"
+      },
+      "answer": "B",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 11,
+      "domain": "logic",
+      "question": "5 runners — Ravi, Sia, Tej, Uma, Vik — finished a race with no ties. Tej finished ahead of Vik. Vik finished ahead of Ravi. Ravi finished ahead of Sia. Sia finished ahead of Uma. Who finished first?",
+      "choices": {
+        "A": "Ravi",
+        "B": "Sia",
+        "C": "Tej",
+        "D": "Uma"
+      },
+      "answer": "C",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 12,
+      "domain": "logic",
+      "question": "6 runners — Ravi, Sia, Tej, Uma, Vik, Wen — finished a race with no ties. Wen finished ahead of Sia. Sia finished ahead of Tej. Tej finished ahead of Ravi. Ravi finished ahead of Uma. Uma finished ahead of Vik. Who finished third?",
+      "choices": {
+        "A": "Ravi",
+        "B": "Sia",
+        "C": "Tej",
+        "D": "Uma"
+      },
+      "answer": "C",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 13,
+      "domain": "logic",
+      "question": "5 runners — Gia, Hal, Ivy, Jo, Kim — finished a race with no ties. Jo finished ahead of Gia. Gia finished ahead of Kim. Kim finished ahead of Hal. Ivy finished ahead of Jo. Who finished second?",
+      "choices": {
+        "A": "Gia",
+        "B": "Hal",
+        "C": "Ivy",
+        "D": "Jo"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 14,
+      "domain": "logic",
+      "question": "6 runners — Gia, Hal, Ivy, Jo, Kim, Lou — finished a race with no ties. Ivy finished ahead of Lou. Lou finished ahead of Hal. Hal finished ahead of Gia. Gia finished ahead of Kim. Kim finished ahead of Jo. Who finished fourth?",
+      "choices": {
+        "A": "Gia",
+        "B": "Hal",
+        "C": "Ivy",
+        "D": "Jo"
+      },
+      "answer": "A",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 15,
+      "domain": "logic",
+      "question": "7 runners — Max, Nia, Oz, Pia, Quil, Ros, Sky — finished a race with no ties. Oz finished ahead of Max. Max finished ahead of Quil. Quil finished ahead of Nia. Nia finished ahead of Pia. Pia finished ahead of Ros. Ros finished ahead of Sky. Who finished fifth?",
+      "choices": {
+        "A": "Max",
+        "B": "Nia",
+        "C": "Oz",
+        "D": "Pia"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 16,
+      "domain": "logic",
+      "question": "6 runners — Max, Nia, Oz, Pia, Quil, Ros — finished a race with no ties. Pia finished ahead of Oz. Oz finished ahead of Ros. Ros finished ahead of Max. Max finished ahead of Nia. Nia finished ahead of Quil. Who finished first?",
+      "choices": {
+        "A": "Max",
+        "B": "Nia",
+        "C": "Oz",
+        "D": "Pia"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 17,
+      "domain": "logic",
+      "question": "5 runners — Abe, Bea, Cole, Drew, Elle — finished a race with no ties. Cole finished ahead of Elle. Elle finished ahead of Abe. Abe finished ahead of Bea. Drew finished ahead of Cole. Who finished third?",
+      "choices": {
+        "A": "Abe",
+        "B": "Bea",
+        "C": "Cole",
+        "D": "Elle"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    },
+    {
+      "id": 18,
+      "domain": "logic",
+      "question": "6 runners — Abe, Bea, Cole, Drew, Elle, Finn — finished a race with no ties. Finn finished ahead of Drew. Drew finished ahead of Bea. Bea finished ahead of Abe. Abe finished ahead of Elle. Elle finished ahead of Cole. Who finished second?",
+      "choices": {
+        "A": "Abe",
+        "B": "Bea",
+        "C": "Cole",
+        "D": "Drew"
+      },
+      "answer": "D",
+      "n_valid_orderings": 1
+    }
+  ]
+}
