@@ -36,21 +36,38 @@
 
 ---
 
-## 빠른 시작 (GUI) — 클릭 세 번이면 끝
+## 빠른 시작 (GUI) — 다운로드 후 한 번에 실행
 
-명령어를 외울 필요 없이, **브라우저 GUI**로 엔진을 완전히 제어합니다(추가 설치 0 — 파이썬 표준 라이브러리만 사용).
+별도 설정·명령어 암기 없이, **브라우저 GUI**로 엔진을 완전히 제어합니다. 런처가 알아서 *Python 3.11+를 찾아 → 가상환경(venv) 생성 → 설치 → GUI 실행* 까지 합니다. (**필요 조건: Python 3.11+ 하나만 설치돼 있으면 됨** — 없으면 https://www.python.org/downloads 에서 설치, 'Add to PATH' 체크.)
 
 ```bash
 git clone https://github.com/wwoosshh/inversa-bench && cd inversa-bench
-python -m pip install -e .            # 의존성 설치 (Python 3.11+)
-python -m inversa.gui                 # → 브라우저가 http://127.0.0.1:8000 자동 오픈
 ```
+그다음 **OS별 한 줄(또는 더블클릭)**:
+
+| OS | 가장 쉬운 방법 |
+|---|---|
+| **Windows** | `start.bat` **더블클릭** (또는 터미널에서 `py run.py`) |
+| **macOS / Linux** | `sh start.sh` (또는 `python3 run.py`) |
+| **어디서든** | `python run.py` |
+
+→ 첫 실행은 자동 셋업(약 1분), 이후엔 즉시 브라우저가 `http://127.0.0.1:8000` 를 엽니다.
 
 1. **모델 선택** — 내장 102개 로스터에서 체크(또는 직접 입력).
 2. **API 키** — `.env`에 `OPENROUTER_API_KEY`가 있으면 자동 감지, 없으면 칸에 입력(해당 실행에만 사용).
 3. **Run** — 실시간 진행 로그 + 완료 시 IGS 순위표 · 대시보드 링크. (고급 패널에서 반복·동시도·pose 무작위화·자명형 차단·truncation 처리 등 모든 옵션 제어. 실행 전 비용 확인 모달.)
 
-> 로컬 전용(127.0.0.1)·외부 비노출. 연구·대중 모두 별도 학습 없이 바로 사용 가능.
+> 로컬 전용(127.0.0.1)·외부 비노출. venv는 각 PC에서 새로 만들어지며 깃에 올라가지 않습니다(머신 종속).
+
+<details><summary>수동 설정 (개발자 — 직접 venv 관리)</summary>
+
+```bash
+py -3.13 -m venv .venv            # 또는 python3.11/3.12 …
+.venv\Scripts\activate            # (mac/Linux: source .venv/bin/activate)
+pip install -e .
+python -m inversa.gui
+```
+</details>
 
 ---
 
