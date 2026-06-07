@@ -16,6 +16,7 @@ import argparse
 import html
 import json
 import os
+import random
 import sys
 import threading
 
@@ -23,6 +24,7 @@ from dotenv import load_dotenv
 
 from inversa.bench_core import ResultCache, evaluate_leaderboard, map_concurrent
 from inversa.cli_experiment import OPENROUTER_BASE_URL, _make_adapter
+from inversa.pose_random import random_pose_targets
 from inversa.tasks.solving import accuracy, solve_batch
 from inversa.tasks.structural import run_struct_pose_item, run_transform_item
 
@@ -108,13 +110,29 @@ def main(argv=None) -> None:
                     help="optional wall-clock seconds before a forced exit; progress is in the "
                          "cache, so re-running with the same --cache resumes. 0 = no deadline.")
     ap.add_argument("--pose-bank", default="data/banks/struct_pose_targets.json")
+    ap.add_argument("--pose-random", type=int, default=0,
+                    help="generate N pose targets FRESH at test time instead of loading --pose-bank "
+                         "(contamination-immune: no fixed item to leak). The seed + generated "
+                         "targets are recorded in the output JSON so the run stays reproducible.")
+    ap.add_argument("--pose-seed", type=int, default=None,
+                    help="seed for --pose-random (default: a fresh OS-random seed each run).")
     ap.add_argument("--transform-bank", default="data/banks/transform_bank.json")
     ap.add_argument("--solve-bank", default="", help="optional solve bank for a saturation-reference column")
     ap.add_argument("--out", default="data/results/igs_benchmark.html")
     ap.add_argument("--json-out", default="data/results/igs_benchmark.json")
     args = ap.parse_args(argv)
 
-    pose_targets = json.load(open(args.pose_bank, encoding="utf-8"))["targets"]
+    if args.pose_random > 0:
+        pose_seed = (args.pose_seed if args.pose_seed is not None
+                     else random.SystemRandom().randrange(2 ** 31))
+        pose_targets = random_pose_targets(args.pose_random, random.Random(pose_seed))
+        pose_source = f"random(n={args.pose_random}, seed={pose_seed})"
+        print(f"[pose] generated {args.pose_random} fresh targets (seed={pose_seed}, "
+              f"contamination-immune)", flush=True)
+    else:
+        pose_seed = None
+        pose_targets = json.load(open(args.pose_bank, encoding="utf-8"))["targets"]
+        pose_source = args.pose_bank
     transform_items = json.load(open(args.transform_bank, encoding="utf-8"))["items"]
     solve_problems = (json.load(open(args.solve_bank, encoding="utf-8"))["problems"]
                       if args.solve_bank else [])
@@ -202,8 +220,11 @@ def main(argv=None) -> None:
         r["rank"] = i
         r["solve_ref"] = solve_ref.get(r["model"])
     meta = {"benchmark": BENCHMARK_NAME, "n_models": len(ranked),
-            "pose_bank": args.pose_bank, "transform_bank": args.transform_bank,
+            "pose_source": pose_source, "pose_seed": pose_seed,
+            "transform_bank": args.transform_bank,
             "repeats_max": max(1, args.repeats), "adaptive": not args.no_adaptive}
+    if args.pose_random > 0:  # record the fresh targets so a contamination-immune run stays auditable
+        meta["pose_targets"] = pose_targets
     json.dump({**meta, "results": ranked}, open(args.json_out, "w", encoding="utf-8"), indent=2)
     open(args.out, "w", encoding="utf-8").write(_render(ranked, solve_ref))
 

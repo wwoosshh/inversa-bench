@@ -108,6 +108,13 @@ t**3 - t - 1 = 0`, `sqrt(2) + sqrt(3)`). Why irrational targets matter: the obvi
 `1 - sqrt(2)` → it fails "unique," so a model must genuinely construct (e.g. `x = sqrt(2) + 1`, or a
 domain-restricted form), not pattern-match.
 
+Pose targets can be drawn from a fixed bank *or* generated **fresh at test time** (`--pose-random N`):
+the engine samples random irrational/structural targets (each target's value is computed by sympy
+from the same symbolic form that describes it, so the description cannot drift from the answer), and
+records the seed + generated targets in the output. This makes the pose axis **contamination-immune
+like the transform axis** — with fresh targets there is no fixed (target → good-equation) pair to
+leak — closing the one asymmetry where a *fixed* pose bank could in principle be memorized once public.
+
 **Task B — "Transform" (the recall-proof core).** We generate a **random** cubic with one ugly
 (irrational) real root *r*, show it to the model, and ask it to build a *new* equation whose unique
 real solution is a function *g(r)* — without computing *r* numerically. Exact prompt:
