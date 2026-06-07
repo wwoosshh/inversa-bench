@@ -1,7 +1,13 @@
 # E14 — Predictive (incremental) validity of IGS
 
-**Status: design (pre-registered). Not yet run.** Closes rebuttal #7 (no predictive/external validity)
+**Status: RUN (2026-06-08) — H_pred REJECTED.** Closes rebuttal #7 (no predictive/external validity)
 and operationalizes the construct definition in paper §3.7.
+
+**Outcome:** N=13. Y1 (construction): ρ(IGS,Y)=+0.55, ρ(AIME,Y)=+0.66, **partial ρ(IGS,Y|AIME)=−0.20**.
+Y2 (verification): ρ(IGS,Y)=+0.72, ρ(AIME,Y)=+0.87, **partial=−0.42**. AIME predicts both outcomes at
+least as well as IGS; controlling AIME, IGS adds nothing → **no incremental predictive validity**. Result
+in `data/results/predictive_results.json`; written up as paper §3.8 / H9 (rejected). Caveats: permissive
+IGS (strict untested), N=13 wide CIs, outcomes are solving-loaded. See §7 below.
 
 ## 1. The question
 

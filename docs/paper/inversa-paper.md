@@ -75,6 +75,7 @@ tests these directly — including hypotheses that turned out to be **wrong**.
 | H6 | IGS measures the same ability as a gold-standard hard forward test | **Supported** | E10: +0.93 [+0.65,+1.0] |
 | H7 | IGS difficulty can be scaled to discriminate the frontier | **Supported** | E8: ceiling broken, opus 88% |
 | H8 | IGS is math-*specific*, not merely general capability (g) | **Supported** | E13: ρ(IGS,AIME)=.93 ≫ ρ(IGS,non-math logic)=.66, Williams p<.05; partial .88 |
+| H9 | IGS's construction residual **predicts** construction/verification beyond forward solving (incremental validity) | **Rejected** | E14: partial ρ(IGS,Y\|AIME) ≤ 0 (Y1 −.20, Y2 −.42) — AIME predicts as well or better |
 
 The honest narrative is: the *strong* form of the original vision (a brand-new ability axis) is
 **false**, but a *more defensible* form (a contamination-proof, self-scaling, validated measure)
@@ -174,7 +175,7 @@ A worked example. Model output `Reasoning…\n#### x**3 - 27 = 0`, target `3`: e
 `x**3 - 27 = 0`; solve → roots `{3, complex, complex}`; real roots `{3}`; `valid = True`,
 `unique = True` → **counts**. Output `x**2 - 9 = 0`, target `3`: real roots `{3, -3}` →
 `unique = False` → **does not count** (it also solves to −3). Everything is reproducible and
-inspectable; the suite has **191 passing unit tests** (verifier, scoring, extraction, and the
+inspectable; the suite has **198 passing unit tests** (verifier, scoring, extraction, and the
 benchmark engine) — run `python -m pytest -q`.
 
 ### 2.4 The score: IGS
@@ -439,8 +440,28 @@ Two caveats sharpen this. First, the construct is **mode-dependent**: permissive
 why gpt-4o-mini reaches IGS 0.73 yet only 3% on AIME); the strict mode (`--pose-no-trivial`, §2.1) removes
 this and isolates genuine construction. Second, construction and solving are **entangled** by the
 uniqueness check, so IGS cannot fully separate them — *how independently the construction residual matters*
-is precisely the open question a **predictive-validity** test must answer (§4.3; design in
-`docs/specs/2026-06-08-e14-predictive-validity.md`).
+is precisely the question the predictive-validity test §3.8 puts to the data (it comes back **negative**).
+
+### 3.8 Predictive validity: the construction residual does NOT predict beyond forward solving (H9 rejected)
+
+E13 showed IGS shares math-*specific* variance with AIME; but is its distinctive construction/
+self-verification residual (§3.7) *useful* — does it predict outcomes a forward-solving score does not?
+We tested **incremental** validity on the E10 cohort with two new machine-graded outcomes, distinct from
+pose/transform: **Y1** = constrained polynomial construction (build a polynomial meeting several exact
+constraints at once — degree, a required root, leading coefficient, distinct-real-root count — sympy-checked),
+and **Y2** = error detection (label yes/no whether claimed solutions/factorizations are correct). For each
+we ask whether IGS predicts the outcome *after controlling for AIME*.
+
+**Result (N=13): rejected — partial ρ(IGS, Y | AIME) ≤ 0 for both.** Y1: ρ(IGS,Y)=+0.55 vs
+ρ(AIME,Y)=+0.66, partial = **−0.20**. Y2: ρ(IGS,Y)=+0.72 vs ρ(AIME,Y)=+0.87, partial = **−0.42**. AIME
+predicts both outcomes at least as well as IGS, and once AIME is controlled IGS adds nothing — even on a
+*construction* outcome. So the construction residual does **not** carry demonstrated incremental predictive
+value over forward solving. This is consistent with the paper's spine: IGS is not a separate ability with
+extra predictive power; its value is **structural** (contamination-immune, auto-scaling, math-specific
+ranking), not a new predictive dimension. Caveats: the cohort's IGS here is the *permissive* easy-bank score
+(§3.7 argues the strict mode is a cleaner construct — untested for incremental validity); N=13 with wide CIs
+(Y1 CI [−0.09, +0.79]); the outcomes are themselves solving-loaded. Design + data:
+`docs/specs/2026-06-08-e14-predictive-validity.md`, `data/results/predictive_results.json`.
 
 ---
 
@@ -476,11 +497,11 @@ is precisely the open question a **predictive-validity** test must answer (§4.3
 
 - **E4 — generality:** replicate beyond algebra (number theory, systems, proofs) to show the construct
   is not algebra-specific.
-- **E5/E14 — predictive (incremental) validity:** show IGS predicts a construction/self-verification
-  outcome **beyond forward solving** — partial ρ(IGS, Y | AIME) > 0 for a held-out constrained-construction
-  task (Y1) and an error-detection task (Y2). This turns the §3.7 construction residual from a correlation
-  into predictive power; full ecological validity (real downstream use / expert ratings) is a further step.
-  Pre-registered design: `docs/specs/2026-06-08-e14-predictive-validity.md`.
+- **E14 — predictive (incremental) validity: tested, rejected (§3.8).** IGS did *not* predict the
+  construction/verification outcomes beyond AIME (partial ρ ≤ 0). What remains: retest with the *strict*
+  IGS (cleaner construct, §3.7), and pursue **ecological** validity — does IGS predict a genuinely external
+  outcome (real downstream math use, expert ratings) that no in-house math benchmark captures? That is the
+  open form of predictive validity; the in-house incremental test has been answered.
 - **E2 — reliability:** test-retest stability and inter-task consistency.
 - **Larger N** to tighten all CIs; separate the very top with one more difficulty rung.
 
@@ -499,7 +520,7 @@ Repository `wwoosshh/inversa-bench`, branch `scoring-validity`. Engine: `python 
 Core: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. Experiments:
 `scripts/run_forward_gap.py` (E12), `run_inverse_gap.py` (E12b), `run_e10.py` + `e10_redux.py` (E10),
 `run_transform_hard.py` + `gen_transform_{hard,brutal}_bank.py` (E8). Figures: `scripts/make_figures.py`.
-All scores are sympy-verified; **191 passing unit tests** cover the verifier, scoring, extraction, and
+All scores are sympy-verified; **198 passing unit tests** cover the verifier, scoring, extraction, and
 the benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under
 `data/banks/`.
 
@@ -524,7 +545,8 @@ command to regenerate it.
 | Leaderboard **N=59, 7 families, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7 families** | `python -m inversa.cli_bench …`; `python scripts/build_dashboard.py` |
 | Discriminant validity (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,logic)=.66, Williams t=3.49 p<.05, partial=.88 | `discriminant_results.json` (control `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; nonmath range 0.50 | re-derived: gap +0.27, partial +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
 | Interval (Rasch) scaling (§2.4): θ monotone in IGS, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | re-derived from the run cache, no API | `python scripts/build_irt.py` |
-| Verifier soundness | `tests/` | — | **191 tests pass** | `python -m pytest -q` |
+| Predictive validity (E14, §3.8): partial ρ(IGS,Y\|AIME) ≤ 0 → **rejected** (no incremental prediction) | `predictive_results.json` | Y1 partial −0.20, Y2 partial −0.42 | re-derived: partials, gaps, spread guard | `python scripts/run_predictive.py` |
+| Verifier soundness | `tests/` | — | **198 tests pass** | `python -m pytest -q` |
 
 **Scope notes carried by the data (read with the numbers):** (i) §3.3's ρ is *range-dominated* — anchored
 by very-weak and frontier models; the defensible figure is the CI lower bound (**+0.65**; redux **+0.47**),

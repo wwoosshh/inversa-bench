@@ -1,0 +1,362 @@
+{
+ "name": "construct-constraints-v1",
+ "note": "E14 Y1: constrained polynomial construction; sympy-graded, references verified.",
+ "items": [
+  {
+   "id": 1,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 2; integer coefficients; a root at x = 3 (so p(3) = 0); leading coefficient 1. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 2
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 3
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 2; integer coefficients; a root at x = -2 (so p(-2) = 0); leading coefficient 1. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 2
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": -2
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 2; integer coefficients; a root at x = 5 (so p(5) = 0); a root at x = -5 (so p(-5) = 0); leading coefficient 1. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 2
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 5
+    },
+    {
+     "type": "root_at",
+     "x": -5
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 2; integer coefficients; exactly 0 distinct real root(s); leading coefficient 1. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 2
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 0
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 3; integer coefficients; a root at x = 0 (so p(0) = 0); leading coefficient 1; exactly 3 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 3
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 0
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 3; integer coefficients; a root at x = 2 (so p(2) = 0); leading coefficient 1; exactly 1 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 3
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 2
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 3; integer coefficients; leading coefficient 2; a root at x = 1 (so p(1) = 0). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 3
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "leading_coeff",
+     "value": 2
+    },
+    {
+     "type": "root_at",
+     "x": 1
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 4; integer coefficients; a root at x = 1 (so p(1) = 0); leading coefficient 1; exactly 2 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 4
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 1
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 2
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 4; integer coefficients; leading coefficient 1; exactly 0 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 4
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 4; integer coefficients; a root at x = 3 (so p(3) = 0); leading coefficient 1; exactly 2 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 4
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 3
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 2
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 4; integer coefficients; a root at x = 2 (so p(2) = 0); leading coefficient 1; exactly 1 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 4
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 2
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 5; integer coefficients; leading coefficient 1; exactly 1 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 5
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: a UNIQUE real root equal to 2; integer coefficients; degree exactly 3. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "unique_real_root",
+     "value": 2.0
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "degree",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: a UNIQUE real root equal to -1; integer coefficients; degree exactly 3. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "unique_real_root",
+     "value": -1.0
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "degree",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: degree exactly 3; integer coefficients; a root at x = 4 (so p(4) = 0); a root at x = -1 (so p(-1) = 0); leading coefficient 1; exactly 3 distinct real root(s). Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "degree",
+     "value": 3
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "root_at",
+     "x": 4
+    },
+    {
+     "type": "root_at",
+     "x": -1
+    },
+    {
+     "type": "leading_coeff",
+     "value": 1
+    },
+    {
+     "type": "num_distinct_real_roots",
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "prompt": "Construct a single-variable polynomial p(x) with ALL of these properties: a UNIQUE real root equal to 3; integer coefficients; degree exactly 5. Output ONLY the polynomial as an equation on a final line prefixed by '#### ', in the form '#### p(x) = 0'. Example: '#### x**2 - 5*x + 6 = 0'.",
+   "checks": [
+    {
+     "type": "unique_real_root",
+     "value": 3.0
+    },
+    {
+     "type": "integer_coeffs"
+    },
+    {
+     "type": "degree",
+     "value": 5
+    }
+   ]
+  }
+ ]
+}

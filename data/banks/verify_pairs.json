@@ -1,0 +1,126 @@
+{
+ "name": "verify-pairs-v1",
+ "note": "E14 Y2: yes/no error-detection claims; truth sympy-computed (14 yes / 10 no).",
+ "items": [
+  {
+   "id": 1,
+   "prompt": "Is x = 3 a real solution of x**3 - x**2 - 9*x + 9 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 2,
+   "prompt": "Is x = 2 a real solution of x**3 - x**2 - 9*x + 9 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 3,
+   "prompt": "Is x = 2 a real solution of x**2 - 5*x + 6 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 4,
+   "prompt": "Is x = 4 a real solution of x**2 - 5*x + 6 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 5,
+   "prompt": "Is x = 3 the UNIQUE real solution of x**3 - x**2 - 9*x + 9 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 6,
+   "prompt": "Is x = 1 the UNIQUE real solution of x**3 + x - 2 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 7,
+   "prompt": "Does x**2 - 4 = 0 have exactly 2 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 8,
+   "prompt": "Does x**2 + 4 = 0 have exactly 2 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 9,
+   "prompt": "Does x**3 - x = 0 have exactly 3 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 10,
+   "prompt": "Does x**4 - 1 = 0 have exactly 4 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 11,
+   "prompt": "Is (x - 2)*(x - 3) a correct factorization of x**2 - 5*x + 6? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 12,
+   "prompt": "Is (x - 1)*(x - 6) a correct factorization of x**2 - 5*x + 6? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 13,
+   "prompt": "Is (x + 1)*(x**2 + 1) a correct factorization of x**3 + x**2 + x + 1? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 14,
+   "prompt": "Is x = -3 a real solution of x**3 - x**2 - 9*x + 9 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 15,
+   "prompt": "Is x = 0 a real solution of x**3 - x = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 16,
+   "prompt": "Is x = 2 the UNIQUE real solution of x**3 - 2*x**2 + x - 2 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 17,
+   "prompt": "Does x**4 + 1 = 0 have exactly 0 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 18,
+   "prompt": "Does (x - 1)**2*(x + 1) = 0 have exactly 3 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 19,
+   "prompt": "Is x = 5 a real solution of x**2 - 25 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 20,
+   "prompt": "Is x = 5 a real solution of x**2 + 25 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 21,
+   "prompt": "Is (x - 2)*(x + 2)*(x**2 + 1) a correct factorization of x**4 - 16? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 22,
+   "prompt": "Is x = 1 the UNIQUE real solution of x**5 + x - 2 = 0? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  },
+  {
+   "id": 23,
+   "prompt": "Does x**2 - 6*x + 9 = 0 have exactly 2 distinct real solutions? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "no"
+  },
+  {
+   "id": 24,
+   "prompt": "Does x**2 - 6*x + 9 = 0 have exactly 1 distinct real solution? Answer with ONLY 'yes' or 'no' on a final line prefixed by '#### '. Example: '#### no'.",
+   "answer": "yes"
+  }
+ ]
+}

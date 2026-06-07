@@ -87,6 +87,6 @@ python -m inversa.cli_bench --models "anthropic/claude-opus-4.8,openai/gpt-4o-mi
 - **논문:** [`docs/paper/inversa-paper.md`](docs/paper/inversa-paper.md) (영문 정본) · [`docs/paper/inversa-paper.ko.md`](docs/paper/inversa-paper.ko.md) (한국어)
 - **핵심 코드:** `tasks/structural.py`(구성 과제) · `verifiers/math_equation.py`(검증 오라클) · `scoring.py`(IGS) · `cli_bench.py`(엔진)
 - **실험 스크립트:** `scripts/run_forward_gap.py`(오염), `run_e10.py`(AIME 변별), `run_transform_hard.py`+`gen_transform_*`(난이도 확장), `make_figures.py`(그림)
-- **테스트:** 191개 단위테스트(검증기·채점·추출·엔진). `data/banks/` 문제은행, `data/results/` 결과.
+- **테스트:** 198개 단위테스트(검증기·채점·추출·엔진). `data/banks/` 문제은행, `data/results/` 결과.
 
 **참고문헌:** GSM-Symbolic (Mirzadeh et al., Apple, ICLR 2025, arXiv:2410.05229) · GSM1k (Zhang et al., Scale AI, 2024, arXiv:2405.00332) · arXiv:2311.04850.

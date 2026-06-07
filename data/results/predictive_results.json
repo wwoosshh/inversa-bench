@@ -1,0 +1,107 @@
+{
+  "benchmark": "E14 predictive validity",
+  "models": {
+    "anthropic/claude-opus-4.8": {
+      "igs": 1.0,
+      "aime": 1.0,
+      "y1": 0.9375,
+      "y2": 1.0
+    },
+    "google/gemini-3.1-flash-lite": {
+      "igs": 1.0,
+      "aime": 0.5,
+      "y1": 0.5625,
+      "y2": 1.0
+    },
+    "anthropic/claude-haiku-4.5": {
+      "igs": 0.8833,
+      "aime": 0.5,
+      "y1": 0.75,
+      "y2": 1.0
+    },
+    "meta-llama/llama-4-scout": {
+      "igs": 0.8667,
+      "aime": 0.3,
+      "y1": 0.75,
+      "y2": 1.0
+    },
+    "google/gemini-3.5-flash": {
+      "igs": 0.8,
+      "aime": 0.26666666666666666,
+      "y1": 0.9375,
+      "y2": 1.0
+    },
+    "mistralai/mistral-large": {
+      "igs": 0.7167,
+      "aime": 0.23333333333333334,
+      "y1": 0.0,
+      "y2": 0.875
+    },
+    "meta-llama/llama-3.3-70b-instruct": {
+      "igs": 0.6333,
+      "aime": 0.16666666666666666,
+      "y1": 0.5625,
+      "y2": 0.9583333333333334
+    },
+    "mistralai/mistral-small-2603": {
+      "igs": 0.5,
+      "aime": 0.1,
+      "y1": 0.3125,
+      "y2": 1.0
+    },
+    "anthropic/claude-3.5-haiku": {
+      "igs": 0.5,
+      "aime": 0.06666666666666667,
+      "y1": 0.25,
+      "y2": 0.9166666666666666
+    },
+    "openai/gpt-4o-mini": {
+      "igs": 0.7333,
+      "aime": 0.03333333333333333,
+      "y1": 0.0,
+      "y2": 0.625
+    },
+    "qwen/qwen-2.5-7b-instruct": {
+      "igs": 0.1833,
+      "aime": 0.03333333333333333,
+      "y1": 0.4375,
+      "y2": 0.7916666666666666
+    },
+    "cohere/command-r-08-2024": {
+      "igs": 0.1,
+      "aime": 0.0,
+      "y1": 0.3125,
+      "y2": 0.5
+    },
+    "meta-llama/llama-3.1-8b-instruct": {
+      "igs": 0.0667,
+      "aime": 0.0,
+      "y1": 0.5,
+      "y2": 0.6666666666666666
+    }
+  },
+  "analyses": [
+    {
+      "outcome": "y1",
+      "n": 13,
+      "rho_igs_y": 0.5534028488010726,
+      "rho_aime_y": 0.6583358732142869,
+      "partial_rho_igs_y_given_aime": -0.19536049451864343,
+      "gap_igs_minus_aime": -0.10493302441321428,
+      "outcome_saturated": false,
+      "supported": false,
+      "verdict": "REJECTED (no incremental prediction over AIME; partial<=0)"
+    },
+    {
+      "outcome": "y2",
+      "n": 13,
+      "rho_igs_y": 0.7229667360553386,
+      "rho_aime_y": 0.8676001898924811,
+      "partial_rho_igs_y_given_aime": -0.4233773849509689,
+      "gap_igs_minus_aime": -0.14463345383714254,
+      "outcome_saturated": false,
+      "supported": false,
+      "verdict": "REJECTED (no incremental prediction over AIME; partial<=0)"
+    }
+  ]
+}

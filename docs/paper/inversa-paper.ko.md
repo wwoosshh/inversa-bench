@@ -69,6 +69,7 @@ forward 벤치마크는 문제를 주고 모델의 답을 채점합니다(GSM8K,
 | H6 | IGS는 gold-standard 어려운 forward와 같은 능력을 잰다 | **지지** | E10: +0.93 [+0.65,+1.0] |
 | H7 | IGS 난이도를 키워 프런티어를 변별할 수 있다 | **지지** | E8: 천장 돌파, opus 88% |
 | H8 | IGS는 일반역량(g)이 아니라 *수학-특이적*이다 | **지지** | E13: ρ(IGS,AIME)=.93 ≫ ρ(IGS,비수학논리)=.66, Williams p<.05; 편상관 .88 |
+| H9 | IGS의 구성 잔차가 순방향 풀이 너머로 구성/검증을 **예측**한다(증분 타당도) | **기각** | E14: 편상관 ρ(IGS,Y\|AIME) ≤ 0 (Y1 −.20, Y2 −.42) — AIME가 동등 이상 예측 |
 
 정직한 서사: 원래 비전의 *강한* 형태(완전히 새로운 능력 축)는 **거짓**이지만, *더 방어 가능한*
 형태(오염 불가·자동 확장·검증된 측정기)는 **성립**합니다.
@@ -160,7 +161,7 @@ equation in x whose unique real solution is exactly {g}  (where r is that soluti
 **예시.** 출력 `추론…\n#### x**3 - 27 = 0`, 타깃 `3`: 추출 → `x**3 - 27 = 0`; 풀이 → 근
 `{3, 복소, 복소}`; 실근 `{3}`; `valid=True, unique=True` → **인정**. 출력 `x**2 - 9 = 0`, 타깃 `3`:
 실근 `{3, -3}` → `unique=False` → **불인정**(−3도 답이므로). 전부 재현·검사 가능하며, 스위트는
-**191개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
+**198개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
 
 ### 2.4 점수: IGS
 
@@ -393,8 +394,24 @@ AIME와 ρ=0.93) 단순 일반역량도 **아니다**(H8 지지: 수학-특이�
 (`x = target`)해도 통과되는데 이는 풀이가 전혀 필요 없다 — 그래서 permissive IGS는 지저분하다(gpt-4o-mini가
 IGS 0.73인데 AIME 3%인 이유); strict 모드(`--pose-no-trivial`, §2.1)가 이를 제거해 진짜 구성을 분리한다.
 둘째, 구성과 풀이는 유일성 검증으로 **얽혀** 있어 IGS가 둘을 완전히 분리하지 못한다 — *구성 잔차가 얼마나
-독립적으로 중요한지*가 바로 **예측타당도** 검정이 답할 미해결 질문이다(§4.3; 설계
-`docs/specs/2026-06-08-e14-predictive-validity.md`).
+독립적으로 중요한지*를 §3.8의 예측타당도 검정이 데이터에 묻는다(결과는 **부정**).
+
+### 3.8 예측타당도: 구성 잔차는 순방향 풀이 너머를 예측하지 못한다 (H9 기각)
+
+E13은 IGS가 AIME와 *수학-특이적* 분산을 공유함을 보였다. 그런데 그 고유한 구성·자기검증 잔차(§3.7)가
+*쓸모* 있는가 — 순방향 점수가 못 하는 결과를 예측하는가? E10 코호트에서 pose/transform과 다른 두
+기계채점 결과로 **증분** 타당도를 검정했다: **Y1** = 제약-구성(차수·필수근·최고차항·서로 다른 실근 수 등
+여러 정확 제약을 동시에 만족하는 다항식 구성, sympy 검증), **Y2** = 오류검출(주장된 해/인수분해의 참거짓을
+yes/no로 라벨). 각각 *AIME를 통제한 뒤* IGS가 그 결과를 예측하는지 본다.
+
+**결과(N=13): 기각 — 둘 다 편상관 ρ(IGS, Y | AIME) ≤ 0.** Y1: ρ(IGS,Y)=+0.55 vs ρ(AIME,Y)=+0.66,
+편상관 **−0.20**. Y2: ρ(IGS,Y)=+0.72 vs ρ(AIME,Y)=+0.87, 편상관 **−0.42**. AIME가 두 결과를 IGS만큼
+혹은 더 잘 예측하고, AIME 통제 후 IGS는 추가 기여가 없다 — *구성* 결과에서조차. 즉 구성 잔차는 순방향
+풀이를 넘어서는 증분 예측력이 **없다**. 이는 논문의 척추와 일치한다: IGS는 추가 예측력을 가진 별개 능력이
+아니며, 그 가치는 **구조적**(오염 면역·자동 확장·수학-특이적 순위)이지 새로운 예측 차원이 아니다. 단서:
+이 코호트의 IGS는 *permissive* 쉬운-뱅크 점수(§3.7은 strict가 더 깨끗한 construct라 보지만 증분타당도엔
+미검정); N=13 넓은 CI(Y1 [−0.09, +0.79]); 결과 자체도 풀이 부하가 큼. 설계·데이터:
+`docs/specs/2026-06-08-e14-predictive-validity.md`, `data/results/predictive_results.json`.
 
 ---
 
@@ -426,10 +443,10 @@ IGS 0.73인데 AIME 3%인 이유); strict 모드(`--pose-no-trivial`, §2.1)가 
 ### 4.3 더 강한 논문을 위해 남은 것
 
 - **E4 — 일반화:** 대수 너머(정수론·연립·증명)로 재현해 구성이 대수 한정이 아님을 입증.
-- **E5/E14 — 예측(증분) 타당도:** IGS가 **순방향 풀이 너머**의 구성·자기검증 결과를 예측함을 입증 —
-  보류 제약-구성 과제(Y1)와 오류검출 과제(Y2)에 대해 편상관 ρ(IGS, Y | AIME) > 0. §3.7의 구성 잔차를
-  상관에서 예측력으로 전환하는 단계(실세계 활용·전문가 평가 같은 생태적 타당도는 그 다음 단계). 사전등록
-  설계: `docs/specs/2026-06-08-e14-predictive-validity.md`.
+- **E14 — 예측(증분) 타당도: 검정 완료, 기각(§3.8).** IGS는 AIME 너머로 구성/검증 결과를 예측하지
+  못했다(편상관 ρ ≤ 0). 남은 것: *strict* IGS(더 깨끗한 construct, §3.7)로 재검정, 그리고 **생태적**
+  타당도 — IGS가 자체 수학 벤치로는 못 잡는 진짜 외부 결과(실세계 수학 활용·전문가 평가)를 예측하는가?
+  이것이 예측타당도의 열린 형태이며, 자체 증분 검정은 이미 답을 얻었다.
 - **E2 — 신뢰도:** 재검사 안정성·과제 간 일관성.
 - **더 큰 N**으로 모든 CI를 좁히고, 한 난이도 단계 더로 최상위를 분리.
 
@@ -447,7 +464,7 @@ IGS 0.73인데 AIME 3%인 이유); strict 모드(`--pose-no-trivial`, §2.1)가 
 핵심: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. 실험:
 `scripts/run_forward_gap.py`(E12), `run_inverse_gap.py`(E12b), `run_e10.py`+`e10_redux.py`(E10),
 `run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8). 그림: `scripts/make_figures.py`.
-모든 점수는 sympy 검증; **191개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
+모든 점수는 sympy 검증; **198개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
 결과 JSON은 `data/results/`, 은행은 `data/banks/`.
 
 ---
@@ -469,7 +486,8 @@ IGS 0.73인데 AIME 3%인 이유); strict 모드(`--pose-no-trivial`, §2.1)가 
 | 리더보드 **N=59, 7패밀리, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7패밀리** | `cli_bench …`; `build_dashboard.py` |
 | 판별타당도 (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,논리)=.66, Williams t=3.49 p<.05, 편상관=.88 | `discriminant_results.json` (통제 `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; 비수학 range 0.50 | 재도출: gap +0.27, 편상관 +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
 | 구간(Rasch) 척도화 (§2.4): θ는 IGS의 단조 재척도, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | 실행 캐시에서 재도출, API 불필요 | `python scripts/build_irt.py` |
-| 검증기 건전성 | `tests/` | — | **191개 통과** | `python -m pytest -q` |
+| 예측타당도 (E14, §3.8): 편상관 ρ(IGS,Y\|AIME) ≤ 0 → **기각**(증분 예측 없음) | `predictive_results.json` | Y1 편상관 −0.20, Y2 −0.42 | 재도출: 편상관·gap·포화가드 | `python scripts/run_predictive.py` |
+| 검증기 건전성 | `tests/` | — | **198개 통과** | `python -m pytest -q` |
 
 **수치와 함께 읽어야 할 범위 주의:** (i) §3.3의 ρ는 *범위 지배* — 극단(약함·프런티어)에 고정됨. 방어값은
 CI 하한(**+0.65**; redux **+0.47**), gpt-4o-mini(IGS 0.73 / AIME 3%)는 실제 부분 괴리. (ii) §3.2의
