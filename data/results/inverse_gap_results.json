@@ -1,0 +1,52 @@
+{
+  "summary": {
+    "n_models": 7,
+    "mean_gap": 7.93016446160826e-18,
+    "gap_ci_lo": -0.10476190476190474,
+    "gap_ci_hi": 0.10952380952380951
+  },
+  "models": [
+    {
+      "model": "anthropic/claude-3.5-haiku",
+      "familiar": 0.36666666666666664,
+      "random": 0.1,
+      "gap": 0.2666666666666666
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "familiar": 0.7666666666666667,
+      "random": 0.6666666666666666,
+      "gap": 0.10000000000000009
+    },
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "familiar": 1.0,
+      "random": 1.0,
+      "gap": 0.0
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "familiar": 0.6,
+      "random": 0.6,
+      "gap": 0.0
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "familiar": 0.9,
+      "random": 0.9666666666666667,
+      "gap": -0.06666666666666665
+    },
+    {
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "familiar": 0.3,
+      "random": 0.36666666666666664,
+      "gap": -0.06666666666666665
+    },
+    {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "familiar": 0.06666666666666667,
+      "random": 0.3,
+      "gap": -0.23333333333333334
+    }
+  ]
+}

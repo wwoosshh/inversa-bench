@@ -1,0 +1,275 @@
+[
+  {
+    "model": "google/gemini-3.1-flash-lite",
+    "pose_validity": 1.0,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 1.0
+  },
+  {
+    "model": "mistralai/mistral-small-2603",
+    "pose_validity": 0.16666666666666666,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": false,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.8333333333333334
+  },
+  {
+    "model": "anthropic/claude-3.5-haiku",
+    "pose_validity": 0.6666666666666666,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": false,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 0.3333333333333333
+  },
+  {
+    "model": "meta-llama/llama-4-scout",
+    "pose_validity": 0.8333333333333334,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.9
+  },
+  {
+    "model": "qwen/qwen-2.5-7b-instruct",
+    "pose_validity": 0.0,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": false,
+      "rational": false,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.36666666666666664
+  },
+  {
+    "model": "openai/gpt-4o-mini",
+    "pose_validity": 0.8333333333333334,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.6333333333333333
+  },
+  {
+    "model": "anthropic/claude-haiku-4.5",
+    "pose_validity": 0.8333333333333334,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 0.9333333333333333
+  },
+  {
+    "model": "google/gemini-3.5-flash",
+    "pose_validity": 0.8333333333333334,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 0.7666666666666667
+  },
+  {
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "pose_validity": 0.0,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": false,
+      "rational": false,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.13333333333333333
+  },
+  {
+    "model": "meta-llama/llama-3.3-70b-instruct",
+    "pose_validity": 0.5,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": false,
+      "rational": false,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.7666666666666667
+  },
+  {
+    "model": "mistralai/mistral-large",
+    "pose_validity": 0.5,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": false,
+      "rational": false,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.9333333333333333
+  },
+  {
+    "model": "anthropic/claude-opus-4.8",
+    "pose_validity": 1.0,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 1.0
+  },
+  {
+    "model": "anthropic/claude-sonnet-4.6",
+    "pose_validity": 0.6666666666666666,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": true
+    },
+    "transform_validity": 0.6333333333333333
+  },
+  {
+    "model": "meta-llama/llama-3.1-70b-instruct",
+    "pose_validity": 0.5,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": true,
+      "rational": false,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.23333333333333334
+  },
+  {
+    "model": "amazon/nova-pro-v1",
+    "pose_validity": 0.6666666666666666,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.6
+  },
+  {
+    "model": "mistralai/mistral-medium-3",
+    "pose_validity": 0.3333333333333333,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.9333333333333333
+  },
+  {
+    "model": "qwen/qwen-2.5-72b-instruct",
+    "pose_validity": 0.6666666666666666,
+    "pose_by_novelty": {
+      "integer": false,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.3333333333333333
+  },
+  {
+    "model": "deepseek/deepseek-chat",
+    "pose_validity": 0.6666666666666666,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": false,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.8333333333333334
+  },
+  {
+    "model": "cohere/command-r-08-2024",
+    "pose_validity": 0.16666666666666666,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": false,
+      "rational": false,
+      "quadratic-irrational": false,
+      "cubic-irrational": false,
+      "sum-of-surds": false
+    },
+    "transform_validity": 0.03333333333333333
+  },
+  {
+    "model": "deepseek/deepseek-v3.2",
+    "pose_validity": 0.8333333333333334,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": false
+    },
+    "transform_validity": 1.0
+  },
+  {
+    "model": "qwen/qwen3.7-plus",
+    "pose_validity": 1.0,
+    "pose_by_novelty": {
+      "integer": true,
+      "large-integer": true,
+      "rational": true,
+      "quadratic-irrational": true,
+      "cubic-irrational": true,
+      "sum-of-surds": true
+    },
+    "transform_validity": 1.0
+  }
+]

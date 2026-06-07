@@ -156,7 +156,8 @@ A worked example. Model output `Reasoning…\n#### x**3 - 27 = 0`, target `3`: e
 `x**3 - 27 = 0`; solve → roots `{3, complex, complex}`; real roots `{3}`; `valid = True`,
 `unique = True` → **counts**. Output `x**2 - 9 = 0`, target `3`: real roots `{3, -3}` →
 `unique = False` → **does not count** (it also solves to −3). Everything is reproducible and
-inspectable; the verifier has 118 passing unit tests.
+inspectable; the suite has **163 passing unit tests** (verifier, scoring, extraction, and the
+benchmark engine) — run `python -m pytest -q`.
 
 ### 2.4 The score: IGS
 
@@ -205,6 +206,23 @@ exactly the model-dependent pattern GSM1k reports. So **H1 holds on our own mode
 items inflates forward scores. (We *scope* this honestly: the effect is real but modest and uneven;
 we do **not** claim forward scores are broadly "fake.")
 
+**Direct evidence** (`data/results/forward_gap_results.json`; gap = GSM8K − GSM-Symbolic accuracy):
+
+| model | GSM8K | GSM-Symbolic | gap |
+|---|---|---|---|
+| llama-3.1-8b-instruct | 78.8% | 67.5% | **+11.2%** |
+| gpt-4o-mini | 96.2% | 91.2% | +5.0% |
+| gemini-3.5-flash | 93.8% | 88.8% | +5.0% |
+| llama-3.3-70b-instruct | 96.2% | 92.5% | +3.7% |
+| qwen-2.5-7b-instruct | 90.0% | 87.5% | +2.5% |
+| claude-3.5-haiku | 90.0% | 88.8% | +1.3% |
+| claude-opus-4.8 | 98.8% | 97.5% | +1.3% |
+| mistral-small-2603 | 91.2% | 90.0% | +1.2% |
+| command-r-08-2024 | 51.2% | 53.8% | **−2.5%** |
+
+Independently recomputed from the file: mean **+3.19%**, 8/9 positive, 95% bootstrap CI **[+1.0, +5.7]**
+(20k resamples, seed 0) — matching the stored `summary`. See Appendix V.
+
 ### 3.2 The inverse task has no contamination gap (H2)
 
 By construction, Task B uses randomized inputs, so no fixed item can leak. Empirically (E12b), we
@@ -213,6 +231,27 @@ Newton's `x³−2x−5`) vs **random** sources: **mean gap +0.0%, 95% CI [−10.
 systematic familiarity advantage. The CI is wide (small sample), so the **structural** argument is
 primary and the measurement is corroborating. The head-to-head is the asymmetry: **forward +3.2%
 (CI excludes 0) vs inverse +0.0% (CI includes 0).**
+
+**Direct evidence and an honest caveat** (`data/results/inverse_gap_results.json`; gap = familiar −
+random source equations):
+
+| model | familiar | random | gap |
+|---|---|---|---|
+| claude-3.5-haiku | 0.37 | 0.10 | **+26.7%** |
+| llama-3.3-70b-instruct | 0.77 | 0.67 | +10.0% |
+| claude-opus-4.8 | 1.00 | 1.00 | 0.0% |
+| gpt-4o-mini | 0.60 | 0.60 | 0.0% |
+| gemini-3.5-flash | 0.90 | 0.97 | −6.7% |
+| qwen-2.5-7b-instruct | 0.30 | 0.37 | −6.7% |
+| llama-3.1-8b-instruct | 0.07 | 0.30 | **−23.3%** |
+
+The mean (+0.0%) is a **cancellation of large opposite per-model swings** (−23% … +27%), not tight
+agreement: with N=7 models × 30 items the per-model rates are noisy. Honesty demands flagging the
+claude-3.5-haiku outlier (+26.7%) — if it were not noise it would be a *familiarity advantage* for that
+one model. This is exactly why the **structural** argument (Task B pins the output to a randomized
+test-time input → there is no fixed item to leak) is the load-bearing claim; E12b only *corroborates*
+that the structure behaves as designed at the population level, and should not be read as a
+tight-CI null. Independently recomputed: mean **+0.00%**, CI **[−10.5, +11.0]** (Appendix V).
 
 ### 3.3 The big turn: IGS is *not* a separate ability — it agrees with a hard forward test (H3 rejected, H6 supported)
 
@@ -236,6 +275,35 @@ We also reject **H4** ("forward saturates in general"): AIME is *not* saturated 
 models with large headroom. So Inversa's value cannot be "forward is dead"; its value is being a
 **contamination-immune, auto-generated** route to the same ranking.
 
+**Direct evidence** (`data/results/e10_results.json`; AIME = accuracy on 60 problems, AIME 2024+2025,
+graded by exact integer match via `scripts/run_e10.py` over `data/banks/aime_set.json`):
+
+| model | IGS | AIME |
+|---|---|---|
+| claude-opus-4.8 | 1.00 | 100% |
+| gemini-3.1-flash-lite | 1.00 | 50% |
+| claude-haiku-4.5 | 0.88 | 50% |
+| llama-4-scout | 0.87 | 30% |
+| gemini-3.5-flash | 0.80 | 27% |
+| **gpt-4o-mini** | **0.73** | **3%** |
+| mistral-large | 0.72 | 23% |
+| llama-3.3-70b-instruct | 0.63 | 17% |
+| mistral-small-2603 | 0.50 | 10% |
+| claude-3.5-haiku | 0.50 | 7% |
+| qwen-2.5-7b-instruct | 0.18 | 3% |
+| command-r-08-2024 | 0.10 | 0% |
+| llama-3.1-8b-instruct | 0.07 | 0% |
+
+**Honest reading of ρ = +0.93.** The correlation is **range-dominated**: it is anchored by the very weak
+models (≈0 on both axes) and the frontier (≈1 on both), so +0.93 *overstates* the agreement in the
+discriminating middle. Two facts temper the headline: (i) the **CI lower bound is +0.65** (N=13, and the
+upper bound is pinned at 1.0 by the percentile bootstrap) — the defensible claim is "moderate-to-strong,"
+not "near-identical"; (ii) there is a real **partial dissociation** — gpt-4o-mini constructs well
+(IGS 0.73) yet barely solves AIME (3%), ranking ~5 places higher on IGS than on AIME. So H3 is rejected
+only in its *strong* form (full orthogonality); construction and solving are *correlated but not
+identical*, and the residual is itself informative. Independently recomputed Spearman = **+0.9253**
+(Appendix V).
+
 ### 3.4 Difficulty is self-scaling: breaking the top ceiling (H7)
 
 On the easy transform bank the top **saturates** — three models tie at IGS 1.0, so the very top is
@@ -252,7 +320,10 @@ raised construction difficulty in two steps, each verifiable via the minimal pol
 best (opus-4.8) tops out at **88%**, with the field spread **12%–88%**. Recomputing IGS with the hard
 transform (E10-redux, N=11) **fixes the top-resolution gap** that E10 found: the number of models tied
 at the maximum drops from 2 to **1** (matching AIME), with **more** distinct levels (10 vs AIME's 9)
-and rank-agreement maintained (**+0.89** [+0.47, +0.99]). The reordering is informative, not uniform:
+and rank-agreement maintained (**+0.89** [+0.47, +0.99]). (These redux numbers are not stored as a file
+but are deterministically recomputed from the committed `transform_hard_results.json` + `e10_results.json`
+by `python scripts/e10_redux.py` — no API — and verified to match exactly; Appendix V.) The reordering
+is informative, not uniform:
 models that do simple substitution but not elimination collapse (llama-3.3-70b 77% → 6%), showing the
 hard bank measures a *deeper* construction skill.
 
@@ -261,22 +332,33 @@ within the verifiable-math limit — the key to future-proofing (§4.3). One cav
 top two (opus vs qwen3.7-plus) was **not** achieved, because qwen3.7-plus (a slow reasoning model)
 times out on the hard bank; this is an infrastructure limit, not a limit of the method.
 
-### 3.5 The engine-aggregated leaderboard (N=72)
+### 3.5 The engine-aggregated leaderboard (N=59, finer 30-item banks)
 
 We ran the benchmark engine (`cli_bench`) over a tier-balanced roster drawn from the live OpenRouter
-catalogue (346 text models → 197 serious candidates → 102 attempted). Of those, **72 models across 19
-families** completed (IGS **0.03 → 1.00**); the remaining ~30 were unmeasurable on the account
-(provider-incompatible — non-serverless / 404 / unsupported endpoint — or reasoning-model timeouts).
+catalogue (346 text models → 197 serious candidates → 102 attempted), scoring each on a **finer
+30-item pose bank and 30-item transform bank** at **temperature 0** (deterministic scoring; a
+reasoning-token budget of 4000 caps spend). This finer bank supersedes the earlier coarse 6-item
+"standard" pose bank: pose validity now resolves in 1/30 increments rather than 1/6, so models
+separate on the pose axis itself rather than needing a hard-bank tiebreak.
 
-![IGS leaderboard](figures/fig_leaderboard.png)
+![IGS leaderboard (30-item banks, N=59; amber * = truncated/low-confidence)](figures/fig_leaderboard.png)
 
-Five models tie at the standard-bank ceiling (IGS 1.0: gpt-5.2, gemini-3.1-flash-lite, deepseek-v4-pro,
-qwen3.7-plus, grok-build-0.1); per the user-chosen "standard + hard tiebreak" protocol they are
-separated by the harder polynomial/brutal transforms of §3.4 (e.g. gemini-3.1-flash-lite drops to 0.79
-on the brutal bank). Weak open models (llama-3.1-8b 0.05, claude-3-haiku 0.03) anchor the bottom. Full
-ranking: `data/results/leaderboard_merged.json`. This is, to our knowledge, the first large
-cross-family **construction-based** leaderboard, and it is contamination-immune and reproducible by
-re-running the engine.
+**59 models across 7 families completed (IGS 0.18 → 1.00).** Three models top the bank at IGS 1.0
+(gpt-5-mini, gpt-5, qwen3-max) — a far tighter ceiling than the coarse bank's five-way tie, confirming
+the finer bank's higher resolution. Transform validity saturates near 1.0 for strong models while pose
+validity spreads 0.23 → 1.00, so the pose axis carries the discrimination. Weak open models
+(qwen3-8b 0.18, claude-3-haiku 0.22) anchor the bottom.
+
+**Coverage and reliability (honest).** This is a single pass (one repeat, temperature 0). The account's
+credit was exhausted partway through the pass; the engine detects an account-wide failure, aborts
+cleanly, and persists its cache, so the run is **resumable from disk** — but the remaining 43 of 102
+went unmeasured: the later-roster families (meta-llama, x-ai, minimax, moonshot, cohere, amazon,
+nvidia, …) were cut off, alongside the usual provider-incompatible (non-serverless / 404 / unsupported
+endpoint) models. Ten reasoning/large models truncated before emitting their final equation (their pose
+scores are low-confidence — e.g. glm-5 was scored on only 27 of 60 items); these are flagged in the
+dashboard. Full ranking and coverage accounting: `data/results/igs_dashboard.html` and
+`igs_leaderboard_30.json`. Completing the roster is a credit-bound re-run with the same `--cache`
+(already-measured models are skipped, so only the unmeasured set is paid for).
 
 ---
 
@@ -328,8 +410,38 @@ Repository `wwoosshh/inversa-bench`, branch `scoring-validity`. Engine: `python 
 Core: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. Experiments:
 `scripts/run_forward_gap.py` (E12), `run_inverse_gap.py` (E12b), `run_e10.py` + `e10_redux.py` (E10),
 `run_transform_hard.py` + `gen_transform_{hard,brutal}_bank.py` (E8). Figures: `scripts/make_figures.py`.
-All scores are sympy-verified; 118 unit tests cover the verifier and scoring. Result JSONs are under
-`data/results/`; banks under `data/banks/`.
+All scores are sympy-verified; **163 passing unit tests** cover the verifier, scoring, extraction, and
+the benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under
+`data/banks/`.
+
+---
+
+## Appendix V — Verification & reproduction (every headline number → its source → how to recompute)
+
+Every quantitative claim in this paper was **independently recomputed from the committed result files**
+(not merely read back from a stored `summary`), branch `scoring-validity`. The recomputation matches the
+reported values to the stated precision. The table below lets a reader verify each claim *from this
+document alone*: the source file, the exact stored value, the independently recomputed value, and the
+command to regenerate it.
+
+| Claim (§) | Source file under `data/results/` | Stored value | Independently recomputed | Reproduce |
+|---|---|---|---|---|
+| Forward gap **+3.2% [+1.0,+5.7]**, N=9, 8/9 positive (§3.1) | `forward_gap_results.json` → `summary` + `models[]` | mean_gap 0.0319; CI [0.0097, 0.0569]; n_positive 8 | mean **+3.19%**, 8/9, CI **[+1.0,+5.7]** (20k bootstrap, seed 0) | live: `python scripts/run_forward_gap.py`; check: `mean(c−f)` over `models[]` |
+| Inverse gap **+0.0% [−10.5,+11.0]**, N=7 (§3.2) | `inverse_gap_results.json` → `summary` + `models[]` | mean_gap ≈0; CI [−0.105, +0.110] | mean **+0.00%**; per-model spread **−23%…+27%** | live: `python scripts/run_inverse_gap.py` |
+| IGS↔AIME **ρ=+0.93 [+0.65,+1.0]**, N=13 (§3.3) | `e10_results.json` → `analysis` + `models[]` | 0.9253; CI [0.652, 1.0]; n 13 | Spearman **+0.9253** (avg-rank Pearson) | live: `python scripts/run_e10.py` (AIME from `data/banks/aime_set.json`, 60 problems) |
+| E10-redux **+0.89 [+0.47,+0.99]**, N=11; ties 2→1; levels 10 vs 9 (§3.4) | *(not stored)* derived from `transform_hard_results.json` + `e10_results.json` | — | **+0.89**, tied_at_max **2→1**, distinct **10 vs AIME 9** | `python scripts/e10_redux.py` (no API; deterministic) |
+| E8 brutal: opus **88%**, spread **12–88%**, none 100% (§3.4) | `transform_brutal_results.json` (`hard_transform_validity`) | opus 0.875; max 0.875; min 0.125 | opus **87.5%**, **12.5–87.5%** | inspect per-model field (7 models) |
+| E8 hard: llama-3.3-70b **77%→6%** (§3.4) | `transform_hard_results.json` + `paper_level3_all.json` | easy 0.77 → hard 0.056 | **77% → 5.6%** | inspect per-model fields |
+| Leaderboard **N=59, 7 families, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7 families** | `python -m inversa.cli_bench …`; `python scripts/build_dashboard.py` |
+| Verifier soundness | `tests/` | — | **163 tests pass** | `python -m pytest -q` |
+
+**Scope notes carried by the data (read with the numbers):** (i) §3.3's ρ is *range-dominated* — anchored
+by very-weak and frontier models; the defensible figure is the CI lower bound (**+0.65**; redux **+0.47**),
+and gpt-4o-mini (IGS 0.73 / AIME 3%) is a real partial dissociation. (ii) §3.2's inverse-gap mean is a
+*cancellation* of ±25% per-model swings (N=7×30 items), so the **structural** argument is primary, not the
+null CI. (iii) §3.4's ceiling-breaking and §3.5's leaderboard are partial coverage (7 brutal models with
+qwen3.7-plus timed out; the 59-model leaderboard is a credit-limited single pass with 10 truncated,
+low-confidence models flagged). All caveats are listed in §4.2.
 
 **References.** GSM-Symbolic — Mirzadeh et al., Apple, ICLR 2025 (arXiv:2410.05229). GSM1k / "A Careful
 Examination…" — Zhang et al., Scale AI, 2024 (arXiv:2405.00332). Rephrased-sample contamination —

@@ -66,14 +66,18 @@ ax.set_title("E8: raising construction difficulty resolves the IGS top\n(all 100
 ax.legend(fontsize=6.5, ncol=2, loc="lower left"); ax.grid(alpha=0.3); ax.set_ylim(-3, 105)
 fig.savefig(f"{OUT}/fig_escalation.png"); plt.close(fig)
 
-# ---- Fig 4: IGS leaderboard (full engine-aggregated run) ---------------------
-lv = load("leaderboard_merged")["results"]
-rows = sorted(([short(r["model"]), r["igs"]] for r in lv), key=lambda x: x[1])
+# ---- Fig 4: IGS leaderboard (engine-aggregated, finer 30-item banks) ---------
+lv = load("igs_leaderboard_30")["results"]
+trunc = set(load("igs_dashboard_summary")["truncated_models"])
+rows = sorted(([short(r["model"]), r["igs"], r["model"] in trunc] for r in lv), key=lambda x: x[1])
 fig, ax = plt.subplots(figsize=(7.6, max(6.0, 0.16 * len(rows))))
-ax.barh(range(len(rows)), [r[1] for r in rows], color="#0d9488")
-ax.set_yticks(range(len(rows))); ax.set_yticklabels([r[0] for r in rows], fontsize=6)
+# truncated models (low-confidence) drawn in amber so the figure self-flags them
+ax.barh(range(len(rows)), [r[1] for r in rows],
+        color=["#d97706" if r[2] else "#0d9488" for r in rows])
+ax.set_yticks(range(len(rows)))
+ax.set_yticklabels([r[0] + (" *" if r[2] else "") for r in rows], fontsize=6)
 ax.set_xlabel("IGS = mean(pose, transform)")
-ax.set_title(f"Inversa Generative Score leaderboard (N={len(rows)}, engine-aggregated)")
+ax.set_title(f"IGS leaderboard (N={len(rows)}, 30-item banks, temp 0; * = truncated/low-confidence)")
 ax.set_xlim(0, 1.0); ax.margins(y=0.005)
 fig.savefig(f"{OUT}/fig_leaderboard.png"); plt.close(fig)
 

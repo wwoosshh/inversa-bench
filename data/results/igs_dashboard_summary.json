@@ -1,0 +1,119 @@
+{
+  "n_attempted": 102,
+  "n_measured": 59,
+  "n_unmeasured": 43,
+  "unmeasured": [
+    "meta-llama/llama-3.1-8b-instruct",
+    "meta-llama/llama-3.1-70b-instruct",
+    "meta-llama/llama-3.3-70b-instruct",
+    "meta-llama/llama-4-scout",
+    "meta-llama/llama-4-maverick",
+    "minimax/minimax-01",
+    "minimax/minimax-m1",
+    "minimax/minimax-m2",
+    "minimax/minimax-m2.5",
+    "x-ai/grok-4.20",
+    "x-ai/grok-4.3",
+    "x-ai/grok-build-0.1",
+    "moonshotai/kimi-k2",
+    "moonshotai/kimi-k2-thinking",
+    "moonshotai/kimi-k2.6",
+    "cohere/command-r-08-2024",
+    "cohere/command-r-plus-08-2024",
+    "cohere/command-a",
+    "amazon/nova-lite-v1",
+    "amazon/nova-pro-v1",
+    "amazon/nova-premier-v1",
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+    "nvidia/nemotron-3-ultra-550b-a55b",
+    "nousresearch/hermes-3-llama-3.1-70b",
+    "nousresearch/hermes-4-70b",
+    "microsoft/phi-4",
+    "microsoft/phi-4-mini-instruct",
+    "bytedance-seed/seed-1.6",
+    "bytedance-seed/seed-2.0-mini",
+    "xiaomi/mimo-v2.5",
+    "xiaomi/mimo-v2.5-pro",
+    "arcee-ai/virtuoso-large",
+    "arcee-ai/maestro-reasoning",
+    "ai21/jamba-large-1.7",
+    "ibm-granite/granite-4.1-8b",
+    "upstage/solar-pro-3",
+    "writer/palmyra-x5",
+    "allenai/olmo-3-32b-think",
+    "liquid/lfm-2-24b-a2b",
+    "inception/mercury-2",
+    "tencent/hunyuan-a13b-instruct",
+    "inflection/inflection-3-productivity",
+    "stepfun/step-3.7-flash"
+  ],
+  "families": [
+    {
+      "family": "openai",
+      "n": 12,
+      "best_igs": 1.0,
+      "best_model": "openai/gpt-5-mini",
+      "mean_igs": 0.8972
+    },
+    {
+      "family": "qwen",
+      "n": 11,
+      "best_igs": 1.0,
+      "best_model": "qwen/qwen3-max",
+      "mean_igs": 0.7061
+    },
+    {
+      "family": "anthropic",
+      "n": 9,
+      "best_igs": 0.9833,
+      "best_model": "anthropic/claude-haiku-4.5",
+      "mean_igs": 0.7074
+    },
+    {
+      "family": "deepseek",
+      "n": 6,
+      "best_igs": 0.9828,
+      "best_model": "deepseek/deepseek-r1",
+      "mean_igs": 0.8737
+    },
+    {
+      "family": "z-ai",
+      "n": 6,
+      "best_igs": 0.9808,
+      "best_model": "z-ai/glm-5",
+      "mean_igs": 0.7748
+    },
+    {
+      "family": "google",
+      "n": 8,
+      "best_igs": 0.9667,
+      "best_model": "google/gemini-3.5-flash",
+      "mean_igs": 0.7478
+    },
+    {
+      "family": "mistralai",
+      "n": 7,
+      "best_igs": 0.9,
+      "best_model": "mistralai/mistral-large",
+      "mean_igs": 0.6832
+    }
+  ],
+  "n_families": 7,
+  "igs_min": 0.1833,
+  "igs_max": 1.0,
+  "total_completion_tokens": 4495156,
+  "total_reasoning_tokens": 3184258,
+  "total_prompt_tokens": 185024,
+  "truncated_models": [
+    "z-ai/glm-5",
+    "z-ai/glm-4.7",
+    "deepseek/deepseek-r1-0528",
+    "deepseek/deepseek-v4-pro",
+    "deepseek/deepseek-v3.2",
+    "z-ai/glm-4.6",
+    "mistralai/mistral-small-2603",
+    "deepseek/deepseek-chat-v3.1",
+    "z-ai/glm-4.5",
+    "z-ai/glm-4.5-air"
+  ]
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "model": "anthropic/claude-opus-4.8",
+    "hard_transform_validity": 1.0
+  },
+  {
+    "model": "qwen/qwen3.7-plus",
+    "hard_transform_validity": 1.0
+  },
+  {
+    "model": "deepseek/deepseek-v3.2",
+    "hard_transform_validity": 0.8333333333333334
+  },
+  {
+    "model": "google/gemini-3.1-flash-lite",
+    "hard_transform_validity": 0.7777777777777778
+  },
+  {
+    "model": "anthropic/claude-haiku-4.5",
+    "hard_transform_validity": 0.7222222222222222
+  },
+  {
+    "model": "mistralai/mistral-large",
+    "hard_transform_validity": 0.6666666666666666
+  },
+  {
+    "model": "meta-llama/llama-4-scout",
+    "hard_transform_validity": 0.6111111111111112
+  },
+  {
+    "model": "google/gemini-3.5-flash",
+    "hard_transform_validity": 0.6111111111111112
+  },
+  {
+    "model": "mistralai/mistral-small-2603",
+    "hard_transform_validity": 0.5
+  },
+  {
+    "model": "qwen/qwen-2.5-7b-instruct",
+    "hard_transform_validity": 0.3333333333333333
+  },
+  {
+    "model": "openai/gpt-4o-mini",
+    "hard_transform_validity": 0.2777777777777778
+  },
+  {
+    "model": "anthropic/claude-sonnet-4.6",
+    "hard_transform_validity": 0.2222222222222222
+  },
+  {
+    "model": "anthropic/claude-3.5-haiku",
+    "hard_transform_validity": 0.05555555555555555
+  },
+  {
+    "model": "meta-llama/llama-3.3-70b-instruct",
+    "hard_transform_validity": 0.05555555555555555
+  }
+]

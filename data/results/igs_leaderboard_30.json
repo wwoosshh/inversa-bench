@@ -1,0 +1,904 @@
+{
+  "benchmark": "Inversa Generative Score (IGS) v1",
+  "n_models": 59,
+  "pose_bank": "data/banks/struct_pose_targets30.json",
+  "transform_bank": "data/banks/transform_bank.json",
+  "repeats_max": 1,
+  "adaptive": true,
+  "results": [
+    {
+      "model": "openai/gpt-5-mini",
+      "pose_validity": 1.0,
+      "transform_validity": 1.0,
+      "igs": 1.0,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 1,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-5",
+      "pose_validity": 1.0,
+      "transform_validity": 1.0,
+      "igs": 1.0,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 2,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-max",
+      "pose_validity": 1.0,
+      "transform_validity": 1.0,
+      "igs": 1.0,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 12,
+        "prompt_tokens": 1425,
+        "completion_tokens": 10873,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 3,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "pose_validity": 1.0,
+      "transform_validity": 0.9667,
+      "igs": 0.9833,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 4,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/o4-mini",
+      "pose_validity": 0.9667,
+      "transform_validity": 1.0,
+      "igs": 0.9833,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 5,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "pose_validity": 0.9667,
+      "transform_validity": 1.0,
+      "igs": 0.9833,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 6,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-r1",
+      "pose_validity": 0.9655,
+      "transform_validity": 1.0,
+      "igs": 0.9828,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 61,
+        "prompt_tokens": 6847,
+        "completion_tokens": 363224,
+        "reasoning_tokens": 340307,
+        "truncations": 0
+      },
+      "rank": 7,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-5",
+      "pose_validity": 0.9615,
+      "transform_validity": 1.0,
+      "igs": 0.9808,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 32,
+        "prompt_tokens": 3072,
+        "completion_tokens": 136432,
+        "reasoning_tokens": 119053,
+        "truncations": 4
+      },
+      "rank": 8,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "pose_validity": 0.9333,
+      "transform_validity": 1.0,
+      "igs": 0.9667,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 9,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "pose_validity": 0.9333,
+      "transform_validity": 1.0,
+      "igs": 0.9667,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 61,
+        "prompt_tokens": 6504,
+        "completion_tokens": 142078,
+        "reasoning_tokens": 123418,
+        "truncations": 0
+      },
+      "rank": 10,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3.7-plus",
+      "pose_validity": 0.9,
+      "transform_validity": 1.0,
+      "igs": 0.95,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 11,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-5.1",
+      "pose_validity": 0.9,
+      "transform_validity": 0.9667,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 12,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-5.2",
+      "pose_validity": 0.8667,
+      "transform_validity": 1.0,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 13,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "pose_validity": 0.9,
+      "transform_validity": 0.9667,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 14,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/o3-mini",
+      "pose_validity": 0.8667,
+      "transform_validity": 1.0,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 15,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3.5-plus-02-15",
+      "pose_validity": 0.8667,
+      "transform_validity": 1.0,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 431,
+        "completion_tokens": 13026,
+        "reasoning_tokens": 12000,
+        "truncations": 0
+      },
+      "rank": 16,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "pose_validity": 0.8667,
+      "transform_validity": 1.0,
+      "igs": 0.9333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 58,
+        "prompt_tokens": 6009,
+        "completion_tokens": 78063,
+        "reasoning_tokens": 57171,
+        "truncations": 0
+      },
+      "rank": 17,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-4.7",
+      "pose_validity": 0.8621,
+      "transform_validity": 1.0,
+      "igs": 0.931,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 61,
+        "prompt_tokens": 6305,
+        "completion_tokens": 207739,
+        "reasoning_tokens": 184831,
+        "truncations": 4
+      },
+      "rank": 18,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-r1-0528",
+      "pose_validity": 0.8571,
+      "transform_validity": 1.0,
+      "igs": 0.9286,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 63,
+        "prompt_tokens": 6744,
+        "completion_tokens": 309617,
+        "reasoning_tokens": 259294,
+        "truncations": 4
+      },
+      "rank": 19,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-4.1",
+      "pose_validity": 0.8333,
+      "transform_validity": 1.0,
+      "igs": 0.9167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 20,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-235b-a22b-thinking-2507",
+      "pose_validity": 0.8333,
+      "transform_validity": 1.0,
+      "igs": 0.9167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 91,
+        "completion_tokens": 6404,
+        "reasoning_tokens": 4894,
+        "truncations": 0
+      },
+      "rank": 21,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-v4-pro",
+      "pose_validity": 0.8333,
+      "transform_validity": 1.0,
+      "igs": 0.9167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 6524,
+        "completion_tokens": 142299,
+        "reasoning_tokens": 126433,
+        "truncations": 2
+      },
+      "rank": 22,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "pose_validity": 0.8276,
+      "transform_validity": 1.0,
+      "igs": 0.9138,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 6599,
+        "completion_tokens": 211415,
+        "reasoning_tokens": 187453,
+        "truncations": 4
+      },
+      "rank": 23,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "pose_validity": 0.8,
+      "transform_validity": 1.0,
+      "igs": 0.9,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 24,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemini-2.5-pro",
+      "pose_validity": 0.8333,
+      "transform_validity": 0.9667,
+      "igs": 0.9,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 63,
+        "prompt_tokens": 6007,
+        "completion_tokens": 216695,
+        "reasoning_tokens": 182350,
+        "truncations": 0
+      },
+      "rank": 25,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mistral-large",
+      "pose_validity": 0.8333,
+      "transform_validity": 0.9667,
+      "igs": 0.9,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 61,
+        "prompt_tokens": 6540,
+        "completion_tokens": 72729,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 26,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-4.6",
+      "pose_validity": 0.7931,
+      "transform_validity": 0.9667,
+      "igs": 0.8799,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 65,
+        "prompt_tokens": 6549,
+        "completion_tokens": 277983,
+        "reasoning_tokens": 255438,
+        "truncations": 6
+      },
+      "rank": 27,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-opus-4.1",
+      "pose_validity": 0.7667,
+      "transform_validity": 0.9667,
+      "igs": 0.8667,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 28,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "pose_validity": 0.7667,
+      "transform_validity": 0.9667,
+      "igs": 0.8667,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 6062,
+        "completion_tokens": 223073,
+        "reasoning_tokens": 172840,
+        "truncations": 0
+      },
+      "rank": 29,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-30b-a3b",
+      "pose_validity": 0.7,
+      "transform_validity": 0.9667,
+      "igs": 0.8333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 30,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.5",
+      "pose_validity": 0.7,
+      "transform_validity": 0.9667,
+      "igs": 0.8333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 31,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-235b-a22b",
+      "pose_validity": 0.6667,
+      "transform_validity": 0.9667,
+      "igs": 0.8167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 32,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-32b",
+      "pose_validity": 0.6333,
+      "transform_validity": 0.9667,
+      "igs": 0.8,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 88,
+        "completion_tokens": 4022,
+        "reasoning_tokens": 4000,
+        "truncations": 0
+      },
+      "rank": 33,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-4",
+      "pose_validity": 0.6,
+      "transform_validity": 1.0,
+      "igs": 0.8,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 34,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "pose_validity": 0.6333,
+      "transform_validity": 0.9667,
+      "igs": 0.8,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 75,
+        "prompt_tokens": 8078,
+        "completion_tokens": 260908,
+        "reasoning_tokens": 196863,
+        "truncations": 9
+      },
+      "rank": 35,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-chat",
+      "pose_validity": 0.7667,
+      "transform_validity": 0.8,
+      "igs": 0.7833,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 59,
+        "prompt_tokens": 6270,
+        "completion_tokens": 35604,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 36,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-4-32b",
+      "pose_validity": 0.7241,
+      "transform_validity": 0.8,
+      "igs": 0.7621,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 60,
+        "prompt_tokens": 6478,
+        "completion_tokens": 33452,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 37,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/ministral-8b-2512",
+      "pose_validity": 0.5333,
+      "transform_validity": 0.9667,
+      "igs": 0.75,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 6886,
+        "completion_tokens": 124792,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 38,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mixtral-8x22b-instruct",
+      "pose_validity": 0.6333,
+      "transform_validity": 0.8667,
+      "igs": 0.75,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 7485,
+        "completion_tokens": 44210,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 39,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-opus-4",
+      "pose_validity": 0.5,
+      "transform_validity": 0.9667,
+      "igs": 0.7333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 40,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemma-3-27b-it",
+      "pose_validity": 0.5,
+      "transform_validity": 0.9333,
+      "igs": 0.7167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 66,
+        "prompt_tokens": 8112,
+        "completion_tokens": 66434,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 41,
+      "solve_ref": null
+    },
+    {
+      "model": "deepseek/deepseek-chat-v3.1",
+      "pose_validity": 0.5667,
+      "transform_validity": 0.8667,
+      "igs": 0.7167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 77,
+        "prompt_tokens": 7611,
+        "completion_tokens": 235883,
+        "reasoning_tokens": 182081,
+        "truncations": 6
+      },
+      "rank": 42,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "pose_validity": 0.5,
+      "transform_validity": 0.9,
+      "igs": 0.7,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 51,
+        "prompt_tokens": 5316,
+        "completion_tokens": 252796,
+        "reasoning_tokens": 176113,
+        "truncations": 0
+      },
+      "rank": 43,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mistral-medium-3",
+      "pose_validity": 0.4828,
+      "transform_validity": 0.8667,
+      "igs": 0.6747,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 68,
+        "prompt_tokens": 8126,
+        "completion_tokens": 53811,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 44,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "pose_validity": 0.4828,
+      "transform_validity": 0.8333,
+      "igs": 0.658,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 63,
+        "prompt_tokens": 7068,
+        "completion_tokens": 90362,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 45,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "pose_validity": 0.7,
+      "transform_validity": 0.6,
+      "igs": 0.65,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 46,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-opus-4.5",
+      "pose_validity": 0.5667,
+      "transform_validity": 0.7,
+      "igs": 0.6333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 47,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemma-3-12b-it",
+      "pose_validity": 0.5517,
+      "transform_validity": 0.7,
+      "igs": 0.6259,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 7553,
+        "completion_tokens": 54516,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 48,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-4.5",
+      "pose_validity": 0.2414,
+      "transform_validity": 1.0,
+      "igs": 0.6207,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 82,
+        "prompt_tokens": 7512,
+        "completion_tokens": 385126,
+        "reasoning_tokens": 366594,
+        "truncations": 24
+      },
+      "rank": 49,
+      "solve_ref": null
+    },
+    {
+      "model": "openai/gpt-4o",
+      "pose_validity": 0.5667,
+      "transform_validity": 0.6333,
+      "igs": 0.6,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 50,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-14b",
+      "pose_validity": 0.1333,
+      "transform_validity": 0.8667,
+      "igs": 0.5,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 51,
+      "solve_ref": null
+    },
+    {
+      "model": "z-ai/glm-4.5-air",
+      "pose_validity": 0.4483,
+      "transform_validity": 0.5,
+      "igs": 0.4741,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 90,
+        "prompt_tokens": 8442,
+        "completion_tokens": 312385,
+        "reasoning_tokens": 233125,
+        "truncations": 7
+      },
+      "rank": 52,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "pose_validity": 0.5333,
+      "transform_validity": 0.3333,
+      "igs": 0.4333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 53,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen-2.5-72b-instruct",
+      "pose_validity": 0.5333,
+      "transform_validity": 0.2667,
+      "igs": 0.4,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 54,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-3.5-haiku",
+      "pose_validity": 0.5333,
+      "transform_validity": 0.1333,
+      "igs": 0.3333,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 55,
+      "solve_ref": null
+    },
+    {
+      "model": "google/gemma-3-4b-it",
+      "pose_validity": 0.3793,
+      "transform_validity": 0.1667,
+      "igs": 0.273,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 7529,
+        "completion_tokens": 104719,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 56,
+      "solve_ref": null
+    },
+    {
+      "model": "mistralai/mistral-nemo",
+      "pose_validity": 0.4,
+      "transform_validity": 0.1,
+      "igs": 0.25,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": {
+        "calls": 62,
+        "prompt_tokens": 6761,
+        "completion_tokens": 24486,
+        "reasoning_tokens": 0,
+        "truncations": 0
+      },
+      "rank": 57,
+      "solve_ref": null
+    },
+    {
+      "model": "anthropic/claude-3-haiku",
+      "pose_validity": 0.3667,
+      "transform_validity": 0.0667,
+      "igs": 0.2167,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 58,
+      "solve_ref": null
+    },
+    {
+      "model": "qwen/qwen3-8b",
+      "pose_validity": 0.2333,
+      "transform_validity": 0.1333,
+      "igs": 0.1833,
+      "reps_done": 1,
+      "n_pose": 30,
+      "n_transform": 30,
+      "usage": null,
+      "rank": 59,
+      "solve_ref": null
+    }
+  ]
+}

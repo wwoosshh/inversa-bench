@@ -16,13 +16,18 @@ from inversa.report_html import render_html_detailed
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
-def _make_adapter(model: str, provider: str, base_url: str, key_env: str, max_tokens: int = 512):
+def _make_adapter(model: str, provider: str, base_url: str, key_env: str, max_tokens: int = 512,
+                  reasoning_max_tokens: int | None = None, temperature: float | None = None):
     """Build an adapter for `model`. provider=anthropic -> native Anthropic;
-    anything else -> OpenAI-compatible endpoint (OpenRouter, Ollama, ...)."""
+    anything else -> OpenAI-compatible endpoint (OpenRouter, Ollama, ...).
+    `reasoning_max_tokens` bounds reasoning-model spend on OpenRouter (ignored by Anthropic);
+    `temperature` (e.g. 0.0) cuts run-to-run noise so fewer repeats are needed."""
     if provider == "anthropic":
         return AnthropicAdapter(model=model)
     return OpenAICompatibleAdapter(model, base_url=base_url, api_key_env=key_env,
-                                   max_tokens=max_tokens)
+                                   max_tokens=max_tokens,
+                                   reasoning_max_tokens=reasoning_max_tokens,
+                                   temperature=temperature)
 
 
 def main(argv=None) -> None:

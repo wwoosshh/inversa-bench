@@ -1,0 +1,90 @@
+{
+  "analysis": {
+    "n": 13,
+    "spearman_igs_aime": 0.9253120883981288,
+    "ci": [
+      0.6524881770737667,
+      1.0
+    ],
+    "disc_igs": {
+      "std": 0.3124774084141616,
+      "spread": 0.9333,
+      "distinct": 11,
+      "frac_tied_max": 0.15384615384615385
+    },
+    "disc_aime": {
+      "std": 0.273482905148172,
+      "spread": 1.0,
+      "distinct": 10,
+      "frac_tied_max": 0.07692307692307693
+    },
+    "verdict": "B2: agree AND IGS sharper -> validated + future-proof (WIN)"
+  },
+  "models": [
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "aime": 1.0,
+      "igs": 1.0
+    },
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "aime": 0.5,
+      "igs": 1.0
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "aime": 0.5,
+      "igs": 0.8833
+    },
+    {
+      "model": "meta-llama/llama-4-scout",
+      "aime": 0.3,
+      "igs": 0.8667
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "aime": 0.26666666666666666,
+      "igs": 0.8
+    },
+    {
+      "model": "mistralai/mistral-large",
+      "aime": 0.23333333333333334,
+      "igs": 0.7167
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "aime": 0.16666666666666666,
+      "igs": 0.6333
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "aime": 0.1,
+      "igs": 0.5
+    },
+    {
+      "model": "anthropic/claude-3.5-haiku",
+      "aime": 0.06666666666666667,
+      "igs": 0.5
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "aime": 0.03333333333333333,
+      "igs": 0.7333
+    },
+    {
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "aime": 0.03333333333333333,
+      "igs": 0.1833
+    },
+    {
+      "model": "cohere/command-r-08-2024",
+      "aime": 0.0,
+      "igs": 0.1
+    },
+    {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "aime": 0.0,
+      "igs": 0.0667
+    }
+  ]
+}

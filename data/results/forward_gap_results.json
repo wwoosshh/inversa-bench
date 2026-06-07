@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "n_models": 9,
+    "mean_gap": 0.031944444444444456,
+    "gap_ci_lo": 0.009722222222222224,
+    "gap_ci_hi": 0.05694444444444443,
+    "n_positive_gap": 8
+  },
+  "models": [
+    {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "acc_contaminated": 0.7875,
+      "acc_fresh": 0.675,
+      "gap": 0.11249999999999993
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "acc_contaminated": 0.9625,
+      "acc_fresh": 0.9125,
+      "gap": 0.050000000000000044
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "acc_contaminated": 0.9375,
+      "acc_fresh": 0.8875,
+      "gap": 0.050000000000000044
+    },
+    {
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "acc_contaminated": 0.9625,
+      "acc_fresh": 0.925,
+      "gap": 0.03749999999999998
+    },
+    {
+      "model": "qwen/qwen-2.5-7b-instruct",
+      "acc_contaminated": 0.9,
+      "acc_fresh": 0.875,
+      "gap": 0.025000000000000022
+    },
+    {
+      "model": "anthropic/claude-3.5-haiku",
+      "acc_contaminated": 0.9,
+      "acc_fresh": 0.8875,
+      "gap": 0.012500000000000067
+    },
+    {
+      "model": "anthropic/claude-opus-4.8",
+      "acc_contaminated": 0.9875,
+      "acc_fresh": 0.975,
+      "gap": 0.012500000000000067
+    },
+    {
+      "model": "mistralai/mistral-small-2603",
+      "acc_contaminated": 0.9125,
+      "acc_fresh": 0.9,
+      "gap": 0.012499999999999956
+    },
+    {
+      "model": "cohere/command-r-08-2024",
+      "acc_contaminated": 0.5125,
+      "acc_fresh": 0.5375,
+      "gap": -0.025000000000000022
+    }
+  ]
+}

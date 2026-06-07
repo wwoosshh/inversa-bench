@@ -143,8 +143,8 @@ equation in x whose unique real solution is exactly {g}  (where r is that soluti
 
 **예시.** 출력 `추론…\n#### x**3 - 27 = 0`, 타깃 `3`: 추출 → `x**3 - 27 = 0`; 풀이 → 근
 `{3, 복소, 복소}`; 실근 `{3}`; `valid=True, unique=True` → **인정**. 출력 `x**2 - 9 = 0`, 타깃 `3`:
-실근 `{3, -3}` → `unique=False` → **불인정**(−3도 답이므로). 전부 재현·검사 가능하며, 검증기는
-118개 단위테스트를 통과합니다.
+실근 `{3, -3}` → `unique=False` → **불인정**(−3도 답이므로). 전부 재현·검사 가능하며, 스위트는
+**163개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
 
 ### 2.4 점수: IGS
 
@@ -190,6 +190,23 @@ IGS는 **생성 전용**이며 forward 풀이는 포함하지 않습니다(포�
 부풀립니다. (정직하게 *한정*합니다: 효과는 실재하나 완만·불균등하며, forward 점수가 광범위하게
 "가짜"라고 주장하지 않습니다.)
 
+**직접 증거**(`data/results/forward_gap_results.json`; 격차 = GSM8K − GSM-Symbolic 정확도):
+
+| 모델 | GSM8K | GSM-Symbolic | 격차 |
+|---|---|---|---|
+| llama-3.1-8b-instruct | 78.8% | 67.5% | **+11.2%** |
+| gpt-4o-mini | 96.2% | 91.2% | +5.0% |
+| gemini-3.5-flash | 93.8% | 88.8% | +5.0% |
+| llama-3.3-70b-instruct | 96.2% | 92.5% | +3.7% |
+| qwen-2.5-7b-instruct | 90.0% | 87.5% | +2.5% |
+| claude-3.5-haiku | 90.0% | 88.8% | +1.3% |
+| claude-opus-4.8 | 98.8% | 97.5% | +1.3% |
+| mistral-small-2603 | 91.2% | 90.0% | +1.2% |
+| command-r-08-2024 | 51.2% | 53.8% | **−2.5%** |
+
+파일에서 독립 재계산: 평균 **+3.19%**, 9개 중 8개 양수, 95% 부트스트랩 CI **[+1.0, +5.7]**(20k, seed 0)
+— 저장된 `summary`와 일치. 부록 V 참조.
+
 ### 3.2 역과제엔 오염 격차가 없다 (H2)
 
 설계상 과제 B는 무작위 입력을 쓰므로 유출될 고정 문항이 없습니다. 경험적으로(E12b), **친숙/교과서**
@@ -197,6 +214,25 @@ source(∛2, 플라스틱수, 뉴턴의 `x³−2x−5`) vs **무작위** source�
 **평균 격차 +0.0%, 95% CI [−10.5%, +11.0%]**(N=7) — 체계적 친숙함 이득 없음. CI가 넓어(작은 표본)
 **구조적 논거가 주**이고 측정은 보강입니다. 핵심은 비대칭: **forward +3.2%(CI가 0 배제) vs inverse
 +0.0%(CI가 0 포함).**
+
+**직접 증거와 정직한 주의**(`data/results/inverse_gap_results.json`; 격차 = 친숙 − 무작위 source):
+
+| 모델 | 친숙 | 무작위 | 격차 |
+|---|---|---|---|
+| claude-3.5-haiku | 0.37 | 0.10 | **+26.7%** |
+| llama-3.3-70b-instruct | 0.77 | 0.67 | +10.0% |
+| claude-opus-4.8 | 1.00 | 1.00 | 0.0% |
+| gpt-4o-mini | 0.60 | 0.60 | 0.0% |
+| gemini-3.5-flash | 0.90 | 0.97 | −6.7% |
+| qwen-2.5-7b-instruct | 0.30 | 0.37 | −6.7% |
+| llama-3.1-8b-instruct | 0.07 | 0.30 | **−23.3%** |
+
+평균(+0.0%)은 **모델별 큰 반대 스윙(−23%…+27%)의 상쇄**이지 촘촘한 일치가 아닙니다: N=7×30문항이라
+모델별 비율이 노이즈가 큽니다. claude-3.5-haiku 이상치(+26.7%)는 정직하게 표기해야 하며, 노이즈가
+아니라면 그 모델의 친숙함 이득을 뜻합니다. 그래서 **구조적 논거**(과제 B는 출력을 무작위 시험시점
+입력에 고정 → 유출될 고정 문항이 없음)가 핵심 근거이고, E12b는 그 구조가 집단 수준에서 설계대로
+작동함을 *보강*할 뿐 촘촘한 귀무 CI로 읽으면 안 됩니다. 독립 재계산: 평균 **+0.00%**, CI **[−10.5,
++11.0]**(부록 V).
 
 ### 3.3 큰 전환: IGS는 *별개 능력이 아니라* 어려운 forward와 일치한다 (H3 기각, H6 지지)
 
@@ -217,6 +253,33 @@ source(∛2, 플라스틱수, 뉴턴의 `x³−2x−5`) vs **무작위** source�
 그러니 Inversa의 가치는 "forward는 죽었다"가 아니라, 같은 순위를 **오염 불가·자동 생성**으로 얻는
 경로라는 데 있습니다.
 
+**직접 증거**(`data/results/e10_results.json`; AIME = `scripts/run_e10.py`가 `data/banks/aime_set.json`
+의 60문항(AIME 2024+2025)을 풀게 해 정수 정확채점):
+
+| 모델 | IGS | AIME |
+|---|---|---|
+| claude-opus-4.8 | 1.00 | 100% |
+| gemini-3.1-flash-lite | 1.00 | 50% |
+| claude-haiku-4.5 | 0.88 | 50% |
+| llama-4-scout | 0.87 | 30% |
+| gemini-3.5-flash | 0.80 | 27% |
+| **gpt-4o-mini** | **0.73** | **3%** |
+| mistral-large | 0.72 | 23% |
+| llama-3.3-70b-instruct | 0.63 | 17% |
+| mistral-small-2603 | 0.50 | 10% |
+| claude-3.5-haiku | 0.50 | 7% |
+| qwen-2.5-7b-instruct | 0.18 | 3% |
+| command-r-08-2024 | 0.10 | 0% |
+| llama-3.1-8b-instruct | 0.07 | 0% |
+
+**ρ = +0.93의 정직한 해석.** 이 상관은 **범위에 지배**됩니다 — 아주 약한 모델(양축 ≈0)과 프런티어
+(양축 ≈1)가 고정점이라 +0.93은 변별 구간(중간)의 일치를 *과대*합니다. 두 사실이 헤드라인을 누릅니다:
+(i) **CI 하한이 +0.65**(N=13, 상한은 percentile 부트스트랩상 1.0에 고정) — 방어 가능한 주장은
+"중강도"이지 "거의 동일"이 아님; (ii) 실제 **부분 괴리** 존재 — gpt-4o-mini는 구성은 잘하나(IGS 0.73)
+AIME는 거의 못 풂(3%)으로 IGS 순위가 AIME보다 ~5계단 높음. 따라서 H3는 *강한* 형태(완전 직교)에서만
+기각되며, 구성과 풀이는 *상관하나 동일하지 않고*, 그 잔차 자체가 정보입니다. 독립 재계산 Spearman =
+**+0.9253**(부록 V).
+
 ### 3.4 난이도는 스스로 확장된다: 상단 천장 돌파 (H7)
 
 쉬운 transform 은행에선 상단이 **포화** — 세 모델이 IGS 1.0으로 묶여 최상단을 못 잽니다(자가 너무
@@ -232,7 +295,9 @@ source(∛2, 플라스틱수, 뉴턴의 `x³−2x−5`) vs **무작위** source�
 최강(opus-4.8)이 **88%**에서 멈추고, 전 구간 **12%–88%**로 퍼집니다. hard transform으로 IGS를
 재계산하면(E10-redux, N=11) E10이 지적한 **최상단 해상도 문제가 해소**됩니다: 만점 동률 모델 수가
 2 → **1**로 줄어(AIME와 동일), 구별값은 **더 많고**(10 vs AIME 9), 순위 일치 유지(**+0.89**
-[+0.47, +0.99]). 재정렬은 균일하지 않고 유의미합니다: 단순 치환은 되나 소거는 못 하는 모델이
+[+0.47, +0.99]). (이 redux 수치는 파일로 저장돼 있지 않지만 커밋된 `transform_hard_results.json` +
+`e10_results.json`에서 `python scripts/e10_redux.py`로 결정적으로 재계산되며 — API 불필요 — 정확히
+일치함을 확인함; 부록 V.) 재정렬은 균일하지 않고 유의미합니다: 단순 치환은 되나 소거는 못 하는 모델이
 붕괴(llama-3.3-70b 77% → 6%) → hard 은행이 *더 깊은* 구성 능력을 잽니다.
 
 따라서 구성 축은 포화 위로 **실제 헤드룸**을 가지며, 프로그램으로·검증 가능 한계 안에서 도달
@@ -240,21 +305,29 @@ source(∛2, 플라스틱수, 뉴턴의 `x³−2x−5`) vs **무작위** source�
 **못 했습니다** — qwen3.7-plus(느린 추론 모델)가 hard 은행에서 타임아웃. 이는 방법이 아니라 인프라
 한계입니다.
 
-### 3.5 엔진 집계 리더보드 (N=72)
+### 3.5 엔진 집계 리더보드 (N=59, 정밀 30문항 은행)
 
 벤치마크 엔진(`cli_bench`)을 OpenRouter 라이브 카탈로그에서 추린 티어 균형 로스터(텍스트 346개
-→ 진지한 후보 197개 → 시도 102개)에 돌렸다. 이 중 **19개 패밀리 72개 모델**이 완주(IGS **0.03 →
-1.00**); 나머지 ~30개는 계정 미접근(provider 비호환 — non-serverless / 404 / 엔드포인트 미지원 —
-또는 추론모델 타임아웃)으로 측정 불가.
+→ 진지한 후보 197개 → 시도 102개)에 돌리되, 각 모델을 **30문항 pose + 30문항 transform** 은행으로
+**temperature 0**(결정적 채점; reasoning 토큰 예산 4000으로 비용 상한)에서 측정했다. 이 정밀 은행은
+기존의 거친 6문항 "표준" pose 은행을 대체한다: pose validity가 1/6이 아니라 **1/30 단위**로 분해되어,
+하드 은행 tiebreak 없이도 pose 축 자체에서 모델이 분리된다.
 
-![IGS 리더보드](figures/fig_leaderboard.png)
+![IGS 리더보드 (30문항 은행, N=59; amber * = truncation·저신뢰)](figures/fig_leaderboard.png)
 
-5개 모델이 표준 은행 천장(IGS 1.0: gpt-5.2, gemini-3.1-flash-lite, deepseek-v4-pro, qwen3.7-plus,
-grok-build-0.1)에서 동률이며, 사용자가 택한 "표준 + 하드 tiebreak" 방식대로 §3.4의 더 어려운
-다항/brutal 변환으로 분리한다(예: gemini-3.1-flash-lite는 brutal 은행에서 0.79로 하락). 약한 오픈
-모델(llama-3.1-8b 0.05, claude-3-haiku 0.03)이 하단을 고정한다. 전체 순위:
-`data/results/leaderboard_merged.json`. 이는 — 우리가 아는 한 — 최초의 대규모 교차패밀리 **구성
-기반** 리더보드이며, 오염에 면역이고 엔진 재실행으로 재현 가능하다.
+**7개 패밀리 59개 모델이 완주(IGS 0.18 → 1.00).** 3개 모델이 천장(IGS 1.0: gpt-5-mini, gpt-5,
+qwen3-max)에서 동률 — 거친 은행의 5중 동률보다 훨씬 좁아져 정밀 은행의 높은 해상도를 확인한다.
+강한 모델은 transform validity가 1.0 부근에서 포화되는 반면 pose validity는 0.23 → 1.00으로 퍼지므로,
+변별은 pose 축이 담당한다. 약한 오픈 모델(qwen3-8b 0.18, claude-3-haiku 0.22)이 하단을 고정한다.
+
+**범위와 신뢰도(정직).** 이것은 단일 패스(반복 1회, temperature 0)다. 패스 도중 계정 크레딧이
+소진되었고, 엔진은 계정 차원 오류를 감지해 즉시 중단하고 캐시를 보존하므로 **디스크에서 재개 가능**하다
+— 다만 102개 중 나머지 43개는 미측정으로 남았다: 후순위 로스터 패밀리(meta-llama, x-ai, minimax,
+moonshot, cohere, amazon, nvidia, …)가 잘렸고, 통상의 provider 비호환(non-serverless / 404 /
+엔드포인트 미지원)분도 포함된다. 추론·대형 모델 10개는 최종 식을 내기 전에 잘려(그 pose 점수는
+신뢰도 낮음 — 예: glm-5는 60문항 중 27문항만 측정) 대시보드에 표시된다. 전체 순위·범위 회계:
+`data/results/igs_dashboard.html` 및 `igs_leaderboard_30.json`. 로스터 완주는 같은 `--cache`로
+크레딧만 충전하면 되는 재실행이다(이미 측정된 모델은 건너뛰므로 미측정분만 과금된다).
 
 ---
 
@@ -301,8 +374,33 @@ grok-build-0.1)에서 동률이며, 사용자가 택한 "표준 + 하드 tiebrea
 핵심: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. 실험:
 `scripts/run_forward_gap.py`(E12), `run_inverse_gap.py`(E12b), `run_e10.py`+`e10_redux.py`(E10),
 `run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8). 그림: `scripts/make_figures.py`.
-모든 점수는 sympy 검증; 118개 단위테스트가 검증기·채점을 커버. 결과 JSON은 `data/results/`,
-은행은 `data/banks/`.
+모든 점수는 sympy 검증; **163개 단위테스트**가 검증기·채점·추출·엔진을 커버(`python -m pytest -q`).
+결과 JSON은 `data/results/`, 은행은 `data/banks/`.
+
+---
+
+## 부록 V — 검증과 재현 (모든 헤드라인 수치 → 출처 → 재계산 방법)
+
+이 논문의 모든 정량 주장은 커밋된 결과 파일에서 **독립적으로 재계산**(저장된 `summary`를 그대로 읽은 게
+아님)했으며, 브랜치 `scoring-validity` 기준으로 보고값과 명시 정밀도까지 일치한다. 아래 표로 독자는 *이
+문서만으로* 각 주장을 검증할 수 있다: 출처 파일, 저장값, 독립 재계산값, 재생성 명령.
+
+| 주장(§) | 출처 파일(`data/results/`) | 저장값 | 독립 재계산 | 재현 |
+|---|---|---|---|---|
+| forward 격차 **+3.2% [+1.0,+5.7]**, N=9, 8/9 양수 (§3.1) | `forward_gap_results.json` | mean 0.0319; CI [0.0097,0.0569]; 양수 8 | 평균 **+3.19%**, 8/9, CI **[+1.0,+5.7]**(20k, seed 0) | `run_forward_gap.py`; `models[]`의 평균(c−f) |
+| inverse 격차 **+0.0% [−10.5,+11.0]**, N=7 (§3.2) | `inverse_gap_results.json` | mean ≈0; CI [−0.105,+0.110] | 평균 **+0.00%**; 모델별 **−23%…+27%** | `run_inverse_gap.py` |
+| IGS↔AIME **ρ=+0.93 [+0.65,+1.0]**, N=13 (§3.3) | `e10_results.json` | 0.9253; CI [0.652,1.0]; n 13 | Spearman **+0.9253** | `run_e10.py`; AIME=`aime_set.json`(60문항) |
+| E10-redux **+0.89 [+0.47,+0.99]**, N=11; 동률 2→1; 레벨 10 vs 9 (§3.4) | *(미저장)* `transform_hard_results.json`+`e10_results.json` | — | **+0.89**, 동률 **2→1**, 구별 **10 vs 9** | `scripts/e10_redux.py`(API 불필요) |
+| E8 brutal: opus **88%**, **12–88%**, 100% 없음 (§3.4) | `transform_brutal_results.json` | opus 0.875; max 0.875; min 0.125 | opus **87.5%**, **12.5–87.5%** | 모델별 `hard_transform_validity`(7개) |
+| E8 hard: llama-3.3-70b **77%→6%** (§3.4) | `transform_hard_results.json`+`paper_level3_all.json` | easy 0.77 → hard 0.056 | **77% → 5.6%** | 모델별 필드 |
+| 리더보드 **N=59, 7패밀리, IGS 0.18–1.0** (§3.5) | `igs_leaderboard_30.json`; `igs_dashboard_summary.json` | n_models 59; igs_min 0.183 | **59/102, 7패밀리** | `cli_bench …`; `build_dashboard.py` |
+| 검증기 건전성 | `tests/` | — | **163개 통과** | `python -m pytest -q` |
+
+**수치와 함께 읽어야 할 범위 주의:** (i) §3.3의 ρ는 *범위 지배* — 극단(약함·프런티어)에 고정됨. 방어값은
+CI 하한(**+0.65**; redux **+0.47**), gpt-4o-mini(IGS 0.73 / AIME 3%)는 실제 부분 괴리. (ii) §3.2의
+inverse 격차 평균은 ±25% 모델별 스윙의 *상쇄*(N=7×30문항)이므로 **구조적 논거**가 주이지 귀무 CI가 아님.
+(iii) §3.4의 천장 돌파와 §3.5의 리더보드는 부분 커버리지(brutal 7개·qwen3.7-plus 타임아웃; 59개 리더보드는
+크레딧 제한 단일 패스, truncation 10개 저신뢰 표기). 모든 단서는 §4.2.
 
 **참고문헌.** GSM-Symbolic — Mirzadeh 외, Apple, ICLR 2025 (arXiv:2410.05229). GSM1k — Zhang 외,
 Scale AI, 2024 (arXiv:2405.00332). 재구성 오염 — arXiv:2311.04850.
