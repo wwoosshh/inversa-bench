@@ -416,6 +416,32 @@ Williams's test applies a Pearson approximation to Spearman ρ. Source/reproduce
 `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` →
 `data/results/discriminant_results.json`.
 
+### 3.7 What IGS measures (the construct)
+
+Reading the mechanism back out: IGS gives the model a *goal* (a target answer, or a transform of a
+random root) and asks it to **build an equation that provably and uniquely meets that goal**, which a
+sympy oracle then checks. To score, the model must (i) **synthesize structure backward from the goal**
+(generative/inverse reasoning, not forward search), (ii) **forward-solve its own construction** to know
+it hits the target, (iii) **reason about the whole real-solution set** to guarantee *uniqueness* (not
+just "a root exists"), and (iv) be **exactly** right (machine-checked — no credit for confident-but-wrong).
+So the construct is **goal-directed *constructive* formal reasoning with self-verification under an exact
+specification** — not calculation (the oracle does arithmetic), not recall (transform is recall-proof,
+`--pose-random` makes pose so too), and — per §3.6 — math-specific, not general capability.
+
+Because step (ii) requires the ability to solve, IGS **subsumes forward solving** and shares most of its
+variance with it (hence E10's ρ=0.93); its distinctive part is the **construction / self-verification
+residual** on top:
+
+> **IGS ≈ (forward-solving ability) + (construction & self-verification residual).**
+
+Two caveats sharpen this. First, the construct is **mode-dependent**: permissive pose lets a model pass by
+*restating* the answer (`x = target`), which needs no solving at all — so permissive IGS is muddied (it is
+why gpt-4o-mini reaches IGS 0.73 yet only 3% on AIME); the strict mode (`--pose-no-trivial`, §2.1) removes
+this and isolates genuine construction. Second, construction and solving are **entangled** by the
+uniqueness check, so IGS cannot fully separate them — *how independently the construction residual matters*
+is precisely the open question a **predictive-validity** test must answer (§4.3; design in
+`docs/specs/2026-06-08-e14-predictive-validity.md`).
+
 ---
 
 ## Part 4 — 結 / Conclusion
@@ -450,8 +476,11 @@ Williams's test applies a Pearson approximation to Spearman ρ. Source/reproduce
 
 - **E4 — generality:** replicate beyond algebra (number theory, systems, proofs) to show the construct
   is not algebra-specific.
-- **E5 — predictive validity:** show IGS predicts an external outcome (held-out hard set, expert
-  ratings).
+- **E5/E14 — predictive (incremental) validity:** show IGS predicts a construction/self-verification
+  outcome **beyond forward solving** — partial ρ(IGS, Y | AIME) > 0 for a held-out constrained-construction
+  task (Y1) and an error-detection task (Y2). This turns the §3.7 construction residual from a correlation
+  into predictive power; full ecological validity (real downstream use / expert ratings) is a further step.
+  Pre-registered design: `docs/specs/2026-06-08-e14-predictive-validity.md`.
 - **E2 — reliability:** test-retest stability and inter-task consistency.
 - **Larger N** to tighten all CIs; separate the very top with one more difficulty rung.
 
