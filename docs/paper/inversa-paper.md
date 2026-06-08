@@ -176,7 +176,7 @@ A worked example. Model output `Reasoning…\n#### x**3 - 27 = 0`, target `3`: e
 `x**3 - 27 = 0`; solve → roots `{3, complex, complex}`; real roots `{3}`; `valid = True`,
 `unique = True` → **counts**. Output `x**2 - 9 = 0`, target `3`: real roots `{3, -3}` →
 `unique = False` → **does not count** (it also solves to −3). Everything is reproducible and
-inspectable; the suite has **198 passing unit tests** (verifier, scoring, extraction, and the
+inspectable; the suite has **213 passing unit tests** (verifier, scoring, extraction, and the
 benchmark engine) — run `python -m pytest -q`.
 
 ### 2.4 The score: IGS
@@ -547,7 +547,7 @@ Core: `tasks/structural.py`, `verifiers/math_equation.py`, `scoring.py`. Experim
 `run_predictive.py` (E14), `build_irt.py` (Rasch θ), `build_dashboard.py`. Figures: `scripts/make_figures.py`.
 Engine flags for the validity hardenings: `--pose-random` (contamination-immune pose, §2.1),
 `--pose-no-trivial` (anti-gaming, §2.1), `--truncation-missing` (§4.2), `--cache` (resume). All scores
-are sympy-verified; **198 passing unit tests** cover the verifier, scoring, extraction, and the
+are sympy-verified; **213 passing unit tests** cover the verifier, scoring, extraction, and the
 benchmark engine (`python -m pytest -q`). Result JSONs are under `data/results/`; banks under `data/banks/`.
 
 ---
@@ -572,7 +572,7 @@ command to regenerate it.
 | Discriminant validity (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,logic)=.66, Williams t=3.49 p<.05, partial=.88 | `discriminant_results.json` (control `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; nonmath range 0.50 | re-derived: gap +0.27, partial +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
 | Interval (Rasch) scaling (§2.4): θ monotone in IGS, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | re-derived from the run cache, no API | `python scripts/build_irt.py` |
 | Predictive validity (E14, §3.8): partial ρ(IGS,Y\|AIME) ≤ 0 → **rejected** (no incremental prediction) | `predictive_results.json` | Y1 partial −0.20, Y2 partial −0.42 | re-derived: partials, gaps, spread guard | `python scripts/run_predictive.py` |
-| Verifier soundness | `tests/` | — | **198 tests pass** | `python -m pytest -q` |
+| Verifier soundness | `tests/` | — | **213 tests pass** | `python -m pytest -q` |
 
 **Scope notes carried by the data (read with the numbers):** (i) §3.3's ρ is *range-dominated* — anchored
 by very-weak and frontier models; the defensible figure is the CI lower bound (**+0.65**; redux **+0.47**),

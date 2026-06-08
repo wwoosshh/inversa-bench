@@ -162,7 +162,7 @@ equation in x whose unique real solution is exactly {g}  (where r is that soluti
 **예시.** 출력 `추론…\n#### x**3 - 27 = 0`, 타깃 `3`: 추출 → `x**3 - 27 = 0`; 풀이 → 근
 `{3, 복소, 복소}`; 실근 `{3}`; `valid=True, unique=True` → **인정**. 출력 `x**2 - 9 = 0`, 타깃 `3`:
 실근 `{3, -3}` → `unique=False` → **불인정**(−3도 답이므로). 전부 재현·검사 가능하며, 스위트는
-**198개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
+**213개 단위테스트**(검증기·채점·추출·엔진)를 통과합니다 — `python -m pytest -q`.
 
 ### 2.4 점수: IGS
 
@@ -485,7 +485,7 @@ yes/no로 라벨). 각각 *AIME를 통제한 뒤* IGS가 그 결과를 예측하
 `run_transform_hard.py`+`gen_transform_{hard,brutal}_bank.py`(E8), `run_discriminant.py`(E13),
 `run_predictive.py`(E14), `build_irt.py`(Rasch θ), `build_dashboard.py`. 그림: `scripts/make_figures.py`.
 타당도 강화 엔진 플래그: `--pose-random`(오염 면역 pose, §2.1)·`--pose-no-trivial`(자명형 차단, §2.1)·
-`--truncation-missing`(§4.2)·`--cache`(resume). 모든 점수는 sympy 검증; **198개 단위테스트**가 검증기·
+`--truncation-missing`(§4.2)·`--cache`(resume). 모든 점수는 sympy 검증; **213개 단위테스트**가 검증기·
 채점·추출·엔진을 커버(`python -m pytest -q`). 결과 JSON은 `data/results/`, 은행은 `data/banks/`.
 
 ---
@@ -508,7 +508,7 @@ yes/no로 라벨). 각각 *AIME를 통제한 뒤* IGS가 그 결과를 예측하
 | 판별타당도 (E13, §3.6): ρ(IGS,AIME)=.93 ≫ ρ(IGS,논리)=.66, Williams t=3.49 p<.05, 편상관=.88 | `discriminant_results.json` (통제 `data/banks/nonmath_logic.json`) | strong_supported=true; williams_t 3.487; 비수학 range 0.50 | 재도출: gap +0.27, 편상관 +0.88, Williams t=3.49 | `python scripts/run_discriminant.py --bank data/banks/nonmath_logic.json` |
 | 구간(Rasch) 척도화 (§2.4): θ는 IGS의 단조 재척도, θ-vs-IGS Spearman +1.00 (N=46) | `igs_irt.json` | n_models 46, n_items 60 | 실행 캐시에서 재도출, API 불필요 | `python scripts/build_irt.py` |
 | 예측타당도 (E14, §3.8): 편상관 ρ(IGS,Y\|AIME) ≤ 0 → **기각**(증분 예측 없음) | `predictive_results.json` | Y1 편상관 −0.20, Y2 −0.42 | 재도출: 편상관·gap·포화가드 | `python scripts/run_predictive.py` |
-| 검증기 건전성 | `tests/` | — | **198개 통과** | `python -m pytest -q` |
+| 검증기 건전성 | `tests/` | — | **213개 통과** | `python -m pytest -q` |
 
 **수치와 함께 읽어야 할 범위 주의:** (i) §3.3의 ρ는 *범위 지배* — 극단(약함·프런티어)에 고정됨. 방어값은
 CI 하한(**+0.65**; redux **+0.47**), gpt-4o-mini(IGS 0.73 / AIME 3%)는 실제 부분 괴리. (ii) §3.2의
