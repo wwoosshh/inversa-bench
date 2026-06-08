@@ -7,6 +7,7 @@ import os
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from adjustText import adjust_text
 
 OUT = "docs/paper/figures"
 os.makedirs(OUT, exist_ok=True)
@@ -42,8 +43,11 @@ pts = [(r["igs"], r["aime"], short(r["model"])) for r in e["models"] if r["igs"]
 rho = e["analysis"]["spearman_igs_aime"]
 fig, ax = plt.subplots(figsize=(6.4, 5.4))
 ax.scatter([p[0] for p in pts], [p[1] * 100 for p in pts], color="#2563eb", zorder=3)
-for x, yy, n in pts:
-    ax.annotate(n, (x, yy * 100), fontsize=6.5, xytext=(3, 3), textcoords="offset points")
+# repel labels so close points (e.g. claude-haiku-4.5 / gemini-3.1-flash-lite) don't overlap;
+# thin grey leader lines connect each label to its point
+_texts = [ax.text(x, yy * 100, n, fontsize=6.5) for x, yy, n in pts]
+adjust_text(_texts, ax=ax, expand=(1.4, 1.8), force_text=(0.4, 0.6),
+            arrowprops=dict(arrowstyle="-", color="#9ca3af", lw=0.5))
 ax.set_xlabel("IGS (Inversa Generative Score)"); ax.set_ylabel("AIME accuracy (%)")
 ax.set_title(f"E10: IGS vs a hard forward benchmark (AIME)\nSpearman = +{rho:.2f} [{e['analysis']['ci'][0]:+.2f}, {e['analysis']['ci'][1]:+.2f}]  (N={e['analysis']['n']})")
 ax.grid(alpha=0.3)

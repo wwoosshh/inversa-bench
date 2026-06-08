@@ -19,7 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
-paper = ["pypandoc-binary>=1.13", "typst>=0.11"]  # PDF build: pandoc(md->typst) + typst(->pdf)
+paper = ["pypandoc-binary>=1.13", "typst>=0.11", "matplotlib>=3.7", "adjustText>=1.0"]  # PDF build
 
 [tool.setuptools.packages.find]
 where = ["src"]
