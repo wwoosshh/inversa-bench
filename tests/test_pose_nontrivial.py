@@ -58,3 +58,10 @@ def test_runner_strict_mode_accepts_real_construction():
     ad = FakeAdapter(["#### x**3 - 27 = 0"])
     it = run_struct_pose_item(ad, "3", 3.0, "integer", require_nontrivial=True)
     assert it.valid
+
+
+def test_oversized_equation_is_rejected_not_parsed():
+    # adversarial model output: an enormous string should be refused before sympy parses it
+    huge = "x" + "+1" * 5000 + " = 0"
+    r = verify_equation(huge, 0.0)
+    assert r.well_formed is False and "too long" in (r.error or "")

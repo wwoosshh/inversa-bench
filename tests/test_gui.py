@@ -66,6 +66,18 @@ def test_run_registry_records_error():
     assert "kaboom" in reg.state(rid)["error"]
 
 
+def test_is_local_request_allows_localhost_and_blocks_csrf_and_rebinding():
+    f = gui.is_local_request
+    # same-origin / no Origin from 127.0.0.1 or localhost -> allowed
+    assert f("127.0.0.1:8000", None) is True
+    assert f("localhost:8000", "http://127.0.0.1:8000") is True
+    assert f("127.0.0.1:8000", "http://localhost:8000") is True
+    # DNS-rebinding: a foreign Host that resolves to 127.0.0.1 -> blocked
+    assert f("evil.example.com:8000", None) is False
+    # CSRF: a real site POSTing cross-origin carries a foreign Origin -> blocked
+    assert f("127.0.0.1:8000", "https://evil.example.com") is False
+
+
 def test_load_roster_is_a_list():
     r = gui.load_roster()
     assert isinstance(r, list)

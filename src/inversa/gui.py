@@ -42,6 +42,27 @@ def load_roster() -> list:
         return []
 
 
+def is_local_request(host: Optional[str], origin: Optional[str]) -> bool:
+    """Defend the localhost server from DNS-rebinding and cross-site POSTs (which could trigger a
+    paid run with the user's key). The `Host` must be loopback (rebinding sends a foreign host that
+    resolves to 127.0.0.1), and any `Origin` (sent on cross-origin requests) must also be loopback."""
+    def _loop(h: Optional[str]) -> bool:
+        if not h:
+            return False
+        h = h.strip().lower()
+        if h.startswith("["):                 # IPv6 literal e.g. [::1]:8000
+            h = h[1:].split("]")[0]
+        else:
+            h = h.split(":")[0]
+        return h in ("127.0.0.1", "localhost", "::1")
+    if not _loop(host):
+        return False
+    if origin:
+        from urllib.parse import urlparse
+        return _loop(urlparse(origin).hostname or "")
+    return True
+
+
 def safe_result_path(rel: str) -> Optional[Path]:
     """Resolve `rel` strictly inside data/results (None on traversal/absolute escape) so the
     /file endpoint cannot serve arbitrary files."""
@@ -279,6 +300,7 @@ a:hover{border-color:var(--accent)}
 
 <script>
 let ROSTER=[], SEL=new Set(), RID=null, POLL=null;
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function init(){
   const cfg=await (await fetch('/config')).json();
   document.getElementById('keybanner').innerHTML = cfg.key_present
@@ -297,7 +319,8 @@ function renderModels(){
     if(fm!==fam){fam=fm; const h=document.createElement('div'); h.className='fam'; h.textContent=fm; box.appendChild(h);}
     const id='cb_'+m;
     const l=document.createElement('label'); l.className='m';
-    l.innerHTML='<input type="checkbox" '+(SEL.has(m)?'checked':'')+' onchange="toggle(\\''+m+'\\',this.checked)"> '+m;
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=SEL.has(m);
+    cb.onchange=()=>toggle(m,cb.checked); l.appendChild(cb); l.appendChild(document.createTextNode(' '+m));
     box.appendChild(l);
   });
   document.getElementById('selcount').textContent=SEL.size+' selected';
@@ -341,12 +364,12 @@ async function poll(){
     clearInterval(POLL); document.getElementById('runbtn').disabled=false;
     document.getElementById('runcard').classList.remove('live');
     document.getElementById('stopbtn').style.display='none';
-    if(s.status==='error'){document.getElementById('resultbox').innerHTML='<div class="banner warn">Error: '+s.error+'</div>';}
+    if(s.status==='error'){document.getElementById('resultbox').innerHTML='<div class="banner warn">Error: '+esc(s.error)+'</div>';}
     else renderResult(s.result); loadPast();
   }
 }
 function renderResult(res){
-  const rows=(res.results||[]).map(r=>'<tr><td>'+r.rank+'</td><td>'+r.model+'</td><td class=c>'+r.igs.toFixed(2)
+  const rows=(res.results||[]).map(r=>'<tr><td>'+r.rank+'</td><td>'+esc(r.model)+'</td><td class=c>'+r.igs.toFixed(2)
     +'</td><td class=c>'+r.pose_validity.toFixed(2)+'</td><td class=c>'+r.transform_validity.toFixed(2)
     +'</td><td class=c>'+r.reps_done+'</td></tr>').join('');
   document.getElementById('resultbox').innerHTML=
@@ -358,7 +381,7 @@ async function stop(){if(RID)await fetch('/stop?id='+RID,{method:'POST'});}
 async function loadPast(){
   const r=await (await fetch('/results')).json();
   document.getElementById('pastresults').innerHTML=r.length
-    ? r.map(f=>'<div><a href="/file?path='+encodeURIComponent(f.path)+'" target="_blank">'+f.name+'</a></div>').join('')
+    ? r.map(f=>'<div><a href="/file?path='+encodeURIComponent(f.path)+'" target="_blank">'+esc(f.name)+'</a></div>').join('')
     : '<span class="muted">none yet</span>';
 }
 init();
@@ -403,6 +426,8 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         u = urlparse(self.path)
+        if not is_local_request(self.headers.get("Host"), self.headers.get("Origin")):
+            return self._send(403, json.dumps({"error": "forbidden: non-local origin/host"}))
         if u.path == "/run":
             n = int(self.headers.get("Content-Length", 0))
             params = json.loads(self.rfile.read(n) or b"{}")

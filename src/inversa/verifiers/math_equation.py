@@ -169,6 +169,11 @@ def parse_sides(equation_str: str):
     namespace. Raises ValueError if the string is not a single well-formed
     equation (wrong count of '=', inequality operators, or parse failure)."""
     s = (equation_str or "").strip()
+    # Bound untrusted model output before it reaches sympy's eval-based parser: a giant expression
+    # can exhaust memory/CPU. parse_expr with __builtins__ stripped blocks code execution, but it is
+    # NOT a formal sandbox — size + the solve timeout are the resource guards.
+    if len(s) > 2000:
+        raise ValueError("equation too long (>2000 chars) — refused")
     if s.count("=") != 1 or any(op in s for op in ("!=", "<=", ">=", "<", ">")):
         raise ValueError("equation must contain exactly one '='")
     lhs_str, rhs_str = s.split("=")
