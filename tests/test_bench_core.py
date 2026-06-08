@@ -295,3 +295,12 @@ def test_discrimination_matrix_skips_models_with_incomplete_cache():
     _fill(cache, "b", "pose", items[:1], [True])  # b missing item 1 -> excluded
 
     assert discrimination_matrix(cache, ["a", "b"], "pose", items) == [[True, True]]
+
+
+def test_result_cache_counts_hits_and_misses():
+    # the GUI reports cache hits vs fresh calls; ResultCache must tally get() outcomes
+    c = ResultCache({"a": {"valid": True}})
+    assert c.get("a") == {"valid": True}   # hit
+    assert c.get("nope") is None           # miss
+    assert c.get("a") is not None          # hit
+    assert (c.hits, c.misses) == (2, 1)

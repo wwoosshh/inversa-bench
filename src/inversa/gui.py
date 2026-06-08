@@ -260,7 +260,15 @@ a:hover{border-color:var(--accent)}
   <label>Extra models — comma-separated, any OpenRouter id</label>
   <textarea id="extra" rows="2" placeholder="openai/gpt-4o-mini, anthropic/claude-haiku-4.5, …"></textarea>
 
-  <div id="keyfield" style="display:none"><label><span class="step">02</span>OpenRouter API key
+  <label><span class="step">02</span>Difficulty
+    <span class="muted">— transform axis; higher breaks the saturation ceiling (E8)</span></label>
+  <select id="difficulty">
+    <option value="easy">Easy — Möbius (most models saturate near 1.0)</option>
+    <option value="hard">Hard — r², r³ transforms</option>
+    <option value="brutal">Brutal — r⁴, composite (breaks the top; opus ≈ 0.88)</option>
+  </select>
+
+  <div id="keyfield" style="display:none"><label><span class="step">03</span>OpenRouter API key
     <span class="muted">— used only for this run</span></label>
     <input type="password" id="apikey" placeholder="sk-or-…"></div>
 
@@ -282,6 +290,7 @@ a:hover{border-color:var(--accent)}
     <label class="chk"><input type="checkbox" id="adaptive" checked> adaptive repeats (only ambiguous ranks)</label>
     <label class="chk"><input type="checkbox" id="notrivial"> reject trivial pose (anti-gaming)</label>
     <label class="chk"><input type="checkbox" id="truncmiss"> treat truncation as missing (don't deflate reasoning models)</label>
+    <label class="chk"><input type="checkbox" id="ignorecache"> ignore cache (force fresh API calls — otherwise an already-measured run returns instantly)</label>
   </details>
 
   <div style="margin-top:1.1rem"><button id="runbtn" onclick="run()">Run benchmark &#8594;</button>
@@ -337,7 +346,10 @@ async function run(){
   if(!ms.length){alert('Pick at least one model.');return;}
   if(!confirm(ms.length+' models × ~60 items — this makes real, paid API calls. Continue?'))return;
   const pm=document.getElementById('posemode').value;
-  const params={models:ms,
+  const diff=document.getElementById('difficulty').value;
+  const DIFF_BANK={easy:'data/banks/transform_bank.json',hard:'data/banks/transform_hard.json',brutal:'data/banks/transform_brutal.json'};
+  const params={models:ms, difficulty:diff, transform_bank:DIFF_BANK[diff],
+    cache: document.getElementById('ignorecache').checked ? '' : 'data/results/igs_cache.json',
     api_key:document.getElementById('apikey')?document.getElementById('apikey').value||null:null,
     repeats:+document.getElementById('repeats').value, adaptive:document.getElementById('adaptive').checked,
     max_workers:+document.getElementById('workers').value, max_tokens:+document.getElementById('maxtok').value,
@@ -372,8 +384,14 @@ function renderResult(res){
   const rows=(res.results||[]).map(r=>'<tr><td>'+r.rank+'</td><td>'+esc(r.model)+'</td><td class=c>'+r.igs.toFixed(2)
     +'</td><td class=c>'+r.pose_validity.toFixed(2)+'</td><td class=c>'+r.transform_validity.toFixed(2)
     +'</td><td class=c>'+r.reps_done+'</td></tr>').join('');
+  const diff=(res.meta&&res.meta.difficulty)||'?';
+  const cs=res.cache_stats||{fresh:0,hits:0};
+  const note = cs.fresh===0 && cs.hits>0
+    ? ' <b style="color:#f5b342">(all cached — no new measurement; tick \\'ignore cache\\' or change difficulty)</b>' : '';
   document.getElementById('resultbox').innerHTML=
-    '<p><a href="/file?path=igs_gui.html" target="_blank">open leaderboard ↗</a> · '
+    '<p class="muted">difficulty: <b style="color:var(--accent)">'+esc(diff)+'</b> (transform axis) · '
+    +cs.fresh+' fresh API calls, '+cs.hits+' served from cache'+note+'</p>'
+    +'<p><a href="/file?path=igs_gui.html" target="_blank">open leaderboard ↗</a> · '
     +'<a href="/file?path=igs_gui.json" target="_blank">download JSON ↗</a></p>'
     +'<table><tr><th>#</th><th>model</th><th>IGS</th><th>pose</th><th>transform</th><th>reps</th></tr>'+rows+'</table>';
 }

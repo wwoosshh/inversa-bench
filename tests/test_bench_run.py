@@ -56,3 +56,17 @@ def test_external_abort_stops_the_run(tmp_path):
     out = run_leaderboard_job(_params(tmp_path), abort=ev,
                               adapter_factory=lambda m: FakeAdapter(["#### x - 1 = 0"]))
     assert out["results"] == []
+
+
+def test_job_records_difficulty_label_in_meta(tmp_path):
+    out = run_leaderboard_job(_params(tmp_path, difficulty="brutal"),
+                              adapter_factory=lambda m: FakeAdapter(["#### x - 1 = 0"]))
+    assert out["meta"]["difficulty"] == "brutal"
+
+
+def test_job_reports_cache_stats_on_resume(tmp_path):
+    p = _params(tmp_path, cache=str(tmp_path / "c.json"))
+    fac = lambda m: FakeAdapter(["#### x - 1 = 0"])  # noqa: E731
+    run_leaderboard_job(p, adapter_factory=fac)            # first run: all misses -> live calls
+    out = run_leaderboard_job(p, adapter_factory=fac)      # second run: all cache hits
+    assert out["cache_stats"]["hits"] > 0

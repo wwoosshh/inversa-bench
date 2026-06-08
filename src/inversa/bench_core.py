@@ -115,6 +115,8 @@ class ResultCache:
         # the engine writes the cache from many worker threads while another thread may persist
         # it mid-run; the lock keeps put/save from racing (e.g. dict-changed-during-iteration).
         self._lock = threading.Lock()
+        self.hits = 0    # cache lookups served from disk (no API call) — surfaced so the GUI can
+        self.misses = 0  # show "N fresh calls / M cached" instead of a confusingly instant run
 
     @classmethod
     def load(cls, path: str) -> "ResultCache":
@@ -124,7 +126,13 @@ class ResultCache:
         return cls({}, path=path)
 
     def get(self, key: str) -> Optional[Any]:
-        return self._data.get(key)
+        v = self._data.get(key)
+        with self._lock:
+            if v is None:
+                self.misses += 1
+            else:
+                self.hits += 1
+        return v
 
     def put(self, key: str, value: Any) -> None:
         with self._lock:

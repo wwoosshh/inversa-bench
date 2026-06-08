@@ -26,9 +26,32 @@ DEFAULTS: Dict[str, Any] = {
     "max_workers": 16, "repeats": 1, "adaptive": True,
     "pose_bank": "data/banks/struct_pose_targets.json", "pose_random": 0, "pose_seed": None,
     "pose_no_trivial": False, "transform_bank": "data/banks/transform_bank.json", "solve_bank": "",
-    "truncation_missing": False, "cache": "data/results/igs_cache.json",
+    "truncation_missing": False, "cache": "data/results/igs_cache.json", "difficulty": None,
     "out": "data/results/igs_benchmark.html", "json_out": "data/results/igs_benchmark.json",
 }
+
+# Transform-axis difficulty -> bank. Raising it is what breaks the IGS ceiling (E8: easy saturates,
+# brutal tops out at opus 88%). The GUI maps its selector to these; the CLI sets --transform-bank.
+DIFFICULTY_BANKS = {
+    "easy": "data/banks/transform_bank.json",       # Möbius
+    "hard": "data/banks/transform_hard.json",        # r^2, r^3
+    "brutal": "data/banks/transform_brutal.json",    # r^4, composite
+}
+
+
+def difficulty_label(transform_bank: str, given: Optional[str] = None) -> str:
+    """Human difficulty label for the meta/leaderboard: an explicit `given` wins; otherwise infer
+    from the transform bank filename (easy/hard/brutal), else 'custom'."""
+    if given:
+        return given
+    n = (transform_bank or "").lower()
+    if "brutal" in n:
+        return "brutal"
+    if "hard" in n:
+        return "hard"
+    if "transform_bank" in n:
+        return "easy"
+    return "custom"
 
 
 def _usage_dict(usage):
@@ -48,7 +71,7 @@ def _bar(p, color="#0d9488"):
             f'border-radius:3px"></div></div> <b>{p:.2f}</b>')
 
 
-def render_html(results, solve_ref) -> str:
+def render_html(results, solve_ref, difficulty: str = "easy") -> str:
     esc = html.escape
     rows = ""
     for i, r in enumerate(sorted(results, key=lambda x: -x["igs"]), 1):
@@ -63,7 +86,8 @@ def render_html(results, solve_ref) -> str:
             f"table{{border-collapse:collapse;width:100%}}th,td{{border-bottom:1px solid #ddd;padding:7px 10px;font-size:14px}}"
             f"th{{font-size:12px;color:#555;text-transform:uppercase}}</style>"
             f"<h1>{esc(BENCHMARK_NAME)}</h1>"
-            f"<p>Ranked by <b>IGS = mean(pose, transform)</b>. Solve is a saturation reference only.</p>"
+            f"<p>Ranked by <b>IGS = mean(pose, transform)</b> at <b>difficulty: {esc(difficulty)}</b> "
+            f"(transform axis). Solve is a saturation reference only.</p>"
             f"<table><tr><th>#</th><th>model</th><th>IGS</th><th>pose</th><th>transform</th>"
             f"<th>solve (ref)</th></tr>{rows}</table>")
 
@@ -162,8 +186,9 @@ def run_leaderboard_job(params: Dict[str, Any], on_log: Optional[Callable[[str],
         r["rank"] = i
         r["solve_ref"] = solve_ref.get(r["model"])
 
+    diff = difficulty_label(p["transform_bank"], p["difficulty"])
     meta = {"benchmark": BENCHMARK_NAME, "n_models": len(ranked), "pose_source": pose_source,
-            "pose_seed": pose_seed, "transform_bank": p["transform_bank"],
+            "pose_seed": pose_seed, "transform_bank": p["transform_bank"], "difficulty": diff,
             "pose_no_trivial": p["pose_no_trivial"], "truncation_missing": p["truncation_missing"],
             "repeats_max": max(1, p["repeats"]), "adaptive": p["adaptive"]}
     if p["pose_random"] and p["pose_random"] > 0:
@@ -171,7 +196,7 @@ def run_leaderboard_job(params: Dict[str, Any], on_log: Optional[Callable[[str],
     if p["json_out"]:
         json.dump({**meta, "results": ranked}, open(p["json_out"], "w", encoding="utf-8"), indent=2)
     if p["out"]:
-        open(p["out"], "w", encoding="utf-8").write(render_html(ranked, solve_ref))
+        open(p["out"], "w", encoding="utf-8").write(render_html(ranked, solve_ref, diff))
 
     usages = [r["usage"] for r in ranked if r.get("usage")]
     token_total = {"completion": sum(u["completion_tokens"] for u in usages),
@@ -187,6 +212,12 @@ def run_leaderboard_job(params: Dict[str, Any], on_log: Optional[Callable[[str],
         if token_total["truncated_models"]:
             log(f"[WARN] truncated (raise max-tokens or use truncation-missing): "
                 f"{token_total['truncated_models']}")
-    log(f"wrote {p['out']} and {p['json_out']} ({len(ranked)} models)")
+    # fresh = actual live calls (progress["n"], counted whether or not a cache exists); hits come
+    # from the cache. With cache disabled, hits=0 but fresh still reflects the real API calls.
+    cache_stats = {"hits": getattr(cache, "hits", 0), "fresh": progress["n"]}
+    log(f"cache: {cache_stats['fresh']} fresh API calls, {cache_stats['hits']} served from cache"
+        + (" (all cached — no new measurement; tick 'ignore cache' or change difficulty for a "
+           "fresh run)" if cache_stats["fresh"] == 0 and cache_stats["hits"] else ""))
+    log(f"difficulty: {diff}  |  wrote {p['out']} and {p['json_out']} ({len(ranked)} models)")
     return {"results": ranked, "meta": meta, "out": p["out"], "json_out": p["json_out"],
-            "token_total": token_total}
+            "token_total": token_total, "cache_stats": cache_stats}
