@@ -265,7 +265,8 @@ a:hover{border-color:var(--accent)}
   <select id="difficulty">
     <option value="easy">Easy — Möbius (most models saturate near 1.0)</option>
     <option value="hard">Hard — r², r³ transforms</option>
-    <option value="brutal">Brutal — r⁴, composite (breaks the top; opus ≈ 0.88)</option>
+    <option value="brutal">Brutal — r⁴, composite over cubics (opus-4.8 still ≈ 1.0)</option>
+    <option value="horizon">Horizon — quintic/septic source, degree-5/7 elimination (frontier ceiling)</option>
   </select>
 
   <div id="keyfield" style="display:none"><label><span class="step">03</span>OpenRouter API key
@@ -351,7 +352,7 @@ async function run(){
   if(!confirm(ms.length+' models × ~60 items — this makes real, paid API calls. Continue?'))return;
   const pm=document.getElementById('posemode').value;
   const diff=document.getElementById('difficulty').value;
-  const DIFF_BANK={easy:'data/banks/transform_bank.json',hard:'data/banks/transform_hard.json',brutal:'data/banks/transform_brutal.json'};
+  const DIFF_BANK={easy:'data/banks/transform_bank.json',hard:'data/banks/transform_hard.json',brutal:'data/banks/transform_brutal.json',horizon:'data/banks/transform_horizon.json'};
   const params={models:ms, difficulty:diff, transform_bank:DIFF_BANK[diff],
     cache: document.getElementById('usecache').checked ? 'data/results/igs_cache.json' : '',
     api_key:document.getElementById('apikey')?document.getElementById('apikey').value||null:null,

@@ -1,0 +1,686 @@
+{
+  "name": "transform_horizon",
+  "note": "Beyond-brutal construction: quintic sources (degree-5 elimination) + composite/high-degree transforms over cubics. Uniqueness verified via minimal polynomial (exactly one real root). Tests programmatic difficulty scaling against frontier models that saturate the brutal bank.",
+  "items": [
+    {
+      "source": "x**5 + 2*x - 1 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.486389035934543,
+      "target_value": 0.23657429427733417,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 1 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.486389035934543,
+      "target_value": 0.11506714292044744,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 1 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.486389035934543,
+      "target_value": 0.0559673967128187,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.486389035934543,
+      "target_value": -0.24981474165720885,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.486389035934543,
+      "target_value": 0.6014561788549905,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x - 2 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.6328345202421523,
+      "target_value": 0.40047953001011505,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x - 2 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.6328345202421523,
+      "target_value": 0.25343727124075377,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x - 2 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.6328345202421523,
+      "target_value": 0.16038385395712265,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x - 2 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.6328345202421523,
+      "target_value": -0.23235499023203723,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x - 2 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.6328345202421523,
+      "target_value": 0.8862717914829061,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 3 = 0",
+      "g_desc": "r**2",
+      "r_value": -1.1329975658850653,
+      "target_value": 1.2836834843014828,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 3 = 0",
+      "g_desc": "r**3",
+      "r_value": -1.1329975658850653,
+      "target_value": -1.4544102630804394,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 3 = 0",
+      "g_desc": "r**4",
+      "r_value": -1.1329975658850653,
+      "target_value": 1.6478432878683953,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 3 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -1.1329975658850653,
+      "target_value": 2.416681050186548,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 3 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -1.1329975658850653,
+      "target_value": -2.5874078289655045,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 5 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.208917813386895,
+      "target_value": 1.4614822795241513,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 5 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.208917813386895,
+      "target_value": 1.766811961666032,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 5 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.208917813386895,
+      "target_value": 2.13593045336311,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 5 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 1.208917813386895,
+      "target_value": 0.25256446613725647,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x - 5 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 1.208917813386895,
+      "target_value": 2.975729775052927,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x - 4 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.226339353087708,
+      "target_value": 1.5039082089315783,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x - 4 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.226339353087708,
+      "target_value": 1.8443018200444454,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x - 4 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.226339353087708,
+      "target_value": 2.261739900891788,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x - 4 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 1.226339353087708,
+      "target_value": 0.27756885584387025,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x - 4 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 1.226339353087708,
+      "target_value": 3.0706411731321537,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x + 1 = 0",
+      "g_desc": "r**2",
+      "r_value": -0.3319890295845093,
+      "target_value": 0.11021671576446421,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x + 1 = 0",
+      "g_desc": "r**3",
+      "r_value": -0.3319890295845093,
+      "target_value": -0.03659074051063616,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x + 1 = 0",
+      "g_desc": "r**4",
+      "r_value": -0.3319890295845093,
+      "target_value": 0.012147724433904692,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x + 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -0.3319890295845093,
+      "target_value": 0.4422057453489735,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 3*x + 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -0.3319890295845093,
+      "target_value": -0.3685797700951455,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 5 = 0",
+      "g_desc": "r**2",
+      "r_value": -1.2991527921902193,
+      "target_value": 1.6877979774556433,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 5 = 0",
+      "g_desc": "r**3",
+      "r_value": -1.2991527921902193,
+      "target_value": -2.192707455064504,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 5 = 0",
+      "g_desc": "r**4",
+      "r_value": -1.2991527921902193,
+      "target_value": 2.84866201270336,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 5 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -1.2991527921902193,
+      "target_value": 2.986950769645863,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + x + 5 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -1.2991527921902193,
+      "target_value": -3.4918602472547233,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x + 1 = 0",
+      "g_desc": "r**2",
+      "r_value": -0.486389035934543,
+      "target_value": 0.23657429427733417,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x + 1 = 0",
+      "g_desc": "r**3",
+      "r_value": -0.486389035934543,
+      "target_value": -0.11506714292044744,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x + 1 = 0",
+      "g_desc": "r**4",
+      "r_value": -0.486389035934543,
+      "target_value": 0.0559673967128187,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x + 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -0.486389035934543,
+      "target_value": 0.7229633302118772,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 2*x + 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -0.486389035934543,
+      "target_value": -0.6014561788549905,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 4*x - 3 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.7061149157741831,
+      "target_value": 0.49859827427878156,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 4*x - 3 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.7061149157741831,
+      "target_value": 0.35206767844751485,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 4*x - 3 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.7061149157741831,
+      "target_value": 0.2486002391137791,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 4*x - 3 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.7061149157741831,
+      "target_value": -0.20751664149540144,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 4*x - 3 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.7061149157741831,
+      "target_value": 1.0581825942216978,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 5*x - 2 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.3980026246943604,
+      "target_value": 0.1584060892635999,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 5*x - 2 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.3980026246943604,
+      "target_value": 0.0630460392944819,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 5*x - 2 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.3980026246943604,
+      "target_value": 0.025092489115787573,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 5*x - 2 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.3980026246943604,
+      "target_value": -0.23959653543076048,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**5 + 5*x - 2 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.3980026246943604,
+      "target_value": 0.46104866398884226,
+      "min_poly_degree": 5,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 1 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.7965443541284571,
+      "target_value": 0.6344829080939208,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 1 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.7965443541284571,
+      "target_value": 0.5053937782332174,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 1 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.7965443541284571,
+      "target_value": 0.40256856066331886,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.7965443541284571,
+      "target_value": -0.16206144603453623,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.7965443541284571,
+      "target_value": 1.3019381323616745,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 1 = 0",
+      "g_desc": "r**2",
+      "r_value": -0.7965443541284571,
+      "target_value": 0.6344829080939208,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 1 = 0",
+      "g_desc": "r**3",
+      "r_value": -0.7965443541284571,
+      "target_value": -0.5053937782332174,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 1 = 0",
+      "g_desc": "r**4",
+      "r_value": -0.7965443541284571,
+      "target_value": 0.40256856066331886,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -0.7965443541284571,
+      "target_value": 1.431027262222378,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -0.7965443541284571,
+      "target_value": -1.3019381323616745,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x - 1 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.4962920713893364,
+      "target_value": 0.2463058201239182,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x - 1 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.4962920713893364,
+      "target_value": 0.12223962566454866,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x - 1 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.4962920713893364,
+      "target_value": 0.06066655702691594,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x - 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.4962920713893364,
+      "target_value": -0.24998625126541824,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x - 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.4962920713893364,
+      "target_value": 0.618531697053885,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 3*x - 2 = 0",
+      "g_desc": "r**2",
+      "r_value": 0.650277084088821,
+      "target_value": 0.4228602860910595,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 3*x - 2 = 0",
+      "g_desc": "r**3",
+      "r_value": 0.650277084088821,
+      "target_value": 0.2749763538162588,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 3*x - 2 = 0",
+      "g_desc": "r**4",
+      "r_value": 0.650277084088821,
+      "target_value": 0.1788108215530127,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 3*x - 2 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 0.650277084088821,
+      "target_value": -0.22741679799776143,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 3*x - 2 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 0.650277084088821,
+      "target_value": 0.9252534379050797,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x + 1 = 0",
+      "g_desc": "r**2",
+      "r_value": -0.4962920713893364,
+      "target_value": 0.2463058201239182,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x + 1 = 0",
+      "g_desc": "r**3",
+      "r_value": -0.4962920713893364,
+      "target_value": -0.12223962566454866,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x + 1 = 0",
+      "g_desc": "r**4",
+      "r_value": -0.4962920713893364,
+      "target_value": 0.06066655702691594,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x + 1 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -0.4962920713893364,
+      "target_value": 0.7425978915132546,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + 2*x + 1 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -0.4962920713893364,
+      "target_value": -0.618531697053885,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 3 = 0",
+      "g_desc": "r**2",
+      "r_value": -1.0963308589205916,
+      "target_value": 1.201941352221562,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 3 = 0",
+      "g_desc": "r**3",
+      "r_value": -1.0963308589205916,
+      "target_value": -1.3177253950532424,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 3 = 0",
+      "g_desc": "r**4",
+      "r_value": -1.0963308589205916,
+      "target_value": 1.4446630141801973,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 3 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": -1.0963308589205916,
+      "target_value": 2.298272211142154,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x + 3 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": -1.0963308589205916,
+      "target_value": -2.414056253973834,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 3 = 0",
+      "g_desc": "r**2",
+      "r_value": 1.0963308589205916,
+      "target_value": 1.201941352221562,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 3 = 0",
+      "g_desc": "r**3",
+      "r_value": 1.0963308589205916,
+      "target_value": 1.3177253950532424,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 3 = 0",
+      "g_desc": "r**4",
+      "r_value": 1.0963308589205916,
+      "target_value": 1.4446630141801973,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 3 = 0",
+      "g_desc": "r**2 - r",
+      "r_value": 1.0963308589205916,
+      "target_value": 0.10561049330097051,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    },
+    {
+      "source": "x**7 + x - 3 = 0",
+      "g_desc": "r**3 + r",
+      "r_value": 1.0963308589205916,
+      "target_value": 2.414056253973834,
+      "min_poly_degree": 7,
+      "canonical_solvable": true
+    }
+  ]
+}

@@ -33,9 +33,10 @@ DEFAULTS: Dict[str, Any] = {
 # Transform-axis difficulty -> bank. Raising it is what breaks the IGS ceiling (E8: easy saturates,
 # brutal tops out at opus 88%). The GUI maps its selector to these; the CLI sets --transform-bank.
 DIFFICULTY_BANKS = {
-    "easy": "data/banks/transform_bank.json",       # Möbius
-    "hard": "data/banks/transform_hard.json",        # r^2, r^3
-    "brutal": "data/banks/transform_brutal.json",    # r^4, composite
+    "easy": "data/banks/transform_bank.json",          # Möbius (degree-3 source elimination)
+    "hard": "data/banks/transform_hard.json",           # r^2, r^3
+    "brutal": "data/banks/transform_brutal.json",       # r^4, composite (cubic source)
+    "horizon": "data/banks/transform_horizon.json",     # quintic/septic source -> degree-5/7 elimination
 }
 
 
