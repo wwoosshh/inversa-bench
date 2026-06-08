@@ -290,7 +290,11 @@ a:hover{border-color:var(--accent)}
     <label class="chk"><input type="checkbox" id="adaptive" checked> adaptive repeats (only ambiguous ranks)</label>
     <label class="chk"><input type="checkbox" id="notrivial"> reject trivial pose (anti-gaming)</label>
     <label class="chk"><input type="checkbox" id="truncmiss"> treat truncation as missing (don't deflate reasoning models)</label>
-    <label class="chk"><input type="checkbox" id="ignorecache"> ignore cache (force fresh API calls — otherwise an already-measured run returns instantly)</label>
+    <label class="chk"><input type="checkbox" id="usecache" checked> <b>cache: ON</b> — resume &amp; skip already-measured items (fast). <b>Uncheck = always-fresh</b> measurement.</label>
+    <div class="muted" style="font-size:11.5px;margin:.2rem 0 .2rem 1.5rem">
+      To average/median over fresh runs: <b>turn cache OFF</b>, set <b>repeats &gt; 1</b>, uncheck
+      <b>adaptive</b>, and use <b>temperature &gt; 0</b>. (With cache ON, re-running returns the same
+      cached values; within one run, repeats are still measured independently.)</div>
   </details>
 
   <div style="margin-top:1.1rem"><button id="runbtn" onclick="run()">Run benchmark &#8594;</button>
@@ -349,7 +353,7 @@ async function run(){
   const diff=document.getElementById('difficulty').value;
   const DIFF_BANK={easy:'data/banks/transform_bank.json',hard:'data/banks/transform_hard.json',brutal:'data/banks/transform_brutal.json'};
   const params={models:ms, difficulty:diff, transform_bank:DIFF_BANK[diff],
-    cache: document.getElementById('ignorecache').checked ? '' : 'data/results/igs_cache.json',
+    cache: document.getElementById('usecache').checked ? 'data/results/igs_cache.json' : '',
     api_key:document.getElementById('apikey')?document.getElementById('apikey').value||null:null,
     repeats:+document.getElementById('repeats').value, adaptive:document.getElementById('adaptive').checked,
     max_workers:+document.getElementById('workers').value, max_tokens:+document.getElementById('maxtok').value,
