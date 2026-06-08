@@ -1,0 +1,12 @@
+{
+  "benchmark": "E8++ horizon difficulty escalation (transform axis)",
+  "note": "Demonstration that Inversa difficulty scales PROGRAMMATICALLY (no human authoring): the brutal bank uses cubic sources (degree-3 elimination) and is saturated by the frontier; the horizon bank lifts the source to an irreducible quintic/septic (degree-5/7 elimination) via scripts/gen_transform_horizon_bank.py. Horizon column measured on a 40-item subset weighted to NON-INJECTIVE transforms (r**2-r, r**3+r), which force genuine elimination (a strong model cannot bypass via inverse substitution f(g^-1(x))=0). temp 0, repeats 1, transform validity only. opus-4.1 / opus-4 horizon pending (account credit exhausted mid-run; resume via --cache).",
+  "tiers": {"brutal": "data/banks/transform_brutal.json (degree-3)", "horizon": "data/banks/transform_horizon40.json (degree-5/7)"},
+  "models": [
+    {"model": "anthropic/claude-opus-4.8", "brutal_transform": 1.000, "horizon_transform": 0.925},
+    {"model": "anthropic/claude-opus-4.1", "brutal_transform": 0.917, "horizon_transform": null},
+    {"model": "anthropic/claude-opus-4",   "brutal_transform": 0.875, "horizon_transform": null},
+    {"model": "anthropic/claude-opus-4.5", "brutal_transform": 0.167, "horizon_transform": 0.175}
+  ],
+  "headline": "opus-4.8 saturates brutal (transform 1.000) but the programmatically-generated horizon bank moves it to 0.925 — the frontier ceiling is broken by raising the elimination degree in a script, not by human authoring."
+}
